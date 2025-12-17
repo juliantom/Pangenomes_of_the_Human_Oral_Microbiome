@@ -2,15 +2,17 @@
 
 **An open, accessible pangenomic resource for exploring genomic diversity in the human oral microbiome—online and offline.**
 
-*This resource treats pangenomes not as supplementary analyses, but as reusable, community-facing biological objects.*
+*This resource treats pangenomes as reusable, community-facing biological objects.*
 
-This repository provides standardized workflows *and*, critically, **direct access to hundreds of pre-computed pangenomes** spanning the majority of known oral bacterial diversity. Its primary contribution is **democratization**: lowering technical and computational barriers so that pangenomes can be explored, reused, and extended by the broader biological community.
+This repository provides **standardized workflows** and **direct access to hundreds of pre-computed pangenomes** spanning the majority of known oral microbial diversity. Its primary contribution is **democratization**: lowering technical and computational barriers so that pangenomes can be explored, reused, and extended by the broader research community.
 
 ---
 
 ## Access the Resource
 
 ### 🌐 Interactive Website (No Installation Required)
+
+**Explore the pangenomes online:*** [HOMD Anvi’o Portal]([https://example.com](https://www.homd.org/genome/anvio_pangenomes)
 
 All pangenomes are available for **online interactive visualization** through a dedicated **HOMD Anvi’o server**. Users can explore gene clusters, core and accessory genomes, metabolic annotations, and phylogenetic structure directly in a web browser.
 
