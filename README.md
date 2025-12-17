@@ -1,64 +1,202 @@
 # Pangenomes of the Human Oral Microbiome
-A reproducible workflow for building and visualizing pangenomes to explore microbial diversity.
 
-## Problem (Biological and Specific)
-**Understanding the underlying microbial diversity is a fundamental problem in biology.** Microbes influence nearly every aspect of life:
-* Shape human health and disease.
-* Drive biotechnological innovations.
-* Regulate critical environmental processess (e.g., nutrient cycling and climate dynamics).
+**An open, accessible pangenomic resource for exploring genomic diversity in the human oral microbiome—online and offline.**
 
-**Pangenomic analysis**—the study of gene content and variation across closely related taxa—provides insights into how microbial diveristy impacts ecotystems  and vice versa. However, widespread adpotation of pangenomic analysis is hindered by:
-* **Lack of standarization, reproducible workflows**.
-* **Computational limitations** when analyzing thousands of genomes.
-* **Limited accessibility** to intuitive visualization tools.
-These barriers make it difficult to perform consistent and reproducibile analyses across labs and even within the same lab.
+*This resource treats pangenomes not as supplementary analyses, but as reusable, community-facing biological objects.*
 
-## What This Repository Provides
-This repository aims to **democratized pangenomic analysis** by offering a **systematic and reproducible workflow** for building pangenomes using **Snakemake** and **Anvi'o**.<br>
-We used the Human Oral Microbiome Database (HOMD) as reference because:
-* It is **well-curated** and **environmentally defined**.
-* **Actively maintained** and **funded**.
-* **Managed by experts** in oral microbiology.
-HOMD classifies genomes into taxonomic units called Human Oral Taxon (HMT) based on evolutionary markers rather than species names (though they generally match with GTDB). 
+This repository provides standardized workflows *and*, critically, **direct access to hundreds of pre-computed pangenomes** spanning the majority of known oral bacterial diversity. Its primary contribution is **democratization**: lowering technical and computational barriers so that pangenomes can be explored, reused, and extended by the broader biological community.
 
-Our workflow leverages Anvi'o (v8) to build, visualize, and inspect pangenomes for each HMT. These pangenomes are available both for online and offline visualization through a dedicated HOMD site, enabling users to easily explore and extract information.
+---
 
-## Workflow Overview
-We generated 567 pangenomes for each oral taxon (HMT) in HOMD, comprising over 8,100 genomes. Two Snakemake workflows are provided:
+## Access the Resource
 
-### Workflow 1: Genome Annotation (per genome)
-* Reformats genomic FASTA files
-* Creates contigs.db
-* Annotates with:
-  * HMMs (rRNAs + Bacteria_71 set)
-  * KEGG KO
-  * COG20
-  * PFAMs
-  * CAZymes
-  * tRNAs (via tRNAscan-SE)
+### 🌐 Interactive Website (No Installation Required)
 
-### Workflow 2: Pangenome Construction (per taxon - HMT)
-* Links genomes to HMT (based on HOMD)
-* Creates anvi'o external file
-* Generates a genome storage database
-* Builds a pangenome
-* Computes ANI
-* Estimates KEGG-based metabolism
-* Identifies single-copy core genes (SCCGs) from pangenome
-* Constructs phylogeny based on SCCGs
+All pangenomes are available for **online interactive visualization** through a dedicated **HOMD Anvi’o server**. Users can explore gene clusters, core and accessory genomes, metabolic annotations, and phylogenetic structure directly in a web browser.
 
-## Operational definitions
-Disclosure. The term "pangenome" is a biological concept that referes to the complete set of genomic information from all members within a closely related group. However, because microbial populations are dynamic, it is impossible to capture all genomic variation at all time points. Thus, the pangenome represents the best possible approximation given available data.
+> This mode of access is intended to support discovery, education, and hypothesis generation without requiring local computational infrastructure.
 
-**Pangenome**: All the genes identified across all available genomes belonging to a given Human Microbiome Taxon (HMT) as defined in HOMD.
+### 💻 Offline Access (Full Control)
 
+Fully assembled **Anvi’o databases** for each pangenome are available for download. Users with Anvi’o installed can:
 
-## SA
-Pangenom refer to [all] the gene content within members of a closely related genomic group. Pangenomic analysis enables us to identify what is shared and what is unique among members of a population at different genomic scales, such as, regions, genes, amino acids, nucelotides, as well as the organization across genomic units.
+- Inspect and edit pangenomes locally
+- Add new genomes or metadata
+- Recompute analyses or extend pangenomes
 
-Disclosure
-The pangenome referes to all the genomic information from all members within a closely related group.
+Together, online and offline access ensure both **immediacy** and **long-term reusability**.
 
-Here, we focused on microbial pangenomes,
+---
 
-ContigsDB, Pangenome, Metabolism, ANI, Dereplication
+## Start Here
+
+- **Explore immediately (no installation):** visit the interactive website to browse pangenomes, gene clusters, and metabolic annotations.
+- **Reuse and extend pangenomes:** download Anvi’o databases for local inspection, modification, or integration with new genomes.
+- **Reproduce or adapt the workflows:** use the Snakemake pipelines provided in this repository.
+
+This structure is intentional: users can move seamlessly from exploration → reuse → reproduction.
+
+---
+
+## Philosophy
+
+🧭 **Democratization without hierarchy** — This resource is grounded in the idea that access to complex genomic analyses should not be limited by computational expertise, infrastructure, or institutional resources. Our goal is not to replace or compete with existing efforts, but to **enable researchers at all levels** to explore, question, and build upon pangenomic data.
+
+🫶 **Accessibility as an enabler** — By providing both interactive online visualization and fully reusable offline databases, we aim to meet users where they are: whether they want to browse, teach, explore, or extend. Accessibility here is not simplification—it is an invitation.
+
+🔁 **Pangenomes as evolving objects** — Pangenomes are not static truths. They change as genome sampling improves, assemblies become more complete, and long-read sequencing technologies (e.g., PacBio and Oxford Nanopore) better resolve complex genomic regions. This resource reflects a *current best representation*, with the expectation that future iterations will be richer and more accurate.
+
+🌱 **Built for growth** — We view these pangenomes as starting points for discovery. Users are encouraged to refine them, add new genomes, and reinterpret patterns as methods and data evolve.
+
+---
+
+## Why This Resource Exists
+
+Microbial genomes are increasingly abundant, yet their biological interpretation remains constrained by how difficult it is to integrate, analyze, and *interactively explore* large genome collections. While pangenomes provide a powerful conceptual framework to address this challenge, most existing studies:
+
+- Are **one-off analyses** tied to a specific publication
+- Require **substantial computational resources** to reproduce
+- Provide figures, but not **reusable pangenomes**
+- Limit exploration to static summaries
+
+As a result, much of the biological signal encoded in gene content variation remains inaccessible.
+
+This repository was built to address that gap by treating **pangenomes as shared research objects**, not just analytical by-products.
+
+---
+
+## What Makes This Work Different
+
+The defining feature of this project is not the introduction of a new method, but the **systematic release of ready-to-use pangenomes at scale**.
+
+Specifically, this resource:
+
+- Provides **567 taxon-resolved pangenomes** built under a single analytical framework
+- Makes them **immediately explorable online** and **fully reusable offline**
+- Preserves rich annotation, metabolic, and phylogenetic context within each pangenome
+- Documents the complete workflows for transparency and reuse
+
+The workflows ensure reproducibility, but the **pangenomes themselves are the primary product**.
+
+---
+
+## How to Use This Resource
+
+This resource is designed to support a wide range of biological questions and use cases, including:
+
+- **Exploring gene content diversity** within a given oral taxon
+- **Comparing core and accessory genomes** across strains
+- **Identifying clade-specific genes** associated with ecological specialization
+- **Examining metabolic potential** using KEGG-based annotations
+- **Teaching pangenomics** using real, complex microbial data
+- **Extending existing pangenomes** by adding new genomes
+
+Users can begin with interactive exploration via the website and transition seamlessly to offline analysis as needed.
+
+---
+
+## Why the Human Oral Microbiome?
+
+This project is built on the foundation of the **Human Oral Microbiome Database (HOMD)**, which provides an exceptional framework for pangenomic analysis:
+
+- A **well-curated**, environment-specific genome collection
+- Taxa defined as **Human Microbial Taxa (HMTs)** using evolutionary markers
+- Long-term commitment to **public accessibility and community use**
+
+HMTs represent biologically meaningful units that capture fine-scale diversity within the oral cavity, making them particularly well suited for systematic pangenomic analysis.
+
+---
+
+## Scope of the Resource
+
+- **567 pangenomes**, one per oral taxon (HMT)
+- **8,100+ bacterial genomes** analyzed
+- Uniformly processed using **Anvi’o v8**
+
+Each pangenome integrates gene content, functional annotation, and evolutionary relationships within a consistent analytical framework.
+
+---
+
+## Workflow Overview (Transparency and Reuse)
+
+Two Snakemake workflows underpin this resource and are provided to ensure transparency, reproducibility, and extensibility. Each workflow is accompanied by a **condensed DAG** that mirrors the biological logic of the analysis rather than low-level implementation details.
+
+The DAGs are intended as conceptual maps—showing how genomes move from raw sequence to annotated pangenomes—while full details remain encoded in the Snakemake rules.
+
+### Workflow 1: Genome Processing and Annotation (per genome)
+
+- Standardizes genomic FASTA files
+- Generates `contigs.db`
+- Annotates genomes with:
+  - HMMs (rRNAs and universal bacterial marker genes; Bacteria_71)
+  - tRNAs (tRNAscan-SE)
+  - KEGG Orthologs (KOs)
+  - COG20
+  - PFAMs
+  - CAZymes
+
+### Workflow 2: Pangenome Construction (per HMT)
+
+- Assigns genomes to HMTs using HOMD metadata
+- Generates Anvi’o external genome files
+- Builds genome storage databases
+- Constructs pangenomes
+- Computes Average Nucleotide Identity (ANI)
+- Estimates KEGG-based metabolic potential
+- Identifies single-copy core genes (SCGs)
+- Reconstructs phylogenies based on SCGs
+
+---
+
+## Operational Definition
+
+**Pangenome**
+
+The complete set of genes identified across all available genomes belonging to a given **Human Microbial Taxon (HMT)** as defined by HOMD.
+
+Pangenomes include both conserved core genes and variable accessory genes that often encode ecological specialization. Each pangenome represents a best-available snapshot based on current genomic sampling.
+
+---
+
+## Cite This Resource
+
+If you use this resource in your research, teaching, or presentations, please cite it as:
+
+> *Pangenomes of the Human Oral Microbiome: an open, accessible pangenomic resource for the oral microbiome.*
+
+A persistent identifier (DOI) will be added as this resource evolves.
+
+---
+
+## Acknowledgments
+
+🧙‍♀️ **HOMD stewards** — This resource is built on the sustained efforts of the **Human Oral Microbiome Database (HOMD)** team. Their long-term commitment to curation, standardization, and public access makes large-scale, community-facing resources like this possible.
+
+🧙 **Anvi’o developers** — We gratefully acknowledge the **Anvi’o development team** for creating a platform that uniquely balances analytical rigor with intuitive, interactive visualization. Anvi’o’s philosophy and design align naturally with our goal of making pangenomes explorable by everyone.
+
+🪄 **Publicly funded science** — This work reflects the aims of long-term, publicly supported research: to build durable, reusable infrastructure that enables discovery beyond any single study.
+
+---
+
+## Governance, Updates, and Longevity
+
+🔮 **Update cycle** — Pangenomes will be revisited and updated approximately **every two years**, in step with major releases of the Human Oral Microbiome Database (HOMD).
+
+🧩 **Versioning** — Each release will be versioned and archived to preserve reproducibility while allowing the resource to grow as new genomes become available.
+
+🧙‍♂️ **Stewardship** — This repository is maintained as a community resource. Contributions, issue reports, and suggestions are welcome and encouraged.
+
+---
+
+## Who This Is For
+
+This repository is intended for microbiologists, computational biologists, educators, trainees, and clinicians who wish to explore oral microbial diversity without the burden of large-scale recomputation.
+
+---
+
+## Key Takeaway
+
+By making hundreds of oral microbial pangenomes **directly accessible**, both online and offline, this project reframes pangenomes as **shared biological infrastructure**—enabling exploration, reuse, and discovery across the community.
+
+*We hope this resource lowers barriers, sparks questions, and grows alongside the community that uses it.*
+
