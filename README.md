@@ -1,108 +1,110 @@
-# Pangenomes of the Human Oral Microbiome 🦷
+# Pangenomes of the Human Oral Microbiome 🦷 🦠
+**A curated collection of species-level pangenomes for taxa in the Human Oral Microbiome Database**
 
-**A curated collection of pangenomes for taxa in the Human Oral Microbiome Database**
-
-This repository provides stable, open-access workflow, and direct access to hundreds of pangenomes enabling visualization and exploration of core and accessory gene content across oral microbial taxa- bacteria and archaea.
+This repository provides stable, open-access workflows and direct access to hundreds of pangenomes, enabling visualization and exploration of core and accessory gene content across oral microbial taxa (bacteria and archaea).
 
 *This resource treats pangenomes as reusable, community-facing biological objects.*
 
 ---
-
 ## 🚀 Quick Start
 
-**🌐 Online (I want a sneak peak)**
-1. Browse pangenomes interactively through the HOMD Anvi’o Portal [HOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes). No anvi'o installation needed.
+### 🌐 Online (I want a sneak peek)
+1. Browse pangenomes interactively through the HOMD Anvi’o Portal [HOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes).
+   *No Anvi'o installation needed.*
 2. Select a taxon and inspect core and accessory gene clusters.
 3. Use these pangenomes as a reference for comparative analysis.
 
-**💻 Offline (I want full control)**
+### 💻 Offline (I want full control)
 1. Download Anvi'o-compatible pangenome databases.
-2. Load databases locally for maximum exploration.
-3. Summarize gene-cluster information and annotation.
+2. Load databases locally for deeper exploration.
+3. Summarize gene-cluster content and functional annotation.
 
 ---
+## 🧬 What This Resource Contains
 
-## What This Resource Contains
-
-- Species-level pangenomes for all taxa represented in HOMD, including both named species and Human Microbial Taxa (HMTs)
+- Species-level pangenomes for all taxa represented in HOMD, including named species and Human Microbial Taxa (HMTs)
 - Pangenomes constructed independently for each taxon
-- Taxa for which multiple closely related groups exists (HMTs) are treated as separate pangenomes
-At present, 12 named species contain multiple distinct taxa, each represented by its own pangenome.
+- Taxa represented by multiple closely related groups (HMTs) are treated as separate pangenomes
+At present, **12 named species contain multiple distinct taxa**, each represented by its own pangenome.
 
 ---
-
 ## 🧩 Scope and Boundaries
 
 **This resource provides:**
-- Systematically constructed taxon-resolved pangenomes for oral bacteria and archaea
+- Systematically constructed, taxon-resolved pangenomes for oral bacteria and archaea
 - A reference framework for examining genomic variation within taxa (Snakemake + Anvi'o)
-- Visual access to core and accessory gene content for over 567 pangenomes
+- Visual access to core and accessory gene content across more than 500 pangenomes
 
-**Specifically, this resource:**
+**This resource does NOT provide:**
 - Claims-driven biological interpretation
 - Predictive functional modeling
 
 All content reflects completed analyses within the scope of current funding.
 
 ---
+## 🔮 Pangenome Construction (Overview)
 
-## 🧙‍♂️🔮 Pangenome Construction (Overview)
-
-Pangenomes are constructed within Anvi'o platform using a standarized workflow:
+Pangenomes are constructed within the Anvi’o platform using a standardized workflows:
 - Open reading frames are predicted from genome assemblies
 - Genes are clustered into putative homologous gene clusters based on amino-acid similarity
-- Clustering parameters optimized at the species level
-- Both gene clusters and genomes are hierarchichally clustered to highlight shared gene content and relationship
+- Clustering parameters are optimized at the species level
+- Gene clusters and genomes are hierarchically organized to highlight shared gene content and relationships
 
-Detailed methods are provided in Anvi'o.
+Detailed methodological descriptions are provided in the associated Anvi’o documentation and publications.
 
 ---
-
 ## 🧑‍💻 Reproducing or Extending the Work
-
+*For those who want to go beyond the mark - you know who you are*
 This repository includes:
 - Two Snakemake workflows implementing the pangenome construction pipeline
-- Full analysis code used to generate the distribured pangenomes
-For users who wish to reproduce the analysis or construct pangenomes for additional taxa, see:
-WORKFLOWS.md - overview of the Snakemake popelines
-CODE_OVERVIEW.md - description of scripts and analysis logic
-These materials are provided for transparency and reproducibility. Re-running or extending the workflows is optional and not required to use the resource.
----
+- Full analysis code used to generate the distributed pangenomes
 
+For users who wish to reproduce analyses or construct pangenomes for additional taxa, see:
+- `WORKFLOWS.md` — overview of the Snakemake pipelines
+- `CODE_OVERVIEW.md` — description of scripts and analysis logic
+
+These materials are provided for transparency and reproducibility.
+Re-running or extending the workflows is optional and not required to use the resource.
+
+---
 ## 📦 Additional Associated Files
 
-Supplementary supporting data products generated during pangenome construction may be provided, including:
-- Average Nucelotide Identity (ANI) matrices
-- Phylogenomic reconstructions based on single-copy core genes (from the pangenome)
-- Metabolic annotation summary
+Supplementary data products generated during pangenome construction may be provided, including:
+- Average Nucleotide Identity (ANI) matrices
+- Phylogenomic reconstructions based on single-copy core genes
+- Functional annotation summaries
+
+These files support interpretation of the pangenomes and are not intended as standalone analyses.
 
 ---
+## 🔧 Data and Software Versions
 
+- **HOMD**: v4.1φ (phi release)
+- **Anvi’o**: v8
 
+Version information is provided to support reproducibility and temporal context.
+
+---
 ## 📖 Citation
 
-A lot of effort has been made by many parties to make this resource available.
-If you use these pangenomes please consider citing the associated announcement, HOMD (?), and Anvi'o (?).
+If you use these pangenomes, please cite the associated resource announcement and acknowledge the data and tools that made this work possible:
 
-> DOI *Pangenomes of the Human Oral Microbiome.*
-> eHOMD
-> Anvi'o
+- *Pangenomes of the Human Oral Microbiome* (Microbiology Resource Announcement) — DOI: [TBD]
+- Expanded Human Oral Microbiome Database (eHOMD)
 
 ---
+## 🧙 Acknowledgments
 
-## License
+🛡️ **HOMD stewards** — This resource builds on the sustained efforts of the **Human Oral Microbiome Database (HOMD)** team. Their long-term commitment to curation, standardization, and public access makes large-scale, community-facing resources possible.
+
+🧙 **Anvi’o developers** — We gratefully acknowledge the **Anvi’o development team** for creating a platform balancing analytical rigor with intuitive, interactive visualization.
+
+🪄 **Publicly funded science** — This work reflects the goals of long-term, publicly supported research: building durable, reusable infrastructure that enables discovery beyond any single study.
+
+---
+## ⚖️ License
 
 All content in this repository is released under the GNU General Public License v3.0 (GPL-3.0).
-
----
-
-## Acknowledgments
-
-🧙‍♀️ **HOMD stewards** — This resource is built on the sustained efforts of the **Human Oral Microbiome Database (HOMD)** team. Their long-term commitment to curation, standardization, and public access makes large-scale, community-facing resources like this possible.
-
-🧙 **Anvi’o developers** — We gratefully acknowledge the **Anvi’o development team** for creating a platform that uniquely balances analytical rigor with intuitive, interactive visualization. Anvi’o’s philosophy and design align naturally with our goal of making pangenomes explorable by everyone.
-
-🪄 **Publicly funded science** — This work reflects the aims of long-term, publicly supported research: to build durable, reusable infrastructure that enables discovery beyond any single study.
 
 ---
 
