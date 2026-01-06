@@ -10,15 +10,15 @@ This repository provides stable, open-access workflows and direct access to hund
 
 ### 🌐 Online (I want a sneak peek)
 1. Browse pangenomes interactively through the HOMD Anvi’o Portal [HOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
-   - *No Anvi'o installation needed.*
-2. Select a taxon and inspect core and accessory gene clusters.
-3. Use these pangenomes as a reference for comparative analysis.
+   - *No Anvi'o installation needed*
+2. Select a taxon and inspect core and accessory gene clusters
+3. Use these pangenomes as a reference for comparative analysis
 
 ### 💻 Offline (I want full control)
-1. Download Anvi'o-compatible pangenome databases.
-   - *Anvi'o installation required.*
-2. Load databases locally for deeper exploration.
-3. Summarize gene-cluster content and functional annotation.
+1. Download Anvi'o-compatible pangenome databases [HOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
+   - *Anvi'o installation required*
+2. Load databases locally for deeper exploration
+3. Summarize gene-cluster content and functional annotation
 
 ---
 ## 🧬 What This Resource Contains
