@@ -8,6 +8,35 @@ This repository provides **standardized workflows** and **direct access to hundr
 
 ---
 
+## Quick Start (30 seconds)
+
+**Explore online (no installation):**
+1. Open the HOMD Anvi’o Portal [HOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes).
+2. Find a Human Microbial Taxon (HMT) or use the search bar.
+3. Visualize pangenomes by clicking 'Open Anvi'o' to launch anvi-display-pan interactive mode or 'Open SVG' for a static image.
+
+**Explore offline (full control):**
+1. Open the HOMD Anvi’o Portal [HOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes).
+2. Find a Human Microbial Taxon (HMT) or use the search bar.
+3. Download the corresponding Anvi’o pangenome database by clicking the 'Download' botton.
+4. Activate anvio (v8) environment
+5. Display pangenome
+   ```bash
+   anvi-display-pan -g ${taxon_id}-GENOMES.db -p dir_pan/${taxon_id}-PAN.db
+   ```
+
+---
+
+## Start Here
+
+- **Explore immediately (no installation):** visit the interactive website to browse pangenomes, gene clusters, and metabolic annotations.
+- **Reuse and extend pangenomes:** download Anvi’o databases for local inspection, modification, or integration with new genomes.
+- **Reproduce or adapt the workflows:** use the Snakemake pipelines provided in this repository.
+
+This structure is intentional: users can move seamlessly from exploration → reuse → reproduction.
+
+---
+
 ## Access the Resource
 
 ### 🌐 Interactive Website (No Installation Required)
@@ -27,16 +56,6 @@ Fully assembled **Anvi’o databases** for each pangenome are available for down
 - Recompute analyses or extend pangenomes
 
 Together, online and offline access ensure both **immediacy** and **long-term reusability**.
-
----
-
-## Start Here
-
-- **Explore immediately (no installation):** visit the interactive website to browse pangenomes, gene clusters, and metabolic annotations.
-- **Reuse and extend pangenomes:** download Anvi’o databases for local inspection, modification, or integration with new genomes.
-- **Reproduce or adapt the workflows:** use the Snakemake pipelines provided in this repository.
-
-This structure is intentional: users can move seamlessly from exploration → reuse → reproduction.
 
 ---
 
@@ -82,6 +101,21 @@ The workflows ensure reproducibility, but the **pangenomes themselves are the pr
 
 ---
 
+## What This Resource Is (and Is Not)
+
+**This resource is:**
+- A standardized collection of taxon-resolved pangenomes built under a single analytical framework (Snakemake + Anvi'o)
+- A reusable genomic infrastructure for exploration, comparative analysis, and teaching
+- A snapshot of best-available genomic diversity or oral microbes
+
+**This resource is not:**
+- A definitive or final representation of any oral taxon
+- A clinical or diagnostic reference
+- A substitute for taxonomic revision or species definition
+- Static—pangenomes will evolve as new genomes and improved assemblies become available
+
+---
+
 ## How to Use This Resource
 
 This resource is designed to support a wide range of biological questions and use cases, including:
@@ -119,6 +153,13 @@ Each pangenome integrates gene content, functional annotation, and evolutionary 
 
 ---
 
+## Genome Inclusion and Provenance
+
+Genomes included in this resource originate from the Human Oral Microbiome Database (HOMD) and represent cultured isolates, single-cell genomes (SAGs), metagenome-assembled genomes (MAGs), and long-read assemblies. Pangenomes were constructed for Human Microbial Taxa (HMTs) represented by at least two genomes to enable meaningful assessment of gene presence–absence patterns.
+
+Detailed inclusion criteria and quality control procedures are documented and will be available in a separate paper describing the major update in HOMD. Here, we relied on HOMD for inclusion, exclusion, reorganization (HMTs), and naming of genomes and taxa. While CheckM2 (v1.1.0), GTDB (v2.4.1 r226), completeness of 71 universal bacterial genes (Bacteria 71), and contigs stats suggested a few genomes lacked high-quality, no genome was excluded as they represent rare and challenging clades.
+
+---
 ## Workflow Overview (Transparency and Reuse)
 
 Two Snakemake workflows underpin this resource and are provided to ensure transparency, reproducibility, and extensibility. Each workflow is accompanied by a **condensed DAG** that mirrors the biological logic of the analysis rather than low-level implementation details.
@@ -164,9 +205,17 @@ Pangenomes include both conserved core genes and variable accessory genes that o
 
 If you use this resource in your research, teaching, or presentations, please cite it as:
 
-> *Pangenomes of the Human Oral Microbiome: an open, accessible pangenomic resource for the oral microbiome.*
+> DOI *Pangenomes of the Human Oral Microbiome.*
 
-A persistent identifier (DOI) will be added as this resource evolves.
+Each release of this repository is versioned and archived to preserve reproducibility. A persistent identifier (DOI) will be added as the resource evolves.
+
+---
+
+## License
+
+This repository is released under the GNU General Public License v3.0 (GPL-3.0).
+
+All workflows and code are freely available for reuse and modification under the terms of this license. Please cite the resource when reusing data, workflows, or derived analyses.
 
 ---
 
