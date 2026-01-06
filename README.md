@@ -97,9 +97,9 @@ If you use these pangenomes, please cite the associated resource announcement an
 ---
 ## 🧙 Acknowledgments
 
-🛡️ **HOMD stewards** — This resource builds on the sustained efforts of the **Human Oral Microbiome Database (HOMD)** team. Their long-term commitment to curation, standardization, and public access makes large-scale, community-facing resources possible.
+🛡️ **HOMD stewards** — This resource builds on the sustained efforts of the **Human Oral Microbiome Database (HOMD)** team. Their long-term commitment to curation, standardization, and public access makes large-scale, community-facing resources possible. For more information, see the [HOMD Website↗](https://www.homd.org).
 
-🧙 **Anvi’o developers** — We gratefully acknowledge the **Anvi’o development team** for creating a platform balancing analytical rigor with intuitive, interactive visualization.
+🧙 **Anvi’o developers** — We gratefully acknowledge the **Anvi’o development team** for creating a platform balancing analytical rigor with intuitive, interactive visualization. For extensive documentation on Anvi'o installation, pangenome construction and usage, see [Anvi'o Pangenomics Website↗](https://anvio.org/learn/pangenomics/).
 
 🪄 **Publicly funded science** — This work reflects the goals of long-term, publicly supported research: building durable, reusable infrastructure that enables discovery beyond any single study.
 
