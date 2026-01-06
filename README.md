@@ -23,10 +23,10 @@ This repository provides stable, open-access workflows and direct access to hund
 ---
 ## 🧬 What This Resource Contains
 
-- Species-level pangenomes for all taxa represented in HOMD, including named species and Human Microbial Taxa (HMTs)
-- Pangenomes constructed independently for each taxon
-- Taxa represented by multiple closely related groups (HMTs) are treated as separate pangenomes
-- At present, **12 named species contain multiple distinct taxa**, each represented by its own pangenome
+- Species-level pangenomes for 567 Human Microbial Taxa (HMTs) with ≥2 genomes in HOMD
+- 12 additional pangenomes for named species containing multiple taxa (HMTs)
+- Total pangenomes: 579
+- Genomes included: 8,110 from 8,177 genomes in HOMD
 
 ---
 ## 🧩 Scope and Boundaries
@@ -34,7 +34,7 @@ This repository provides stable, open-access workflows and direct access to hund
 **This resource provides:**
 - Systematically constructed, taxon-resolved pangenomes for oral bacteria and archaea
 - A reference framework for examining genomic variation within taxa (Snakemake + Anvi'o)
-- Visual access to core and accessory gene content across more than 500 pangenomes
+- Visual access to core and accessory gene content across all available pangenomes
 
 **This resource does NOT provide:**
 - Claims-driven biological interpretation
