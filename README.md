@@ -50,7 +50,7 @@ Pangenomes are constructed within the Anvi’o platform using a standardized wor
 - Genes are functionally profiled using curated databases (COGs, Pfams, KEGG KOs, etc.)
 - Genes are clustered into putative homologous gene clusters based on amino-acid similarity
 - Clustering parameters are optimized at the species level
-- Gene clusters and genomes are hierarchically organized to highlight shared gene content and relationships
+- Gene clusters and genomes are hierarchically organized to highlight shared gene content and strain relationships
 
 Detailed methodological descriptions are provided in the associated Anvi’o documentation and publications.
 
