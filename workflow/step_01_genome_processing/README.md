@@ -52,7 +52,7 @@ Convert raw genome FASTA files into **anvi’o contigs databases** `contigs.DB` 
 
 ## 📂 Inputs
 
-- **HOMD genome metadata:** [`98_data/01_homd_v11_02-GCA_ID_info.csv`](https://www.homd.org//ftp/genomes/NCBI/V11.02/)
+- **HOMD genome metadata:** [HOMD ftp Site](https://www.homd.org//ftp/genomes/NCBI/V11.02/)
 - **Assembly accession list (generated):** `01_download_genomes/assembly_accession_list.txt`
 - **Scripts and Snakemake workflow:**
   - `step_01_genome_processing/Snakefile`
@@ -69,4 +69,4 @@ Convert raw genome FASTA files into **anvi’o contigs databases** `contigs.DB` 
 - Monitor workflow progress in real time:
 ```bash
 
-© 2026 Julian Torres-Morales — see [LICENSE`](....//LICENSE)  
+© 2026 Julian Torres-Morales — see [LICENSE](../../LICENSE)  
