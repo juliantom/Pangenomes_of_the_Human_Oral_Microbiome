@@ -1,11 +1,12 @@
 # 🧬 Pangenome Analysis Workflow
 
-> ⚠️ **WARNING: HIGH RESOURCE USAGE** ⚠️
-> This workflow is **computationally intensive**. Thread allocation is dynamic, and tasks like ANI calculation, dereplication, pangenome construction, and phylogenomics can saturate your CPU and RAM.
-> On a high-resource machine (e.g., 112 threads, 3 TB RAM), **Snakemake may launch all threads simultaneously if not properly configured**, which can lead to system instability.
-> Always test with a **subset of taxa** before running the full workflow. **Adjust threads** in `config_group_threads.yaml` as needed.
-> 
-This workflow automates **pangenome construction, ANI calculation, dereplication, phylogenomics, and metabolic estimation** for oral microbiome species in HOMDv4.1. It consists of two major steps:
+> ⚠️ **WARNING: HIGH RESOURCE USAGE** ⚠️-
+> This workflow is **computationally intensive**. Thread allocation is dynamic, and tasks like ANI calculation, dereplication, pangenome construction, and phylogenomics can saturate your CPU and RAM.-
+> On a high-resource machine (e.g., 112 threads, 3 TB RAM), **Snakemake may launch all threads simultaneously if not properly configured**, which can lead to system instability.-
+> Always test with a **subset of taxa** before running the full workflow. **Adjust threads** in `config_group_threads.yaml` as needed.-
+
+This workflow automates **pangenome construction, ANI calculation, dereplication, phylogenomics, and metabolic estimation** for oral microbiome species in HOMDv4.1.-
+It consists of two major steps:
 
 1. **Select HMTs with at least 2 genomes** (n = 567)  
 2. **Execute the `Snakefile`** for pangenomic analysis  
