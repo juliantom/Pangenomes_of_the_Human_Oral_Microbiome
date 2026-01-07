@@ -56,7 +56,8 @@ Detailed methodological descriptions are provided in the associated Anvi’o doc
 
 ***
 ## 🧑‍💻 Reproducing or Extending the Work
-*For those who want the full experience — you know who you are*
+*For those who want the full experience — you know who you are*<br>
+
 This repository includes:
 - Two Snakemake workflows implementing the pangenome construction pipeline
 - Full analysis code used to generate the distributed pangenomes
