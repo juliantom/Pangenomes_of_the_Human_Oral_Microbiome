@@ -64,16 +64,18 @@ All processing is fully reproducible and tied to the software and database versi
 mkdir my_work_dir &&  my_work_dir
 
 # Create directories
-mkdir -p 01_download_genomes/{01_ncbi_set,02_genomic_files} 98_data 99_scripts
+mkdir -p 01_download_genomes/{01_ncbi_set,02_genomic_files} 97_nohup 98_data 99_scripts
 
 ####################
 # Process HOMD metadata file
 ####################
 
 # Download metadata for every genome in HOMD
-wget https://www.homd.org//ftp/genomes/NCBI/V11.02/GCA_ID_info.csv -O 98_data/01_homd_v11_02-GCA_ID_info.csv
+wget https://www.homd.org//ftp/genomes/NCBI/V11.02/GCA_ID_info.csv \
+          -O 98_data/01_homd_v11_02-GCA_ID_info.csv
 
 # Generate genome IDs
+# CRITICAL: only alphanumeric characters and underscores
 # Use HMT number, genus and species names, strain ID, and GenBank Assembly Accession number
 # Remove none alphanumeric characters for underscore
 cat 98_data/01_homd_v11_02-GCA_ID_info.csv \
@@ -163,17 +165,24 @@ sed -i 's/........//' 98_data/genome_ids-8174.txt
 ```
 
 ### Process assemblies (reformat, create contigsDB, and annotate)
-
-```bash
 1. Reformat fasta and create contigs.DB
 ```bash
-# Create folders
+####################
+# Prepare contigs.DB working directory
+####################
+
+# Create folders and subfolders
 mkdir -p 02_individual_contigs_db/{01_raw_fasta,02_reformat_fasta,03_report,04_contigs_db} 97_nohup
 
-# copy fasta files
+####################
+# Make copy of genomes
+####################
+# Copy and rename genomic FASTA files
+# This preserves the orignal downloaded file (you never know if you'll need it and NCBI changes)
 dir_ncbi=01_download_genomes/02_genomic_files
 dir_assemblies=02_individual_contigs_db/01_raw_fasta
 
+# Loop over the clean list of genome IDs to save a copy with this ID
 while IFS= read -r genomes_id; do
     gca_id=$(echo $genomes_id | awk -F'_id_' '{print $2}' | sed -e 's/_/./2')
     old_name=$(find $dir_ncbi -maxdepth 1 -name "$gca_id*.fna")
@@ -181,14 +190,26 @@ while IFS= read -r genomes_id; do
     cp $old_name $NEW_NAME
 done < 98_data/genome_ids-8174.txt
 
-# copy genome ids to folder
+# Copy and rename genome id file
 cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids.txt
+```
+
+2. Reformat fasta and create contigs.DB
+```bash
+####################
+# Execute Snakemake workflow
+####################
+
+# Copy the Snakemake workflow present in this repository (Step_01_genome_processing) to the contigs directory (my_work_dir/02_individual_contigs_db)
+# Copy the shell script to scripts folder
+(my_work_dir/99_scripts)
 
 # Run full execution to refromat fasta and generate 8174 contigs databases with functional annotations (CAZymes, COG20, Pfam, KEGG)
 nohup ./99_scripts/s-02_individual_contigs_db-snakemake_wf-2025_08_19.sh >> 97_nohup/nohup-02_individual_contigs_db-snakemake_wf-2025_08_19.out 2>&1 &
 
 ```
-2. Compress fasta files
+
+3. Compress fasta files to reduce memory usage
 ```bash
 # Compress fasta files
 ls 01_download_genomes/02_genomic_files/*.fna | parallel gzip -9
