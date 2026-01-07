@@ -1,15 +1,12 @@
 🧬 Pangenome Analysis Workflow
 
 This workflow automates pangenome construction, ANI calculation, dereplication, phylogenomics, and metabolism estimation for oral microbiome species in HOMDv4.1. It consistes of two mayor steps:
-- First, selection of HMTs with at least 2 genomes (n = 567)
-- Second, execution of the `Snakefile`
+1. First, selection of HMTs with at least 2 genomes (n = 567)
+2. Second, execution of the `Snakefile`
 
 All processing is fully reproducible and is linked to the [`genome_processing`](../genome_processing/README.md).
 
-
-
-
----
+***
 
 ## **Overview**
 
@@ -20,7 +17,7 @@ All processing is fully reproducible and is linked to the [`genome_processing`](
 5. **Metabolism Estimation** – Predict genome metabolic potential.  
 6. **Phylogenomics** – Extract single-copy core genes and build trees (requires ≥3 genomes).  
 
----
+***
 
 ## **Requirements**
 
@@ -29,7 +26,7 @@ All processing is fully reproducible and is linked to the [`genome_processing`](
 - **Databases:** CAZymes v13, KEGG 2023-09-22, COG20, Pfam v37.2, GTDB v214  
 - **Snakemake:** Required for workflow orchestration  
 
----
+***
 
 ## **Usage**
 
@@ -40,7 +37,7 @@ All processing is fully reproducible and is linked to the [`genome_processing`](
 5. Monitor completion in `99_done/`.
 6. Summarize rule completion with `summary_rules-YYYY_MM_DD.txt`.
 
----
+***
 
 ## **Notes**
 
