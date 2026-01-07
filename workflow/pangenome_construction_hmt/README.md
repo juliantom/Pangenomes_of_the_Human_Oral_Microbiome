@@ -1,9 +1,13 @@
-# 🧬 HOMDv4.1 Φ Pangenome++ Workflow
+🧬 Pangenome Analysis Workflow
 
-**Author:** Julian Torres Morales  
-**Date:** December 8, 2025  
+This workflow automates pangenome construction, ANI calculation, dereplication, phylogenomics, and metabolism estimation for oral microbiome species in HOMDv4.1. It consistes of two mayor steps:
+- First, selection of HMTs with at least 2 genomes (n = 567)
+- Second, execution of the `Snakefile`
 
-This workflow automates pangenome construction, ANI calculation, dereplication, phylogenomics, and metabolism estimation for oral microbiome species in HOMDv4.1.  
+All processing is fully reproducible and is linked to the [`genome_processing`](../genome_processing/README.md).
+
+
+
 
 ---
 
