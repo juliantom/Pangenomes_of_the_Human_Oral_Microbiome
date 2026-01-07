@@ -5,7 +5,7 @@ This repository provides stable, open-access workflows and direct access to hund
 
 *This resource treats pangenomes as reusable, community-facing biological objects.*
 
----
+***
 ## 🚀 Quick Start
 
 ### 🌐 Online (I want a sneak peek)
@@ -20,7 +20,7 @@ This repository provides stable, open-access workflows and direct access to hund
 2. Load databases locally for deeper exploration
 3. Summarize gene-cluster content and functional annotation
 
----
+***
 ## 🧬 What This Resource Contains
 
 - Species-level pangenomes for 567 Human Microbial Taxa (HMTs) with ≥2 genomes in HOMD
@@ -28,7 +28,7 @@ This repository provides stable, open-access workflows and direct access to hund
 - Total pangenomes: 579
 - Genomes included: 8,110 from 8,177 genomes in HOMD
 
----
+***
 ## 🧩 Scope and Boundaries
 
 **This resource provides:**
@@ -42,7 +42,7 @@ This repository provides stable, open-access workflows and direct access to hund
 
 All content reflects completed analyses within the scope of current funding.
 
----
+***
 ## 🔮 Pangenome Construction (Overview)
 
 Pangenomes are constructed within the Anvi’o platform using a standardized workflow. Key steps include:
@@ -54,7 +54,7 @@ Pangenomes are constructed within the Anvi’o platform using a standardized wor
 
 Detailed methodological descriptions are provided in the associated Anvi’o documentation and publications.
 
----
+***
 ## 🧑‍💻 Reproducing or Extending the Work
 *For those who want the full experience — you know who you are*
 This repository includes:
@@ -68,7 +68,7 @@ For users who wish to reproduce analyses or construct pangenomes for additional 
 These materials are provided for transparency and reproducibility.
 Re-running or extending the workflows is optional and not required to use the resource.
 
----
+***
 ## 📦 Additional Associated Files
 
 Supplementary data products generated during pangenome construction may be provided, including:
@@ -78,7 +78,7 @@ Supplementary data products generated during pangenome construction may be provi
 
 These files support interpretation of the pangenomes and are not intended as standalone analyses.
 
----
+***
 ## 🔧 Data and Software Versions
 
 - **HOMD**: v4.1φ (phi release, includes phage genomes)
@@ -86,7 +86,7 @@ These files support interpretation of the pangenomes and are not intended as sta
 
 Version information is provided to support reproducibility and temporal context.
 
----
+***
 ## 📖 Citation
 
 If you use these pangenomes, please cite the associated resource announcement and acknowledge the data and tools that made this work possible:
@@ -94,7 +94,7 @@ If you use these pangenomes, please cite the associated resource announcement an
 - *Pangenomes of the Human Oral Microbiome* (Microbiology Resource Announcement) — DOI: [TBD]
 - Expanded Human Oral Microbiome Database (eHOMD)
 
----
+***
 ## 🧙 Acknowledgments
 
 🛡️ **HOMD stewards** — This resource builds on the sustained efforts of the **Human Oral Microbiome Database (HOMD)** team. Their long-term commitment to curation, standardization, and public access makes large-scale, community-facing resources possible. For more information, see the [HOMD Website↗](https://www.homd.org).
@@ -103,12 +103,12 @@ If you use these pangenomes, please cite the associated resource announcement an
 
 🪄 **Publicly funded science** — This work reflects the goals of long-term, publicly supported research: building durable, reusable infrastructure that enables discovery beyond any single study.
 
----
+***
 ## ⚖️ License
 
 All content in this repository is released under the GNU General Public License v3.0 (GPL-3.0).
 
----
+***
 
 ## 📬 Contact
 
