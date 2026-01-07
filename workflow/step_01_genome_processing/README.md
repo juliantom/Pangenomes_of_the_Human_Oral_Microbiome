@@ -63,9 +63,6 @@ All processing is fully reproducible and tied to the software and database versi
 # Create and change to working directory
 mkdir my_work_dir &&  my_work_dir
 
-# Activate environment
-conda activate anvio-8
-
 # Create directories
 mkdir -p 01_download_genomes/{01_ncbi_set,02_genomic_files} 98_data 99_scripts
 
@@ -102,6 +99,12 @@ cd 01_download_genomes/
 ####################
 # Download Genomes using Datasets program from NCBI (v18.9.0)
 ####################
+
+# Activate environment
+conda activate anvio-8
+
+# Install datasets if needed (I have it inside anvio environment)
+# conda install conda-forge::ncbi-datasets-cli
 
 # Download a dehydrated data package
 assembly_list="assembly_accession_list.txt"
@@ -141,6 +144,10 @@ for i in $(cat missing_genomes.txt); do
   grep "$i" ../98_data/01_homd_v11_02-GCA_ID_info.csv >> missing_genomes_info.txt
 done
 
+####################
+# Clean genome IDs 
+####################
+
 # Go back to working folder
 cd ../
 
@@ -153,3 +160,37 @@ done
 # Remove first 8 characters from genome ids to make it shorter (remove HMT ID)
 cat 98_data/genome_ids-8174.txt > 98_data/genome_ids-8174-long.txt
 sed -i 's/........//' 98_data/genome_ids-8174.txt
+```
+
+### Process assemblies (reformat, create contigsDB, and annotate)
+
+```bash
+1. Reformat fasta and create contigs.DB
+```bash
+# Create folders
+mkdir -p 02_individual_contigs_db/{01_raw_fasta,02_reformat_fasta,03_report,04_contigs_db} 97_nohup
+
+# copy fasta files
+dir_ncbi=01_download_genomes/02_genomic_files
+dir_assemblies=02_individual_contigs_db/01_raw_fasta
+
+while IFS= read -r genomes_id; do
+    gca_id=$(echo $genomes_id | awk -F'_id_' '{print $2}' | sed -e 's/_/./2')
+    old_name=$(find $dir_ncbi -maxdepth 1 -name "$gca_id*.fna")
+    NEW_NAME=$(echo "$genomes_id" | awk -v new_dir="$dir_assemblies" '{print new_dir"/"$1"-raw.fasta"}' )
+    cp $old_name $NEW_NAME
+done < 98_data/genome_ids-8174.txt
+
+# copy genome ids to folder
+cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids.txt
+
+# Run full execution to refromat fasta and generate 8174 contigs databases with functional annotations (CAZymes, COG20, Pfam, KEGG)
+nohup ./99_scripts/s-02_individual_contigs_db-snakemake_wf-2025_08_19.sh >> 97_nohup/nohup-02_individual_contigs_db-snakemake_wf-2025_08_19.out 2>&1 &
+
+```
+2. Compress fasta files
+```bash
+# Compress fasta files
+ls 01_download_genomes/02_genomic_files/*.fna | parallel gzip -9
+ls 02_individual_contigs_db/01_raw_fasta/*.fasta | parallel gzip -9
+```
