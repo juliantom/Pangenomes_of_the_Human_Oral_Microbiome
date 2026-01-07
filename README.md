@@ -32,9 +32,9 @@ This repository provides stable, open-access workflows and direct access to hund
 ## 🧩 Scope and Boundaries
 
 **This resource provides:**
+- Visual access to core and accessory gene content across all available pangenomes
 - Systematically constructed, taxon-resolved pangenomes for oral bacteria and archaea
 - A reference framework for examining genomic variation within taxa (Snakemake + Anvi'o)
-- Visual access to core and accessory gene content across all available pangenomes
 
 **This resource does NOT provide:**
 - Claims-driven biological interpretation
@@ -112,4 +112,4 @@ All content in this repository is released under the GNU General Public License 
 
 ## 📬 Contact
 
-For questions or issues related to this resource, please open a GitHub issue or contact the maintainers via HOMD.
+For questions or issues related to this resource, please contact the maintainers via HOMD.
