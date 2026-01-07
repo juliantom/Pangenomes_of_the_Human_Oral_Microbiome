@@ -1,1 +1,290 @@
+# ============================================
+# 🐍 Snakefile: Genome Processing & Contigs DB Workflow
+# ============================================
+# 📅 Date: 2025-05-19
+# 👤 Creator: Julian Torres-Morales
+# ©️ Copyright: Julian Torres-Morales
+# 📁 Project: HOMDv4.1 Φ Anvi'o 8 Pangenomes
+# 🧪 Description:
+#     - Reformat genomic FASTA files
+#     - Generate contigs databases for each genome
+#     - Run functional annotations (CAZymes, COG, Pfam, KEGG)
+#     - Profile marker genes (Bacteria 71 and ribosomal genes)
+#     - Scan tRNAs
+# 🛠️ Requirements:
+#     - Conda environment: anvio-8
+#     - Anvi'o v8, Python 3.10.15
+#     - Databases: CAZymes v13, COG20, Pfam v37.2, KEGG 2023-09-22, GTDB v214
+# 📌 Notes:
+#     - ⚠️ 'done' files track completed steps
+#     - Logs are stored in structured directories
+#     - Full software & database versions documented in VERSIONS.md
+# 📖 License: See LICENSE.md in repository
+# ============================================
 
+# ========== CONFIGURATION ==========
+import os
+
+# Use the current working directory as the base
+CURRENT_DIR = os.getcwd()
+
+## Input files
+PARENT_DIR = os.path.dirname(CURRENT_DIR)
+GENOMES_LIST = os.path.join(CURRENT_DIR, "genome_ids.txt")
+
+# Output directory for species-specific pangenomes
+RAW_FASTA_DIR = os.path.join(CURRENT_DIR, "01_raw_fasta")
+REFORMATTED_DIR = os.path.join(CURRENT_DIR, "02_reformat_fasta")
+REPORT_DIR = os.path.join(CURRENT_DIR, "03_report")
+CONTIGS_DB_DIR = os.path.join(CURRENT_DIR, "04_contigs_db")
+DONE_DIR = os.path.join(CURRENT_DIR, "99_done")
+
+# Read genome ID list
+with open(GENOMES_LIST) as f:
+    genomes_list = [line.strip() for line in f if line.strip()]
+
+# ========== RULES ==========
+
+rule all:
+    input:
+        expand(os.path.join(REFORMATTED_DIR, "{genome}.fa"), genome = genomes_list),
+        expand(os.path.join(REPORT_DIR, "{genome}-reformat_report.txt"), genome = genomes_list),
+        expand(os.path.join(DONE_DIR, "{genome}-reformat_fasta.done"), genome = genomes_list),
+        expand(os.path.join(DONE_DIR, "{genome}-contigs_db.done"), genome = genomes_list),
+        expand(os.path.join(DONE_DIR, "{genome}-cazymes.done"), genome = genomes_list),
+        expand(os.path.join(DONE_DIR, "{genome}-hmms.done"), genome = genomes_list),
+        expand(os.path.join(DONE_DIR, "{genome}-trnas.done"), genome = genomes_list),
+        expand(os.path.join(DONE_DIR, "{genome}-pfams.done"), genome = genomes_list),
+        expand(os.path.join(DONE_DIR, "{genome}-ncbi_cogs.done"), genome = genomes_list),
+        expand(os.path.join(DONE_DIR, "{genome}-kegg_kofams.done"), genome = genomes_list),
+        expand(os.path.join(DONE_DIR, "{genome}-scg_taxonomy.done"), genome = genomes_list),
+        expand(os.path.join(DONE_DIR, "{genome}-trna_taxonomy.done"), genome = genomes_list)
+
+# Rule to reformat original fasta to meet anvi'o requirements
+rule reformat_fasta:
+    input:
+        raw_fasta = os.path.join(RAW_FASTA_DIR, "{genome}-raw.fasta")
+    output:
+        edited_fasta = os.path.join(REFORMATTED_DIR, "{genome}.fa"),
+        report_fasta = os.path.join(REPORT_DIR, "{genome}-reformat_report.txt"),
+        done_reformat_fasta = os.path.join(DONE_DIR, "{genome}-reformat_fasta.done")
+    log:
+        "00_log/reformat_fasta/{genome}-reformat_fasta.log"
+    shell:
+        '''
+        mkdir -p 00_log/reformat_fasta {REFORMATTED_DIR} {REPORT_DIR} {CONTIGS_DB_DIR} {DONE_DIR}
+        anvi-script-reformat-fasta --output-file {output.edited_fasta} \
+                                    --report-file {output.report_fasta} \
+                                    --simplify-names \
+                                    --prefix {wildcards.genome} \
+                                    --min-len "200" \
+                                    --seq-type "NT" \
+                                    {input.raw_fasta} &> log
+
+        touch {output.done_reformat_fasta}
+        '''
+
+# Create contigs database from edited assemblies
+# IMPORTANT: creating a DONE file is essential to avoid snakemake crashing after each annotation step since the contigs.db is modified after each annotation
+rule create_contigs_db:
+    input:
+        edited_fasta = os.path.join(REFORMATTED_DIR, "{genome}.fa")
+    output:
+        done_contigs_db=os.path.join(DONE_DIR, "{genome}-contigs_db.done")
+    params:
+        contigs_db=lambda wildcards: os.path.join(CONTIGS_DB_DIR, f"{wildcards.genome}-contigs.db")
+    log:
+        "00_log/contigs_db/{genome}-contigs.db.log"
+    threads: 4
+    shell:
+        '''
+        mkdir -p 00_log/contigs_db
+        anvi-gen-contigs-database -f {input.edited_fasta} \
+                                -o {params.contigs_db} \
+                                --project-name {wildcards.genome} \
+                                --num-threads {threads} \
+                                &> {log}
+        touch {output.done_contigs_db}
+        '''
+
+# Rule to annotate with CAZymes (v13) with HMMER (hmmsearch)
+rule run_cazymes:
+    input:
+        done_contigs_db=os.path.join(DONE_DIR, "{genome}-contigs_db.done")
+    params:
+        contigs_db=lambda wildcards: os.path.join(CONTIGS_DB_DIR, f"{wildcards.genome}-contigs.db")
+    output:
+        done_cazymes=os.path.join(DONE_DIR, "{genome}-cazymes.done")
+    log: 
+        "00_log/cazymes/{genome}-cazymes.log"
+    threads: 8
+    shell:
+        '''
+        mkdir -p 00_log/cazymes
+        anvi-run-cazymes -c {params.contigs_db} \
+                         --num-threads {threads} \
+                         --hmmer-program "hmmsearch" \
+                         &> {log}
+        touch {output.done_cazymes}
+        '''
+
+# Rule to annotate with HMMs with HMMER (hmmscan) for ribosomal RNA genes and single-copy genes of Archeaea, Bacteria, and Protista DBs 
+rule run_hmms:
+    input:
+        done_contigs_db=os.path.join(DONE_DIR, "{genome}-contigs_db.done")
+    params:
+        contigs_db=lambda wildcards: os.path.join(CONTIGS_DB_DIR, f"{wildcards.genome}-contigs.db")
+    output:
+        done_hmms=os.path.join(DONE_DIR, "{genome}-hmms.done")
+    log: 
+        "00_log/hmms/{genome}-hmms.log"
+    threads: 8
+    shell:
+        '''
+        mkdir -p 00_log/hmms
+        anvi-run-hmms -c {params.contigs_db} \
+                      --num-threads {threads} \
+                      --hmmer-program "hmmscan" \
+                      &> {log}
+        touch {output.done_hmms}
+        '''
+
+# Rule to scan tRNAs (tRNAscan-SE; v2.0.12)
+rule scan_trnas:
+    input:
+        done_contigs_db=os.path.join(DONE_DIR, "{genome}-contigs_db.done")
+    params:
+        contigs_db=lambda wildcards: os.path.join(CONTIGS_DB_DIR, f"{wildcards.genome}-contigs.db")
+    output:
+        done_trnas=os.path.join(DONE_DIR, "{genome}-trnas.done")
+    log: 
+        "00_log/trnas/{genome}-trnas.log"
+    threads: 8
+    shell:
+        '''
+        mkdir -p 00_log/trnas
+        anvi-scan-trnas -c {params.contigs_db} \
+                        --num-threads {threads} \
+                        &> {log}
+        touch {output.done_trnas}
+        '''
+
+# Rule run Pfams (v37.2) with HMMER (hmmsearch)
+rule run_pfams:
+    input:
+        done_contigs_db=os.path.join(DONE_DIR, "{genome}-contigs_db.done")
+    params:
+        contigs_db=lambda wildcards: os.path.join(CONTIGS_DB_DIR, f"{wildcards.genome}-contigs.db")
+    output:
+        done_pfams=os.path.join(DONE_DIR, "{genome}-pfams.done")
+    log: 
+        "00_log/pfams/{genome}-pfams.log"
+    threads: 8
+    shell:
+        '''
+        mkdir -p 00_log/pfams
+        anvi-run-pfams -c {params.contigs_db} \
+                        --num-threads {threads} \
+                        --hmmer-program "hmmsearch" \
+                        &> {log}
+        touch {output.done_pfams}
+        '''
+
+# Rule run NCBI COGs (COG20) with DIAMOND (v2.1.11)
+rule run_ncbi_cogs:
+    input:
+        done_contigs_db=os.path.join(DONE_DIR, "{genome}-contigs_db.done")
+    params:
+        contigs_db=lambda wildcards: os.path.join(CONTIGS_DB_DIR, f"{wildcards.genome}-contigs.db")
+    output:
+        done_ncbi_cogs=os.path.join(DONE_DIR, "{genome}-ncbi_cogs.done")
+    log: 
+        "00_log/ncbi_cogs/{genome}-ncbi_cogs.log"
+    threads: 4
+    shell:
+        '''
+        mkdir -p 00_log/ncbi_cogs
+        anvi-run-ncbi-cogs -c {params.contigs_db} \
+                            --num-threads {threads} \
+                            --search-with "diamond" \
+                            &> {log}
+        touch {output.done_ncbi_cogs}
+        '''
+
+# Rule run KEGG Modules / KOfam (v2023-09-22) with HMMER (hmmsearch)
+rule run_kegg_kofams:
+    input:
+        done_contigs_db=os.path.join(DONE_DIR, "{genome}-contigs_db.done")
+    params:
+        contigs_db=lambda wildcards: os.path.join(CONTIGS_DB_DIR, f"{wildcards.genome}-contigs.db")
+    output:
+        done_kegg_kofams=os.path.join(DONE_DIR, "{genome}-kegg_kofams.done")
+    log: 
+        "00_log/kegg_kofams/{genome}-kegg_kofams.log"
+    threads: 12
+    shell:
+        '''
+        mkdir -p 00_log/kegg_kofams
+        anvi-run-kegg-kofams -c {params.contigs_db} \
+                      --num-threads {threads} \
+                      --hmmer-program "hmmsearch" \
+                      &> {log}
+        touch {output.done_kegg_kofams}
+        '''
+
+# Rule run SCG taxonomy (GTDB v214)
+rule run_scg_taxonomy:
+    input:
+        done_contigs_db=os.path.join(DONE_DIR, "{genome}-contigs_db.done"),
+        done_hmms=os.path.join(DONE_DIR, "{genome}-hmms.done")
+    params:
+        contigs_db=lambda wildcards: os.path.join(CONTIGS_DB_DIR, f"{wildcards.genome}-contigs.db")
+    output:
+        done_scg_taxonomy=os.path.join(DONE_DIR, "{genome}-scg_taxonomy.done")
+    log: 
+        "00_log/scg_taxonomy/{genome}-scg_taxonomy.log"
+    threads: 4
+    shell:
+        '''
+        mkdir -p 00_log/scg_taxonomy
+        anvi-run-scg-taxonomy -c {params.contigs_db} \
+                      --num-parallel-processes 1 \
+                      --num-threads {threads} \
+                      &> {log}
+        touch {output.done_scg_taxonomy}
+        '''
+
+# Rule run tRNA taxonomy (GTDB v214)
+rule run_trna_taxonomy:
+    input:
+        done_contigs_db=os.path.join(DONE_DIR, "{genome}-contigs_db.done"),
+        done_trnas=os.path.join(DONE_DIR, "{genome}-trnas.done")
+    params:
+        contigs_db=lambda wildcards: os.path.join(CONTIGS_DB_DIR, f"{wildcards.genome}-contigs.db")
+    output:
+        done_trna_taxonomy=os.path.join(DONE_DIR, "{genome}-trna_taxonomy.done")
+    log: 
+        "00_log/trna_taxonomy/{genome}-trna_taxonomy.log"
+    threads: 4
+    shell:
+        '''
+        mkdir -p 00_log/trna_taxonomy
+        anvi-run-trna-taxonomy -c {params.contigs_db} \
+                      --num-parallel-processes 1 \
+                      --num-threads {threads} \
+                      &> {log}
+        touch {output.done_trna_taxonomy}
+        '''
+
+# Rule to remove all output files
+rule clean:
+    message:
+        "Removing all output files..."
+    shell:
+        """
+        rm -rf 00_log/
+        rm -rf {REFORMATTED_DIR}
+        rm -rf {REPORT_DIR}
+        rm -rf {CONTIGS_DB_DIR}
+        rm -rf {DONE_DIR}
+        """
