@@ -17,14 +17,14 @@ All genomes and HOMD reference files were obtained on August 19, 2025.
 
 ### Anvi’o internal database versions
 
-- Profile database: 38  
-- Contigs database: 21  
-- Pan database: 16  
-- Genome data storage: 7  
-- Auxiliary data storage: 2  
-- Structure database: 2  
-- Metabolic modules database: 4  
-- tRNA-seq database: 2  
+- Profile database............: 38
+- Contigs database............: 21
+- Pan database................: 16
+- Genome data storage.........: 7
+- Auxiliary data storage......: 2
+- Structure database..........: 2
+- Metabolic modules database..: 4
+- tRNA-seq database...........: 2
 
 ***
 
