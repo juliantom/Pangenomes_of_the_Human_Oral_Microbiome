@@ -1,9 +1,10 @@
 # 🔢 Software and Database Versions
 
-This file documents the software versions and database snapshots used to generate
-the pangenomes distributed in this repository.
+This document records the software versions and database snapshots used to generate the pangenomes distributed in this repository. These versions correspond to the initial public release of the resource.
 
-These versions correspond to the initial public release of the resource.
+Exact version enforcement is handled within the Snakemake workflows and associated configuration files.
+
+***
 
 ## Core software
 
@@ -11,17 +12,6 @@ These versions correspond to the initial public release of the resource.
 - **Python**: 3.10.15
 - **Snakemake**: 7.32
 - **Conda environment**: `anvio-8`
-
-# 🔢 Software and Database Versions
-
-This document records the software versions and database snapshots used to generate
-the pangenomes distributed in this repository. These versions correspond to the
-initial public release of the resource.
-
-Exact version enforcement is handled within the Snakemake workflows and associated
-configuration files.
-
-***
 
 ### Anvi’o internal database versions
 - Profile database: 38
