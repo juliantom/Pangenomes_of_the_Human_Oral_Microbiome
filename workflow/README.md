@@ -15,9 +15,9 @@ reusable, community-facing pangenomes.
 ```text
 workflow/
 ├── README.md                  # You are here
-├── WORKFLOWS.md               # Conceptual overview (what happens and why)
 ├── CODE_OVERVIEW.md           # Technical overview (how the code is organized)
 ├── VERSIONS.md                # Software and database versions used for this resource
+├── WORKFLOWS.md               # Conceptual overview (what happens and why)
 │
 ├── step_01_genome_processing/
 │   ├── Snakefile
