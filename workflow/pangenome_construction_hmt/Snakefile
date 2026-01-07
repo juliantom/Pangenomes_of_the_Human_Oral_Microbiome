@@ -1,42 +1,41 @@
-
 # ============================================
-# 🐍 Snakefile for Pangenomic Analysis Pipeline
+# 🐍 Snakefile: HOMDv4.1 Φ Pangenome++ Workflow
 # ============================================
-# 📅 Date: 2025-12-12
-# 👤 Creator: Julian [📝 Registered User]
-# 📁 Project: HOMDv4 Anvi'o 8 Pangenomes
-# 🧪 Description:
-#     This Snakefile defines the workflow for generating contigs databases,
-#     running CAZyme, HMM annotations, and tracking completion status.
-#
+# 📅 Date: 2025-12-23
+# 👤 Creator: Julian Torres-Morales
+# ©️ Copyright: Julian Torres-Morales
+# 📁 Project: HOMDv4.1 Φ Anvi'o 8 Pangenomes
+# 🧬 Workflow Scope:
+#     Automates comprehensive genome processing and pangenomic analysis of HOMDv4.1 genomes:
+#       1️⃣ Subset genomes by species/group
+#       2️⃣ Generate external files linking genome IDs to contigs.DB
+#       3️⃣ Build genomes storage databases for each group
+#       4️⃣ Construct pangenomes with hierarchical clustering
+#       5️⃣ Compute genome similarity using ANI (pyANI, ANIb)
+#       6️⃣ Dereplicate genomes across multiple similarity thresholds
+#       7️⃣ Perform dereplication using full percent identity
+#       8️⃣ Estimate genome metabolic potential
+#       9️⃣ Extract single-copy core genes from pangenomes
+#     1️⃣0️⃣ Perform phylogenomic reconstruction (alignment, trimming, tree inference)
 # 🛠️ Requirements:
-#     - Conda
-#     - Anvi'o v8 environment
-#     - Python 3.10.15
-#     - Anvi'o software:
-#       * tRNAscan-SE (v2.0.12)
-#       * DIAMOND (v2.1.11)
-#       * HMMER (v3.4)
-#     - Databases:
-#       * CAZymes (v13)
-#       * HMMS (r214.1)
-#           * Ribosomal rRNA genes
-#           * Transfer rRNA genes
-#           * Bacteria (Bacteria 71), Archaea (76), and Eukaryotes (Protista 83) single-copy genes
-#       * KEGG Modules and Orthologs (v2023-09-22; snapshot)
-#       * NCBI COGs (COG20)
-#       * Pfam (v37.2)
-#       * GTDB (v214; SCG taxonomy)
-#       * GTDB (v214; tRNA taxonomy)
-#     - Required Snakemake software:
-#     - Graphviz (for rulegraph)
-#
-# 📌 Notes:
-#     - 'contigs.db' is passed as a parameter, not checked as input
-#     - Elapsed time is logged in dd:hh:mm:ss format
-#     - Output logs and done flags are stored in structured directories
-#
+#     • Conda environment: anvio-8
+#     • Anvi'o v8, Python 3.10.15
+#     • Contigs.DB must exist for all genomes; annotations are optional
+#       (pangenome construction is independent of functional annotation)
+#     • If annotations exist, they must have been built with identical parameters and versions
+#     • Databases used for prior contigs.DB construction: CAZymes v13, COG20, Pfam v37.2, KEGG 2023-09-22, GTDB v214
+# 📝 Notes:
+#     • Done files track completion of each step for reproducibility
+#     • Logs stored in structured directories under 00_logs/
+#     • Genome output files are prefixed with HMT ID and species name 
+#       (format: SpeciesName_HMTID) and stored in `results/`
+#     • Full software & database versions documented in VERSIONS.md
+# ⚠️ Warnings:
+#     • ANI, dereplication, and phylogenomics are computationally intensive
+#     • Phylogeny will be skipped if ≤4 genomes are present for a group due to bootstrapping requirements
+# 📖 License: See LICENSE.md in repository
 # ============================================
+
 
 # ========== CONFIGURATION ==========
 import os
