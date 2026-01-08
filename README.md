@@ -75,7 +75,9 @@ These materials are provided for transparency and reproducibility.
 Re-running or extending the workflows is optional and not required to use the resource.
 
 Just the code? Here it is:
+
 [Genome Processing ↗](workflow/genome_processing/CODE.md)
+
 [Pangenome Analysis ↗](workflow/pangenome_construction_hmt/CODE.md)
 
 ***
