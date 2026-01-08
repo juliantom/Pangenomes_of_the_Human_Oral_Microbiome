@@ -166,17 +166,22 @@ done < 98_data/genome_ids-8174.txt
 cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids.txt
 ```
 ### 📝 5️⃣ Run Snakemake Workflow
+Before running, make sure the script `01_prepare-contigs_db-snakemake.sh` is in the working directory `99_scripts/`.<br>
+If you cloned the repository, it’s in `/workflow/scripts/` — copy it to the working directory:
 ```
+# Copy script 
+cp /path/to/repo/workflow/scripts/01_prepare-contigs_db-snakemake.sh 99_scripts/
+
 ####################
-# Execute Snakemake workflow
+# Execute Snakemake workflow: Prepare contigs DB and annotate assemblies
 ####################
-nohup ./99_scripts/s-02_individual_contigs_db-snakemake_wf-2025_08_19.sh \
-     >> 97_nohup/nohup-02_individual_contigs_db-snakemake_wf-2025_08_19.out 2>&1 &
+nohup ./99_scripts/01_prepare-contigs_db-snakemake.sh \
+     >> 97_nohup/nohup-01_prepare-contigs_db-snakemake.out 2>&1 &
 ```
 ### 📂 6️⃣ Compress FASTA Files
 ```
 ####################
-# Compress fasta files for storage
+# Compress fasta files for storage optimization
 ####################
 ls 01_download_genomes/02_genomic_files/*.fna | parallel gzip -9
 ls 02_individual_contigs_db/01_raw_fasta/*.fasta | parallel gzip -9
