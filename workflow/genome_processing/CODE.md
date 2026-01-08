@@ -1,4 +1,4 @@
-# 🧬 Genome Processing Code — Step 01
+# 🧬 Genome Processing Code — Step 1
 
 **Created by:** Julian Torres Morales  
 **Date:** December 8, 2025  
