@@ -2,9 +2,22 @@
 **Created by:** Julian Torres Morales  
 **Date:** December 8, 2025  
 
+***
+
+⚠️ **WARNING: HIGH RESOURCE USAGE** ⚠️<br>
+> This workflow is **computationally intensive** and intended for **high‑performance environments**.
+> 
+> - Set up on a machine with **112 threads** and **3 TB RAM**
+>   - ⏱ Run Time Full Genome Processing (genomes = 8,174): 6 days
+>   - ⏱ Run Time Full Pangenomic Analysis (taxa = 567): 3 days
+> - **Thread allocation is dynamic**, set per **taxon** and **rule** — adjust to match your system
+> - **Snakemake may launch all threads simultaneously if not properly configured**
+> - **Adjust thread setting** in `config_group_threads.yaml` as needed
+> - ✅ **Start small:** run one taxon, confirm resource usage, then scale
+
 This script implements the workflow to identify and select representative genomes for each taxon in HOMDv4.1 using ~95% percent identity thresholds. Taxa definitions follow the HOMD genome table: [HOMD Genome Table](https://www.homd.org/genome/genome_table).  
 
----
+***
 
 ## **Workflow Overview**
 
