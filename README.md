@@ -11,7 +11,7 @@ This repository provides stable, open-access workflows and direct access to hund
 ## 🚀 Quick Start
 
 ### 🌐 Online (interactive experience)
-1. Browse pangenomes interactively through the HOMD Anvi’o Portal [HOMD Anvi’'o Server Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
+1. Browse pangenomes interactively through the HOMD Anvi’o Portal [HOMD Anvi’o Server Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
    - *No Anvi’o installation needed*
 2. Select a taxon and inspect core and accessory gene clusters
 3. Use these pangenomes as a reference for comparative analysis
