@@ -1,12 +1,8 @@
 # 🧬 Workflow Overview
 
-This repository implements a two-stage workflow for constructing and analyzing 
-species-level pangenomes of oral microbial taxa. The workflows are designed to
-produce standardized, reusable pangenomes that can be explored interactively
-and used in comparative analyses.
+This resource implements a **two-stage workflow** for constructing and analyzing taxon-specific level pangenomes of oral microbial taxa. The designed emphasizes transparency, reproducibility, and community utility, ensuring that every step can be traced, validated, and reused.
 
-The overall process proceeds from genome identification and processing to
-taxon-specific pangenome construction and downstream analyses.
+The process moves from curated genome retrival - from HOMD- to taxon-specific pangenome construction and additional comparative analyses. Each stage is documented and version-controlled to support scientific rigor.
 
 ***
 
