@@ -25,7 +25,7 @@ All processing is tied to VERSIONS.md
  for software and database versions.
 Keep this file for reproducibility, troubleshooting, or re-running the workflow.
 
-## 🖥️ 1️⃣ Prepare Working Directories and HOMD Metadata
+### 🖥️ 1️⃣ Prepare Working Directories and HOMD Metadata
 ```
 ####################
 # Prepare working directory
@@ -65,7 +65,7 @@ cat 98_data/genome_ids-8177.txt \
 # Copy list to download directory
 cp 98_data/02-assembly_id_list-2025_08_19.txt 01_download_genomes/assembly_accession_list.txt
 ```
-## 📂 2️⃣ Download Genomes from NCBI
+### 📂 2️⃣ Download Genomes from NCBI
 ```
 ####################
 # Change to download directory
@@ -98,7 +98,7 @@ for fasta_file in 01_ncbi_set/ncbi_dataset/data/*/*.fna; do
   mv $fasta_file 02_genomic_files
 done
 ```
-## ⚙️ 3️⃣ Sanity Check and Clean Genome IDs
+### ⚙️ 3️⃣ Sanity Check and Clean Genome IDs
 ```
 ####################
 # Sanity Check
@@ -132,7 +132,7 @@ done
 cat 98_data/genome_ids-8174.txt > 98_data/genome_ids-8174-long.txt
 sed -i 's/........//' 98_data/genome_ids-8174.txt
 ```
-## 📂 4️⃣ Prepare Contigs DB Working Directory
+### 📂 4️⃣ Prepare Contigs DB Working Directory
 ```
 ####################
 # Create contigs DB workspace
@@ -155,7 +155,7 @@ done < 98_data/genome_ids-8174.txt
 # Copy genome IDs to contigs DB folder
 cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids.txt
 ```
-## 📝 5️⃣ Run Snakemake Workflow
+### 📝 5️⃣ Run Snakemake Workflow
 ```
 ####################
 # Execute Snakemake workflow
@@ -163,7 +163,7 @@ cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids.txt
 nohup ./99_scripts/s-02_individual_contigs_db-snakemake_wf-2025_08_19.sh \
      >> 97_nohup/nohup-02_individual_contigs_db-snakemake_wf-2025_08_19.out 2>&1 &
 ```
-## 📂 6️⃣ Compress FASTA Files
+### 📂 6️⃣ Compress FASTA Files
 ```
 ####################
 # Compress fasta files for storage
