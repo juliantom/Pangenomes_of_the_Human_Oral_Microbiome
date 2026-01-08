@@ -117,7 +117,7 @@ done
 # List of assembly accession numbers downloaded
 ls 02_genomic_files/ | awk 'BEGIN{FS=OFS="_"}{print $1,$2}' > downloaded_genomes.txt
 
-# Compare with planned assembly list to identify missing genomes
+# Compare downloaded vs expected genomes to identify missing ones
 comm -23 <(sort assembly_accession_list.txt) <(sort downloaded_genomes.txt) > missing_genomes.txt
 
 # Fetch metadata for missing genomes
