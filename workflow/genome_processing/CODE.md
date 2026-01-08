@@ -1,4 +1,19 @@
-🧬 Genome Processing Code — Step 01
+# 🧬 Genome Processing Code — Step 01
+
+***
+
+⚠️ **WARNING: HIGH RESOURCE USAGE** ⚠️<br>
+> This workflow is **computationally intensive** and intended for **high‑performance environments**.
+> 
+> - Set up on a machine with **112 threads** and **3 TB RAM**
+>   - ⏱ Run Time Full Genome Processing Workflow (genomes = 8,174): 6 days
+>   - ⏱ Run Time Full Pangenomic Analysis Workflow (taxa = 567): 3 days
+> - **Thread allocation is dynamic**, set per **taxon** and **rule** — adjust to match your system
+> - **Snakemake may launch all threads simultaneously if not properly configured**
+> - **Adjust thread setting** in `config_group_threads.yaml` as needed
+> - ✅ **Start small:** run one taxon, confirm resource usage, then scale
+
+***
 
 This file contains all commands and scripts used to prepare genomes for pangenome analysis.
 It combines genome retrieval, cleaning, contigs database creation, and functional annotation in a single workflow.
@@ -7,7 +22,7 @@ All processing is tied to VERSIONS.md
  for software and database versions.
 Keep this file for reproducibility, troubleshooting, or re-running the workflow.
 
-🖥️ 1️⃣ Prepare Working Directories and HOMD Metadata
+## 🖥️ 1️⃣ Prepare Working Directories and HOMD Metadata
 ```
 ####################
 # Prepare working directory
@@ -47,7 +62,7 @@ cat 98_data/genome_ids-8177.txt \
 # Copy list to download directory
 cp 98_data/02-assembly_id_list-2025_08_19.txt 01_download_genomes/assembly_accession_list.txt
 ```
-📂 2️⃣ Download Genomes from NCBI
+## 📂 2️⃣ Download Genomes from NCBI
 ```
 ####################
 # Change to download directory
@@ -80,7 +95,7 @@ for fasta_file in 01_ncbi_set/ncbi_dataset/data/*/*.fna; do
   mv $fasta_file 02_genomic_files
 done
 ```
-⚙️ 3️⃣ Sanity Check and Clean Genome IDs
+## ⚙️ 3️⃣ Sanity Check and Clean Genome IDs
 ```
 ####################
 # Sanity Check
@@ -114,7 +129,7 @@ done
 cat 98_data/genome_ids-8174.txt > 98_data/genome_ids-8174-long.txt
 sed -i 's/........//' 98_data/genome_ids-8174.txt
 ```
-📂 4️⃣ Prepare Contigs DB Working Directory
+## 📂 4️⃣ Prepare Contigs DB Working Directory
 ```
 ####################
 # Create contigs DB workspace
@@ -137,7 +152,7 @@ done < 98_data/genome_ids-8174.txt
 # Copy genome IDs to contigs DB folder
 cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids.txt
 ```
-📝 5️⃣ Run Snakemake Workflow
+## 📝 5️⃣ Run Snakemake Workflow
 ```
 ####################
 # Execute Snakemake workflow
@@ -145,7 +160,7 @@ cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids.txt
 nohup ./99_scripts/s-02_individual_contigs_db-snakemake_wf-2025_08_19.sh \
      >> 97_nohup/nohup-02_individual_contigs_db-snakemake_wf-2025_08_19.out 2>&1 &
 ```
-📂 6️⃣ Compress FASTA Files
+## 📂 6️⃣ Compress FASTA Files
 ```
 ####################
 # Compress fasta files for storage
