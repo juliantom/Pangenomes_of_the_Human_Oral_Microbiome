@@ -10,21 +10,22 @@ This repository provides stable, open-access workflows and direct access to hund
 
 ## 🚀 Quick Start
 
-### 🌐 Online (I want a sneak peek)
+### 🌐 Online (interactive experience)
 1. Browse pangenomes interactively through the HOMD Anvi’o Portal [HOMD Anvi’o Server Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
    - *No Anvi'o installation needed*
 2. Select a taxon and inspect core and accessory gene clusters
 3. Use these pangenomes as a reference for comparative analysis
 
-### 💻 Offline (I want full control)
+### 💻 Offline (full control)
 1. Download Anvi'o-compatible pangenome databases [HOMD Anvi’o Servern Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
    - *Anvi'o installation required* [Anvi'o install](https://anvio.org/install/)
 2. Load databases locally for deeper exploration
 3. Summarize gene-cluster content and functional annotation
 
 ***
-## 🧬 What This Resource Contains
+## 🧬 What This Repository Contains
 
+How to generate:
 - Species-level pangenomes for 567 Human Microbial Taxa (HMTs) with ≥2 genomes in HOMD
 - 12 additional pangenomes for named species containing multiple taxa (HMTs)
 - Total pangenomes: 579
