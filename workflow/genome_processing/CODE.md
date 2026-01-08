@@ -77,15 +77,13 @@ cd 01_download_genomes/
 conda activate anvio-8
 
 ####################
-#
-# Install Datasets (only needed once and didn't break anvi'o)
-#
-# conda install conda-forge::ncbi-datasets-cli=18.9.0
-#
-# Alternative
-#
-# conda install conda-forge::ncbi-datasets-cli
+# Install NCBI Datasets
+# only needed once and didn't break anvi'o
 ####################
+
+# Choose one option
+# conda install conda-forge::ncbi-datasets-cli=18.9.0
+# conda install conda-forge::ncbi-datasets-cli
 
 # Download a dehydrated data package (NCBI datasets v18.9.0)
 assembly_list="assembly_accession_list.txt"
