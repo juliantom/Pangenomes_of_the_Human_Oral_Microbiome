@@ -8,13 +8,19 @@
 ⚠️ **WARNING: HIGH RESOURCE USAGE** ⚠️<br>
 > This workflow is **computationally intensive** and intended for **high‑performance environments**.
 > 
-> - Set up on a machine with **112 threads** and **3 TB RAM**
->   - ⏱ Run Time Full Genome Processing Workflow (genomes = 8,174): 6 days
->   - ⏱ Run Time Full Pangenomic Analysis Workflow (taxa = 567): 3 days
-> - **Thread allocation is dynamic**, set per **taxon** and **rule** — adjust to match your system
-> - **Snakemake may launch all threads simultaneously if not properly configured**
-> - **Adjust thread setting** in `config_group_threads.yaml` as needed
-> - ✅ **Start small:** run one taxon, confirm resource usage, then scale
+> - Optimized for a machine with **112 threads** and **3 TB RAM**
+>   - ⏱ Run Time Full Genome Processing Workflow (genomes = 8,174): ~6 days
+>   - ⏱ Run Time Full Pangenomic Analysis Workflow (taxa = 567): ~3 days
+> 
+> - **Thread allocation is static set per rule** — adjust if needed
+> - **Control total threads and jobs** in the script: `01_prepare-contigs_db-snakemake.sh`
+>  ```bash
+>  # High resources
+>  snakemake --jobs 100 --cores 100
+>  # Reduced resources for testing or smaller runs
+>  snakemake --jobs 10 --cores 10
+>  ```
+> - ✅ **Start small:** run a single genome, confirm resource usage, then scale up
 
 ***
 
