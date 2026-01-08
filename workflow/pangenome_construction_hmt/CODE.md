@@ -78,7 +78,7 @@ cp "$genome_to_group_pass" "$dir_first_derep/group_to_genomes.txt"
 cp 99_scripts/s-03_generate_yaml.py "$dir_first_derep"
 ./$dir_first_derep/s-03_generate_yaml.py
 ```
-## **2️⃣ Test Snakemake workflow**
+### **2️⃣ Test Snakemake workflow**
 ```bash
 cd $dir_first_derep
 conda activate anvio-8
@@ -96,13 +96,13 @@ snakemake --jobs 48 --cores 48 --quiet
 cd ../
 
 ```
-## **3️⃣ Run full Snakemake workflow for oral species**
+### **3️⃣ Run full Snakemake workflow for oral species**
 ```bash
 nohup ./99_scripts/s-15_pangenome_ani_phylo-snakemake_wf-2025_12_08.sh \
     >> 97_nohup/nohup-15_pangenome_ani_phylo-snakemake_wf-2025_12_08.out 2>&1 &
 
 ```
-## **4️⃣ Check completion status**
+### **4️⃣ Check completion status**
 ```bash
 Some rules may fail if the number of genomes is too low (phylogenomics requires ≥3–4 genomes).
 
@@ -124,7 +124,7 @@ ls ./15_pangenome_ani_phylogeny_2025_12_08/99_done/ \
   | awk -v OFS="\t" 'NR==1{print "Rule","Finished"}{print $2,$1}' \
   > 15_pangenome_ani_phylogeny_2025_12_08/summary_rules.txt
 ```
-## **5️⃣ Summarize number of completed rules**
+### **5️⃣ Summarize number of completed rules**
 ```bash
 dir_done="15_pangenome_ani_phylogeny_2025_12_08/99_done"
 summary_file="15_pangenome_ani_phylogeny_2025_12_08/summary_rules-2025_12_23.txt"
