@@ -1,8 +1,6 @@
 # 🔢 Software and Database Versions
 
-This document records the software versions and database snapshots used to generate
-the pangenomes distributed in this repository. These versions correspond to the
-initial public release of the resource.
+Version tracking is essential for reproducibility. All versions below correspond to the initial public release.
 
 All genomes and HOMD reference files were obtained on August 19, 2025.
 
@@ -10,9 +8,9 @@ All genomes and HOMD reference files were obtained on August 19, 2025.
 
 ## Core software
 
-- **Anvi’o**: v8 (stable branch; codename: *marie*)  
-- **Python**: 3.10.15  
-- **Snakemake**: 7.32  
+- **Anvi’o**: v8 (*marie*; stable)
+- **Python**: 3.10.15
+- **Snakemake**: 7.32
 - **Conda environment**: `anvio-8`
 
 ### Anvi’o internal database versions
@@ -31,51 +29,49 @@ All genomes and HOMD reference files were obtained on August 19, 2025.
 ## Functional annotation databases
 
 ### CAZymes
-- **Database**: dbCAN  
-- **Version**: v13  
-- **Source**: dbCAN HMM database  
+- **Database**: dbCAN
+- **Version**: v13
+- **Source**: dbCAN HMM database
 
 ***
 
 ### InteracDome
-- **Pfam release**: 31.0  
-- **Pfam-A families**: 16,712  
-- **Release date**: February 2017  
-- **Based on UniProtKB**: 2016_10  
+- **Pfam release**: 31.0
+- **Pfam-A families**: 16,712
+- **Release date**: February 2017
+- **Based on UniProtKB**: 2016_10
 
 ***
 
 ### KEGG KOfam and KO modules
-- **KEGG build**: 2023-09-22  
-- **Database archive**: `KEGG_build_2023-09-22_a2b5bde358bb`  
+- **KEGG build**: 2023-09-22
+- **Database archive**: `KEGG_build_2023-09-22_a2b5bde358bb`
 
 ***
 
 ### NCBI COGs
-- **COG version**: COG20  
+- **COG version**: COG20
 
 ***
 
 ## Taxonomy and single-copy gene databases
 
-### SCG taxonomy (ModelSeed / GTDB)
-- **GTDB release**: v214.1  
-- **Anvi’o SCG taxonomy version**: v1  
+### SCG taxonomy (GTDB)
+- **GTDB release**: v214.1
+- **Anvi’o SCG taxonomy version**: v1
 
 ***
 
 ### Pfam (SCG taxonomy)
-- **Pfam release**: 37.2  
-- **Pfam-A families**: 24,076  
-- **Release date**: November 2024  
-- **Based on UniProtKB**: 2023_05  
+- **Pfam release**: 37.2
+- **Pfam-A families**: 24,076
+- **Release date**: November 2024
+- **Based on UniProtKB**: 2023_05
 
 ***
 
 ## Notes on reproducibility
 
-- All database versions listed above were fixed at the time of pangenome generation.  
-- Paths to locally installed databases are intentionally omitted, as they are
-  environment-specific.  
-- Version enforcement and database selection are implemented within Anvi’o programs
-  and are listed in the Snakemake workflows.
+- All database versions were fixed at the time of pangenome generation
+- Paths to local installation are omitted (set by the environment/user)
+- Versions are checked by Anvi'o programs (pangenome step)
