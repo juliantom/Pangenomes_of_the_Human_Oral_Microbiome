@@ -110,7 +110,7 @@ Version information is provided to support reproducibility and temporal context.
 If you use these pangenomes, please cite the associated resource announcement and acknowledge the data and tools that made this work possible:
 
 - *Pangenomes of the Human Oral Microbiome* (Microbiology Resource Announcement) — DOI: [TBD]()
-- Expanded Human Oral Microbiome Database — DOI: (10.1093/database/baq013)
+- Expanded Human Oral Microbiome Database — DOI: 10.1093/database/baq013 - [HOMD Paper](https://pubmed.ncbi.nlm.nih.gov/20624719/)
 
 ***
 
