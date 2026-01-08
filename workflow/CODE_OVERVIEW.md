@@ -1,14 +1,14 @@
 # 🛠️ Code Overview
 
-The workflows in this repository are implemented using Snakemake and are organized
-into two modular pipelines: genome processing and pangenome construction.
+The **workflows** in this repository are implemented using **Snakemake** and are organized into two modular pipelines:
+- **Genome processing**
+- **Pangenome construction**
 
-Each pipeline can be executed independently and is configured using declarative
-configuration files.
+Each pipeline can run independently to allows for reproducibility and maintenance.
 
 ***
 
-## Genome processing workflow
+## 🧬 Genome Processing Workflow
 
 **Location:** `workflow/genome_processing/`
 
@@ -18,33 +18,28 @@ This workflow:
 - Performs gene calling
 - Adds functional annotations
 
-**Key output:**  
-An anvi’o contigs database for each genome.
+**Key output:** An anvi’o contigs database for each genome.
 
 ***
 
-## Pangenome construction workflow
+## 🧩 Pangenome Construction Workflow
 
 **Location:** `workflow/pangenome_construction/`
 
 This workflow:
 - Groups genomes by taxon using a genome-to-group mapping file
 - Constructs taxon-specific pangenomes
-- Estimates average nucleotide identity (ANI)
-- Builds phylogenetic trees
+- Estimates Average Nucleotide Identity (ANI)
+- Builds phylogenomic trees
 - Assesses metabolic completeness
-- Computes gene-level differentiation metrics
 
-Each taxon group is processed independently to ensure scalability and biological
-interpretability.
+Each taxon group is processed independently to ensure scalability and biological interpretability.
 
 ***
 
-## Workflow orchestration
+## 🔗 Workflow Orchestration
 
-The two workflows are designed to be chained, with the output of the genome
-processing workflow serving as input to pangenome construction.
+The two workflows are designed to be chained seamlessly, with the output of the genome processing workflow serving as input to pangenome construction.
 
-All parameters controlling execution, resource usage, and thresholds are defined
-in per-workflow configuration files.
+All parameters controlling execution, resource usage, and thresholds are defined in per-workflow configuration files.
 
