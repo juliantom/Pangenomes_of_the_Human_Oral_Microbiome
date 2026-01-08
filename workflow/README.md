@@ -1,12 +1,10 @@
 # 🧬 Workflows
 
-This directory contains the reproducible workflows used to construct and analyze
-species-level pangenomes of the human oral microbiome.
+This directory contains the reproducible workflows that power the construction and analyzis of species-level pangenomes of the human oral microbiome. These workflows are implemented in **Snakemake** and organized into two modular stages: 
+- Genome processing - prepares genomic files into searchable databases with annotations
+- Pangenome construction - builds taxon-specific pangenomes and associated metrics
 
-The workflows are implemented using **Snakemake** and are organized into two
-modular stages: genome processing and pangenome construction. This structure
-reflects both the biological logic of the analysis and the goal of producing
-reusable, community-facing pangenomes.
+This structure reflects both the biological logic of the analysis and the goal of producing reusable, community-facing pangenomes.
 
 ***
 
@@ -14,9 +12,9 @@ reusable, community-facing pangenomes.
 
 ```text
 workflow/
-├── README.md                  # You are here
+├── README.md                  # Overview of workflows (you are here)
 ├── CODE_OVERVIEW.md           # Technical overview (how the code is organized)
-├── VERSIONS.md                # Software and database versions used for this resource
+├── VERSIONS.md                # Software and databases versions used
 ├── WORKFLOWS.md               # Conceptual overview (what happens and why)
 │
 ├── step_01_genome_processing/
@@ -29,3 +27,8 @@ workflow/
 │   ├── config.yaml
 │   ├── genome_to_group.tsv
 │   └── README.md
+```
+
+***
+
+Each step is self-contained, with its own configuration files and documentation. This modular design ensures scalability, transparency, and reproducibility.
