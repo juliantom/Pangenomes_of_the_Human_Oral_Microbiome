@@ -1,4 +1,4 @@
-# 🧬 Pangenome, ANI, Phylogeny, Dereplication, Metabolism Workflow
+# 🧬 Pangenome Analysis Workflow - Step 2
 
 **Created by:** Julian Torres Morales  
 **Date:** December 8, 2025  
