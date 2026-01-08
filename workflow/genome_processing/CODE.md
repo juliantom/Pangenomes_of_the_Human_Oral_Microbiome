@@ -47,7 +47,8 @@ wget https://www.homd.org//ftp/genomes/NCBI/V11.02/GCA_ID_info.csv \
 
 # Generate genome IDs
 # CRITICAL: only alphanumeric characters and underscores
-# Format: HMT number, genus_species, strain ID, GenBank Assembly Accession
+# Columns needed: HMT number, Genus, Species, strain ID, GenBank Assembly Accession
+# Expected ID: HMT_000_Genus_Species_str_STRAIN_id_GCA
 cat 98_data/01_homd_v11_02-GCA_ID_info.csv \
           | awk -F',' 'NR>2{print $2,$3,$4"_str_"$5"_id_"$1}' \
           | sed -e 's/"//g' \
