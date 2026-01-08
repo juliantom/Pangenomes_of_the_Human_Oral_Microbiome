@@ -1,4 +1,5 @@
 # Pangenomes of the Human Oral Microbiome 🦷 🦠
+
 **A curated collection of species-level pangenomes for taxa in the Human Oral Microbiome Database**
 
 This repository provides stable, open-access workflows and direct access to hundreds of pangenomes, enabling visualization and exploration of core and accessory gene content across oral microbial taxa (bacteria and archaea).
@@ -6,6 +7,7 @@ This repository provides stable, open-access workflows and direct access to hund
 *This resource treats pangenomes as reusable, community-facing biological objects.*
 
 ***
+
 ## 🚀 Quick Start
 
 ### 🌐 Online (I want a sneak peek)
@@ -29,6 +31,7 @@ This repository provides stable, open-access workflows and direct access to hund
 - Genomes included: 8,110 from 8,177 genomes in HOMD
 
 ***
+
 ## 🧩 Scope and Boundaries
 
 **This resource provides:**
@@ -43,6 +46,7 @@ This repository provides stable, open-access workflows and direct access to hund
 All content reflects completed analyses within the scope of current funding.
 
 ***
+
 ## 🔮 Pangenome Construction (Overview)
 
 Pangenomes are constructed within the Anvi’o platform using a standardized workflow. Key steps include:
@@ -55,6 +59,7 @@ Pangenomes are constructed within the Anvi’o platform using a standardized wor
 Detailed methodological descriptions are provided in the associated Anvi’o documentation and publications.
 
 ***
+
 ## 🧑‍💻 Reproducing or Extending the Work
 *For those who want the full experience — you know who you are*<br>
 
@@ -70,6 +75,7 @@ These materials are provided for transparency and reproducibility.
 Re-running or extending the workflows is optional and not required to use the resource.
 
 ***
+
 ## 📦 Additional Associated Files
 
 Supplementary data products generated during pangenome construction may be provided, including:
@@ -80,6 +86,7 @@ Supplementary data products generated during pangenome construction may be provi
 These files support interpretation of the pangenomes and are not intended as standalone analyses.
 
 ***
+
 ## 🔧 Data and Software Versions
 
 - **HOMD**: v4.1φ (phi release, includes phage genomes)
@@ -88,6 +95,7 @@ These files support interpretation of the pangenomes and are not intended as sta
 Version information is provided to support reproducibility and temporal context.
 
 ***
+
 ## 📖 Citation
 
 If you use these pangenomes, please cite the associated resource announcement and acknowledge the data and tools that made this work possible:
@@ -96,6 +104,21 @@ If you use these pangenomes, please cite the associated resource announcement an
 - Expanded Human Oral Microbiome Database (eHOMD)
 
 ***
+
+## 🧭 On a Personal Note
+
+If you’re reading this, there’s a decent chance you’re procrastinating. That’s fine — so was I.
+
+This repository exists largely because I wanted to not do something the “right” way the first time. Anvi’o already provides Snakemake workflows that can process genomes and construct pangenomes, and in many situations those workflows would have been more than sufficient. In fact, a much shorter path to the same endpoint.
+
+But I wanted more control over how things ran, to plug in a few tools that weren’t part of the standard workflows at the time, and—if I’m honest—to avoid bothering the Anvi’o developers with feature requests while they were busy doing far more interesting things. I also knew just enough Snakemake to be dangerous, which felt like a good reason to learn it properly rather than pretending I understood it.
+
+So instead of extending upstream code (or opening the appropriate GitHub issue, as a more responsible person might have done), I took the long way around. What came out of that decision is this repository: a working, reproducible pipeline shaped as much by curiosity and stubbornness as by necessity.
+
+In the end, this probably could have been achieved with fewer lines of code inside Anvi’o. That’s okay. Bioinformatics allows many paths to the same result, and sometimes the scenic route is the one where you learn the most.
+
+***
+
 ## 🧙 Acknowledgments
 
 🛡️ **HOMD stewards** — This resource builds on the sustained efforts of the **Human Oral Microbiome Database (HOMD)** team. Their long-term commitment to curation, standardization, and public access makes large-scale, community-facing resources possible. For more information, see the [HOMD Website↗](https://www.homd.org).
@@ -105,6 +128,7 @@ If you use these pangenomes, please cite the associated resource announcement an
 🪄 **Publicly funded science** — This work reflects the goals of long-term, publicly supported research: building durable, reusable infrastructure that enables discovery beyond any single study.
 
 ***
+
 ## ⚖️ License
 
 All content in this repository is released under the GNU General Public License v3.0 (GPL-3.0).
