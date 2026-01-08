@@ -61,18 +61,22 @@ Detailed methodological descriptions are provided in the associated Anvi’o doc
 ***
 
 ## 🧑‍💻 Reproducing or Extending the Work
-*For those who want the full experience — you know who you are*<br>
+*For those who want the full experience — you know who you are* 😉<br>
 
 This repository includes:
 - Two Snakemake workflows implementing the pangenome construction pipeline
 - Full analysis code used to generate the distributed pangenomes
 
 For users who wish to reproduce analyses or construct pangenomes for additional taxa, see:
-- `WORKFLOWS.md` — overview of the Snakemake pipelines
-- `CODE_OVERVIEW.md` — description of scripts and analysis logic
+- [`WORKFLOWS.md`](workflow/WORKFLOWS.md) — overview of the Snakemake pipelines
+- [`CODE_OVERVIEW.md`](workflow/CODE_OVERVIEW.md) — description of scripts and analysis logic
 
 These materials are provided for transparency and reproducibility.
 Re-running or extending the workflows is optional and not required to use the resource.
+
+Just the code? Here it is:
+[Genome Processing ↗](workflow/genome_processing/CODE.md)
+[Pangenome Analysis ↗](workflow/pangenome_construction_hmt/CODE.md)
 
 ***
 
