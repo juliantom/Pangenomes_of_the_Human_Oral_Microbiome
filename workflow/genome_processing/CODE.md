@@ -78,7 +78,7 @@ conda activate anvio-8
 
 ####################
 # Install NCBI Datasets
-# only needed once and didn't break anvi'o
+# only needed once and can be installed inside anvi'o
 ####################
 
 # Choose one option
