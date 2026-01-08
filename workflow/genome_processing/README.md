@@ -1,5 +1,20 @@
 # 🧬 Genome Processing Workflow
 
+***
+
+⚠️ **WARNING: HIGH RESOURCE USAGE** ⚠️<br>
+> This workflow is **computationally intensive** and intended for **high‑performance environments**.
+> 
+> - Set up on a machine with **112 threads** and **3 TB RAM**
+>   - ⏱ Run Time Full Genome Processing Workflow (genomes = 8,174): 6 days
+>   - ⏱ Run Time Full Pangenomic Analysis Workflow (taxa = 567): 3 days
+> - **Thread allocation is dynamic**, set per **taxon** and **rule** — adjust to match your system
+> - **Snakemake may launch all threads simultaneously if not properly configured**
+> - **Adjust thread setting** in `config_group_threads.yaml` as needed
+> - ✅ **Start small:** run one taxon, confirm resource usage, then scale
+
+***
+
 This workflow retrieves, prepares, and annotates genomes for downstream pangenome construction. It consists of **two integrated steps**:
 
 1. **Genome retrieval and standardization**
