@@ -1,5 +1,8 @@
 # 🧬 Genome Processing Code — Step 01
 
+**Created by:** Julian Torres Morales  
+**Date:** December 8, 2025  
+
 ***
 
 ⚠️ **WARNING: HIGH RESOURCE USAGE** ⚠️<br>
