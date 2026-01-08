@@ -11,13 +11,13 @@ This repository provides stable, open-access workflows and direct access to hund
 ## 🚀 Quick Start
 
 ### 🌐 Online (interactive experience)
-1. Browse pangenomes interactively through the HOMD Anvi’o Portal [HOMD Anvi’o Server Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
+1. Browse pangenomes interactively through the HOMD Anvi'o Portal [HOMD Anvi'o Server Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
    - *No Anvi'o installation needed*
 2. Select a taxon and inspect core and accessory gene clusters
 3. Use these pangenomes as a reference for comparative analysis
 
 ### 💻 Offline (full control)
-1. Download Anvi'o-compatible pangenome databases [HOMD Anvi’o Servern Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
+1. Download Anvi'o-compatible pangenome databases [HOMD Anvi'o Server Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
    - *Anvi'o installation required* [Anvi'o install](https://anvio.org/install/)
 2. Load databases locally for deeper exploration
 3. Summarize gene-cluster content and functional annotation
@@ -25,7 +25,7 @@ This repository provides stable, open-access workflows and direct access to hund
 ***
 ## 🧬 What This Repository Contains
 
-How to generate:
+Code to generate:
 - Species-level pangenomes for 567 Human Microbial Taxa (HMTs) with ≥2 genomes in HOMD
 - 12 additional pangenomes for named species containing multiple taxa (HMTs)
 - Total pangenomes: 579
@@ -50,14 +50,14 @@ All content reflects completed analyses within the scope of current funding.
 
 ## 🔮 Pangenome Construction (Overview)
 
-Pangenomes are constructed within the Anvi’o platform using a standardized workflow. Key steps include:
+Pangenomes are constructed within the Anvi'o platform using a standardized workflow. Key steps include:
 - Open reading frames (ORFs; hereafter called genes) are predicted from genome assemblies
 - Genes are functionally profiled using curated databases (COGs, Pfams, KEGG KOs, etc.)
 - Genes are clustered into putative homologous gene clusters based on amino-acid similarity
 - Clustering parameters are optimized at the species level
 - Gene clusters and genomes are hierarchically organized to highlight shared gene content and strain relationships
 
-Detailed methodological descriptions are provided in the associated Anvi’o documentation and publications.
+Detailed methodological descriptions are provided in the associated Anvi'o documentation and publications.
 
 ***
 
@@ -95,7 +95,7 @@ These files support interpretation of the pangenomes and are not intended as sta
 ## 🔧 Data and Software Versions
 
 - **HOMD**: v4.1φ (phi release, includes phage genomes)
-- **Anvi’o**: v8
+- **Anvi'o**: v8
 
 Version information is provided to support reproducibility and temporal context.
 
@@ -114,13 +114,13 @@ If you use these pangenomes, please cite the associated resource announcement an
 
 If you’re reading this, there’s a decent chance you’re procrastinating. That’s fine — so was I.
 
-This repository exists largely because I wanted to not do something the “right” way the first time. Anvi’o already provides Snakemake workflows that can process genomes and construct pangenomes, and in many situations those workflows would have been more than sufficient. In fact, a much shorter path to the same endpoint.
+This repository exists largely because I wanted to not do something the “right” way the first time. Anvi'o already provides Snakemake workflows that can process genomes and construct pangenomes, and in many situations those workflows would have been more than sufficient. In fact, a much shorter path to the same endpoint almost certainly existed.
 
-But I wanted more control over how things ran, to plug in a few tools that weren’t part of the standard workflows at the time, and—if I’m honest—to avoid bothering the Anvi’o developers with feature requests while they were busy doing far more interesting things. I also knew just enough Snakemake to be dangerous, which felt like a good reason to learn it properly rather than pretending I understood it.
+But I wanted more control over how things ran, to plug in a few tools that weren’t part of the standard workflows at the time, and—if I’m honest—to avoid bothering the Anvi'o developers with feature requests while they were busy doing far more interesting things. I also knew just enough Snakemake to be dangerous, which felt like a good reason to learn it properly rather than pretending I understood it.
 
 So instead of extending upstream code (or opening the appropriate GitHub issue, as a more responsible person might have done), I took the long way around. What came out of that decision is this repository: a working, reproducible pipeline shaped as much by curiosity and stubbornness as by necessity.
 
-In the end, this probably could have been achieved with fewer lines of code inside Anvi’o. That’s okay. Bioinformatics allows many paths to the same result, and sometimes the scenic route is the one where you learn the most.
+In the end, this probably could have been achieved with fewer lines of code inside Anvi'o. That’s okay. Bioinformatics allows many paths to the same result, and sometimes the scenic route is the one where you learn the most.
 
 ***
 
@@ -128,7 +128,7 @@ In the end, this probably could have been achieved with fewer lines of code insi
 
 🛡️ **HOMD stewards** — This resource builds on the sustained efforts of the **Human Oral Microbiome Database (HOMD)** team. Their long-term commitment to curation, standardization, and public access makes large-scale, community-facing resources possible. For more information, see the [HOMD Website↗](https://www.homd.org).
 
-🧙 **Anvi’o developers** — We gratefully acknowledge the **Anvi’o development team** for creating a platform balancing analytical rigor with intuitive, interactive visualization. For extensive documentation on Anvi'o installation, pangenome construction and usage, see [Anvi'o Pangenomics Website↗](https://anvio.org/learn/pangenomics/).
+🧙 **Anvi'o developers** — We gratefully acknowledge the **Anvi'o development team** for creating a platform balancing analytical rigor with intuitive, interactive visualization. For extensive documentation on Anvi'o installation, pangenome construction and usage, see [Anvi'o Pangenomics Website↗](https://anvio.org/learn/pangenomics/).
 
 🪄 **Publicly funded science** — This work reflects the goals of long-term, publicly supported research: building durable, reusable infrastructure that enables discovery beyond any single study.
 
