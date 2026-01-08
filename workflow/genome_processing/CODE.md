@@ -76,6 +76,13 @@ cd 01_download_genomes/
 # Activate Anvi'o environment
 conda activate anvio-8
 
+####################
+# Install Datasets (only needed once and didn't break anvi'o)
+# conda install conda-forge::ncbi-datasets-cli=18.9.0
+# Alternative
+# conda install conda-forge::ncbi-datasets-cli
+####################
+
 # Download a dehydrated data package (NCBI datasets v18.9.0)
 assembly_list="assembly_accession_list.txt"
 datasets download genome accession \
@@ -91,7 +98,7 @@ unzip 01_ncbi_set/HOMDv4_1-ncbi-2025_08_19-dehydrated.zip -d 01_ncbi_set/
 # Rehydrate package
 datasets rehydrate --max-workers 30 --directory 01_ncbi_set
 
-# Check number of genomes fetched (n=8174); note 3 genomes are missing
+# Check number of genomes fetched; note 3 genomes are missing (expected =8177, downloaded = 8174)
 ls 01_ncbi_set/ncbi_dataset/data/*/*.fna | wc -l
 
 # Move all genomic FASTA files into a single folder
