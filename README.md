@@ -14,7 +14,8 @@ This repository provides stable, open-access workflows and direct access to hund
 1. Browse pangenomes interactively through the HOMD Anvi’o Portal [HOMD Anvi’o Server Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
    - *No Anvi’o installation needed*
 2. Select a taxon and inspect core and accessory gene clusters
-3. Use these pangenomes as a reference for comparative analysis
+3. Explore pangenomes
+4. Use these pangenomes as a reference for comparative analysis
 
 ### 💻 Offline (full control)
 1. Download Anvi’o-compatible pangenome databases [HOMD Anvi’o Server Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
@@ -25,7 +26,7 @@ This repository provides stable, open-access workflows and direct access to hund
 ***
 ## 🧬 What This Repository Contains
 
-Code to generate:
+Code used to generate:
 - Species-level pangenomes for 567 Human Microbial Taxa (HMTs) with ≥2 genomes in HOMD
 - 12 additional pangenomes for named species containing multiple taxa (HMTs)
 - Total pangenomes: 579
@@ -50,7 +51,9 @@ All content reflects completed analyses within the scope of current funding.
 
 ## 🔮 Pangenome Construction (Overview)
 
-Pangenomes are constructed within the Anvi’o platform using a standardized workflow. Key steps include:
+Pangenomes are constructed within the Anvi’o platform using a standardized workflow.
+
+Key steps include:
 - Open reading frames (ORFs; hereafter called genes) are predicted from genome assemblies
 - Genes are functionally profiled using curated databases (COGs, Pfams, KEGG KOs, etc.)
 - Genes are clustered into putative homologous gene clusters based on amino-acid similarity
@@ -65,10 +68,11 @@ Detailed methodological descriptions are provided in the associated Anvi’o doc
 *For those who want the full experience — you know who you are* 😉<br>
 
 This repository includes:
-- Two Snakemake workflows implementing the pangenome construction pipeline
 - Full analysis code used to generate the distributed pangenomes
+- Two Snakemake workflows to process genomes and construct pangenomes
+- Additional scripts to execute in detachment mode
 
-For users who wish to reproduce analyses or construct pangenomes for additional taxa, see:
+For users who wish to reproduce analyses or construct pangenomes for their own taxa, see:
 - [`WORKFLOWS.md`](workflow/WORKFLOWS.md) — overview of the Snakemake pipelines
 - [`CODE_OVERVIEW.md`](workflow/CODE_OVERVIEW.md) — description of scripts and analysis logic
 
@@ -105,8 +109,8 @@ Version information is provided to support reproducibility and temporal context.
 
 If you use these pangenomes, please cite the associated resource announcement and acknowledge the data and tools that made this work possible:
 
-- *Pangenomes of the Human Oral Microbiome* (Microbiology Resource Announcement) — DOI: [TBD]
-- Expanded Human Oral Microbiome Database (eHOMD)
+- *Pangenomes of the Human Oral Microbiome* (Microbiology Resource Announcement) — DOI: [TBD]()
+- Expanded Human Oral Microbiome Database — DOI: (10.1093/database/baq013)
 
 ***
 
