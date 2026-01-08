@@ -1,10 +1,15 @@
 # 🧬 Pangenome Analysis Workflow
 
-> ⚠️ **WARNING: HIGH RESOURCE USAGE** ⚠️<br>
-> This workflow is **computationally intensive**.<br>
-> Thread allocation is dynamic, and tasks like ANI calculation, dereplication, pangenome construction, and phylogenomics can saturate your CPU and RAM.<br>
-> On a high-resource machine (e.g., 112 threads, 3 TB RAM), **Snakemake may launch all threads simultaneously if not properly configured**, which can lead to system instability.<br>
-> Always test with a **subset of taxa** before running the full workflow. **Adjust threads** in `config_group_threads.yaml` as needed.<br>
+⚠️ **WARNING: HIGH RESOURCE USAGE** ⚠️<br>
+> This workflow is **computationally intensive** and intended for **high‑performance environments**.
+> 
+> - Set up on a machine with **112 threads** and **3 TB RAM**
+>   - ⏱ Run Time Full Genome Processing (genomes = 8,174): 6 days
+>   - ⏱ Run Time Full Pangenomic Analysis (taxa = 567): 3 days
+> - **Thread allocation is dynamic**, set per **taxon** and **rule** — adjust to match your system
+> - **Snakemake may launch all threads simultaneously if not properly configured**
+> - **Adjust thread setting** in `config_group_threads.yaml` as needed
+> - ✅ **Start small:** run one taxon, confirm resource usage, then scale
 
 This workflow automates **pangenome construction, ANI calculation, dereplication, phylogenomics, and metabolic estimation** for oral microbiome species in HOMDv4.1.-
 It consists of two major steps:
