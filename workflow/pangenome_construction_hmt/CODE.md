@@ -36,7 +36,7 @@ Taxonomic groups (HMTs) as defined by  HOMD genome table: [HOMD Genome Table](ht
 # -------------------------------
 # Step 1: Create pangenome directory
 # -------------------------------
-dir_first_derep=15_pangenome_ani_phylogeny_2025_12_08
+dir_first_derep=03_pangenome_analysis
 mkdir -p "$dir_first_derep"/data   # Create main folder and 'data' subfolder
 
 # Input file generated during genome processing
@@ -157,7 +157,7 @@ nohup ./99_scripts/s-15_pangenome_ani_phylo-snakemake_wf-2025_12_08.sh \
 # Some rules may fail if the number of genomes is too low (phylogenomics requires ≥3–4 genomes)
 
 # Define folder containing Snakemake "done" markers
-done_dir="./15_pangenome_ani_phylogeny_2025_12_08/99_done/"
+done_dir="./03_pangenome_analysis/99_done/"
 
 # -------------------------------
 # Step 1: Quick overview of rule completion
@@ -182,15 +182,15 @@ ls "$done_dir" \
   | sed -e 's/.*-//' \
   | sort | uniq -c \
   | awk -v OFS="\t" 'NR==1{print "Rule","Finished"}{print $2,$1}' \
-  > 15_pangenome_ani_phylogeny_2025_12_08/summary_rules.txt
+  > 03_pangenome_analysis/summary_rules.txt
 
 
 ```
 
 ### **6️⃣ Summarize number of completed rules (tabular summary)**
 ```bash
-dir_done="15_pangenome_ani_phylogeny_2025_12_08/99_done"
-summary_file="15_pangenome_ani_phylogeny_2025_12_08/summary_rules-2025_12_23.txt"
+dir_done="03_pangenome_analysis/99_done"
+summary_file="03_pangenome_analysis/summary_rules-2025_12_23.txt"
 
 # Step 1: Create header for summary file
 printf 'Snakemake_Rule\tCompleted_Processes\n' > "$summary_file"
