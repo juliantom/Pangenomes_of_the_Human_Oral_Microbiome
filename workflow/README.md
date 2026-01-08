@@ -17,12 +17,12 @@ workflow/
 ├── VERSIONS.md                # Software and databases versions used
 ├── WORKFLOWS.md               # Conceptual overview (what happens and why)
 │
-├── step_01_genome_processing/
+├── genome_processing/
 │   ├── Snakefile
 │   ├── config.yaml
 │   └── README.md
 │
-├── step_02_pangenome_construction/
+├── pangenome_construction_hmt/
 │   ├── Snakefile
 │   ├── config.yaml
 │   ├── genome_to_group.tsv
