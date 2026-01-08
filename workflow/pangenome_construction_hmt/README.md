@@ -1,5 +1,7 @@
 # 🧬 Pangenome Analysis Workflow
 
+***
+
 ⚠️ **WARNING: HIGH RESOURCE USAGE** ⚠️<br>
 > This workflow is **computationally intensive** and intended for **high‑performance environments**.
 > 
@@ -11,6 +13,8 @@
 > - **Adjust thread setting** in `config_group_threads.yaml` as needed
 > - ✅ **Start small:** run one taxon, confirm resource usage, then scale
 
+***
+
 This workflow automates **pangenome construction, ANI calculation, dereplication, phylogenomics, and metabolic estimation** for oral microbiome species in HOMDv4.1.-
 It consists of two major steps:
 
@@ -19,7 +23,7 @@ It consists of two major steps:
 
 All processing is fully reproducible and is linked to the [`genome_processing`](../genome_processing/README.md) workflow.
 
----
+***
 
 ## 🔍 Overview
 
@@ -37,7 +41,7 @@ Identify taxa (HMTs) with at least two genomes (`contigs.DB`).
   - Taxa with ≥2 genomes  
   - Taxa with only one genome  
 
----
+***
 
 ### Step 2 – Execute Pangenome Workflow
 
@@ -64,7 +68,7 @@ All files are saved in `results/Taxon_ID`:
 - Metabolic potential: `dir_metabolism/Taxon-modules.txt`  
 - Phylogenomic tree: `dir_phylogenomics/Taxon-tree.nwk`  
 
----
+***
 
 ## ✅ Notes
 
