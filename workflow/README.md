@@ -32,3 +32,15 @@ workflow/
 ***
 
 Each step is self-contained, with its own configuration files and documentation. This modular design ensures scalability, transparency, and reproducibility.
+
+***
+
+## 🔍 Why This Matters
+
+These workflows enable:
+
+- Reproducible pangenome construction for oral taxa
+- Community reusability – anyone can extend or adapt the pipeline
+- Transparency – every step is documented and version-controlled
+
+For conceptual details, see [`WORKFLOWS.md`](WORKFLOWS.md) For technical implementation, see [`CODE_OVERVIEW.md`](CODE_OVERVIEW.md).
