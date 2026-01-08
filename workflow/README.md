@@ -18,15 +18,21 @@ workflow/
 ├── WORKFLOWS.md               # Conceptual overview (what happens and why)
 │
 ├── genome_processing/
+│   ├── CODE.md
 │   ├── Snakefile
-│   ├── config.yaml
 │   └── README.md
 │
 ├── pangenome_construction_hmt/
+│   ├── CODE.md
 │   ├── Snakefile
-│   ├── config.yaml
-│   ├── genome_to_group.tsv
 │   └── README.md
+├── scripts/
+│   ├── 01_prepare-contigs_db-snakemake.sh
+│   ├── 02_generate-yaml.sh
+│   └── 02_run-pangenome_analysis-snakemake.sh
+├── workflow_images/
+    ├── rulegraph-contigs_db.pdf
+    └── rulegraph-pangenome_analysis.pdf
 ```
 
 ***
