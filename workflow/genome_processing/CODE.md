@@ -97,10 +97,10 @@ conda activate anvio-8
 ####################
 
 # NCBI Datasets (v18.9.0; probably any recent version will work)
-# conda install conda-forge::ncbi-datasets-cli=18.9.0
+conda install conda-forge::ncbi-datasets-cli=18.9.0
 
 # Setup Cazymes DB (v13)
-# anvi-setup-cazymes --cazyme-version V13 --reset
+anvi-setup-cazymes --cazyme-version V13 --reset
 # If the above command fails, copy a pre-built CAZyme DB folder content to anvio CAZyme folder
 # cp -r path/to/misc/CAZyme/* path/to/anaconda3/envs/anvio-8/lib/python3.10/site-packages/anvio/data/misc/CAZyme/
 
@@ -124,6 +124,10 @@ anvi-setup-trna-taxonomy --num-threads 16
 
 # Setup ModelSEED DB
 anvi-setup-modelseed-database
+
+# Check snakemake installation v7.32.4 (you might need to do some version control of modules)
+snakemake --version
+
 ```
 
 ### 📂 3️⃣ Download Genomes from NCBI
@@ -186,9 +190,15 @@ for i in $(cat 01_download_genomes/downloaded_genomes.txt); do
     grep "$assembly_id" 98_data/genome_ids-8177.txt >> 98_data/genome_ids-8174.txt
 done
 
-# Generate long and short genome ID files
-cat 98_data/genome_ids-8174.txt > 98_data/genome_ids-8174-long.txt
-sed -i 's/........//' 98_data/genome_ids-8174.txt
+# Generate long and short genome ID files (portable)
+cp 98_data/genome_ids-8174.txt 98_data/genome_ids-8174-long.txt
+
+# Remove leading "HMT_<number>_" from each line (POSIX sed, no -i)
+sed 's/^HMT_[0-9][0-9]*_//' 98_data/genome_ids-8174.txt \
+    > 98_data/genome_ids-8174.tmp && \
+    mv 98_data/genome_ids-8174.tmp \
+    98_data/genome_ids-8174.txt
+
 ```
 
 ### 📂 5️⃣ Prepare Contigs DB Working Directory
@@ -203,30 +213,63 @@ mkdir -p 02_individual_contigs_db/{01_raw_fasta,02_reformat_fasta,03_report,04_c
 ####################
 dir_ncbi=01_download_genomes/02_genomic_files
 dir_assemblies=02_individual_contigs_db/01_raw_fasta
-
+# Loop through genome IDs and copy/rename files
 while IFS= read -r genomes_id; do
-    gca_id=$(echo $genomes_id | awk -F'_id_' '{print $2}' | sed -e 's/_/./2')
-    old_name=$(find $dir_ncbi -maxdepth 1 -name "$gca_id*.fna")
-    NEW_NAME=$(echo "$genomes_id" | awk -v new_dir="$dir_assemblies" '{print new_dir"/"$1"-raw.fasta"}' )
-    cp $old_name $NEW_NAME
+    # Extract the portion after "_id_"
+    gca_id=$(printf '%s\n' "$genomes_id" | awk -F '_id_' '{print $2}' | sed 's/_/./2')
+    # POSIX find: avoid descending into subdirectories using -prune (instead of -maxdepth)
+    # If multiple matches exist, take the first deterministically.
+    old_name=$(find "$dir_ncbi" -type f -name "${gca_id}*.fna" -prune | head -n 1)
+    # Build the new filename (no spaces expected in $genomes_id; still safe)
+    new_name="${dir_assemblies}/${genomes_id}-raw.fasta"
+    # Only copy if a source was found
+    if [ -n "$old_name" ]; then
+        cp "$old_name" "$new_name"
+    else
+        printf 'WARN: source not found for %s (pattern: %s*.fna)\n' "$genomes_id" "$gca_id" >&2
+    fi
 done < 98_data/genome_ids-8174.txt
 
+
 # Copy genome IDs to contigs DB folder
-cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids.txt
+cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids-full.txt
 ```
 
 ### 📝 6️⃣ Run Snakemake Workflow
 Before running, make sure the script `01_prepare-contigs_db-snakemake.sh` is in the working directory `99_scripts/`.<br>
 If you cloned the repository, it’s in `/workflow/scripts/` — copy it to the working directory:
 ```bash
-# Copy script 
+# Copy script and Snakefile
+# Script
 cp /path/to/repo/workflow/scripts/01_prepare-contigs_db-snakemake.sh 99_scripts/
+
+# Make script executable
+chmod +x 99_scripts/01_prepare-contigs_db-snakemake.sh
+
+# Snakefile
+cp /path/to/repo/workflow/genome_processing/Snakefile 02_individual_contigs_db
 
 ####################
 # Execute Snakemake workflow: Prepare contigs DB and annotate assemblies
 ####################
+
+# Test
+cd 02_individual_contigs_db
+# Subset genome IDs for testing (e.g., only Abiotrophia)
+grep 'Abiotro' genome_ids-full.txt > genome_ids.txt
+# Visualize rulegraph (single graph)
+snakemake --rulegraph | dot -Tpdf > rulegraph-test-contigs_db.pdf
+# Execute test
+snakemake --cores 10 --jobs 10 --dry-run
+snakemake --cores 10 --jobs 10
+
+# Run the workflow in background
+cp genome_ids-full.txt genome_ids.txt
+cd ../
+# Execute full workflow in background
 nohup ./99_scripts/01_prepare-contigs_db-snakemake.sh \
      >> 97_nohup/nohup-01_prepare-contigs_db-snakemake.out 2>&1 &
+
 ```
 
 ### 📂 7️⃣ Compress FASTA Files
@@ -234,6 +277,7 @@ nohup ./99_scripts/01_prepare-contigs_db-snakemake.sh \
 ####################
 # Compress fasta files for storage optimization
 ####################
+cd my_work_dir/
 ls 01_download_genomes/02_genomic_files/*.fna | parallel gzip -9
 ls 02_individual_contigs_db/01_raw_fasta/*.fasta | parallel gzip -9
 ```
