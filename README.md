@@ -19,10 +19,10 @@ This repository provides stable, open-access workflows and direct access to hund
 
 ### 💻 Offline (full control)
 1. Download Anvi’o-compatible pangenome databases [eHOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
-2. <a href="https://www.homd.org/genome/anvio_pangenomes" target="_blank">HOMD Anvi’o Portal ↗</a>
+2. Download Anvi’o-compatible pangenome databases <a href="https://www.homd.org/genome/anvio_pangenomes" target="_blank">HOMD Anvi’o Portal ↗</a>
    - *Anvi’o installation required* [Anvi’o install ↗](https://anvio.org/install/)
-3. Load databases locally for deeper exploration
-4. Summarize gene-cluster content and functional annotation
+4. Load databases locally for deeper exploration
+5. Summarize gene-cluster content and functional annotation
 
 ***
 ## 🧬 What This Repository Contains
