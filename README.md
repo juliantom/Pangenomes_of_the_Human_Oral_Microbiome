@@ -11,26 +11,27 @@ This repository provides stable, open-access workflows and direct access to hund
 ## 🚀 Quick Start
 
 ### 🌐 Online (interactive experience)
-1. Browse pangenomes interactively through the HOMD Anvi’o Portal [HOMD Anvi’o Server Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
+1. Browse pangenomes interactively through the expanded Human Oral Microbiome Database Anvi’o Portal [eHOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
    - *No Anvi’o installation needed*
 2. Select a taxon and inspect core and accessory gene clusters
 3. Explore pangenomes
 4. Use these pangenomes as a reference for comparative analysis
 
 ### 💻 Offline (full control)
-1. Download Anvi’o-compatible pangenome databases [HOMD Anvi’o Server Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
-   - *Anvi’o installation required* [Anvi’o install](https://anvio.org/install/)
-2. Load databases locally for deeper exploration
-3. Summarize gene-cluster content and functional annotation
+1. Download Anvi’o-compatible pangenome databases [eHOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
+2. <a href="https://www.homd.org/genome/anvio_pangenomes" target="_blank">HOMD Anvi’o Portal ↗</a>
+   - *Anvi’o installation required* [Anvi’o install ↗](https://anvio.org/install/)
+3. Load databases locally for deeper exploration
+4. Summarize gene-cluster content and functional annotation
 
 ***
 ## 🧬 What This Repository Contains
 
 Code used to generate:
-- Species-level pangenomes for 567 Human Microbial Taxa (HMTs) with ≥2 genomes in HOMD
+- Species-level pangenomes for 567 Human Microbial Taxa (HMTs) with ≥2 genomes in eHOMD
 - 12 additional pangenomes for named species containing multiple taxa (HMTs)
 - Total pangenomes: 579
-- Genomes included: 8,110 from 8,177 genomes in HOMD
+- Genomes included: 8,110 from 8,177 genomes in eHOMD
 
 ***
 
@@ -73,8 +74,8 @@ This repository includes:
 - Additional scripts to execute in detachment mode
 
 For users who wish to reproduce analyses or construct pangenomes for their own taxa, see:
-- [`WORKFLOWS.md`](workflow/WORKFLOWS.md) — overview of the Snakemake pipelines
-- [`CODE_OVERVIEW.md`](workflow/CODE_OVERVIEW.md) — description of scripts and analysis logic
+- [`WORKFLOWS.md` ↗](workflow/WORKFLOWS.md) — overview of the Snakemake pipelines
+- [`CODE_OVERVIEW.md` ↗](workflow/CODE_OVERVIEW.md) — description of scripts and analysis logic
 
 These materials are provided for transparency and reproducibility.
 Re-running or extending the workflows is optional and not required to use the resource.
@@ -98,10 +99,10 @@ These files support interpretation of the pangenomes and are not intended as sta
 
 ## 🔧 Data and Software Versions
 
-- **HOMD**: v4.1φ (phi release, includes phage genomes)
+- **eHOMD**: v4.1φ (phi release, includes phage genomes)
 - **Anvi’o**: v8
 
-Version information is provided to support reproducibility and temporal context.
+Version information is provided to support reproducibility and temporal context. As of August 19, 2025.
 
 ***
 
@@ -109,8 +110,11 @@ Version information is provided to support reproducibility and temporal context.
 
 If you use these pangenomes, please cite the associated resource announcement and acknowledge the data and tools that made this work possible:
 
-- *Pangenomes of the Human Oral Microbiome* (Microbiology Resource Announcement) — DOI: [TBD]()
-- Expanded Human Oral Microbiome Database — DOI: 10.1093/database/baq013 - [HOMD Paper](https://pubmed.ncbi.nlm.nih.gov/20624719/)
+- *Pangenomes of the Human Oral Microbiome* — Microbiology Resource Announcement — DOI: To be assinged upon publication - [MRA Paper ↗]()
+
+Please also consider citing eHOMD and Anvi’o:
+- Expanded Human Oral Microbiome Database [eHOMD Paper ↗](https://doi.org/10.1128/msystems.00187-18)
+- Anvi’o [Anvio Paper ↗](https://anvio.org/cite/)
 
 ***
 
@@ -130,7 +134,7 @@ In the end, this probably could have been achieved with fewer lines of code insi
 
 ## 🧙 Acknowledgments
 
-🛡️ **HOMD stewards** — This resource builds on the sustained efforts of the **Human Oral Microbiome Database (HOMD)** team. Their long-term commitment to curation, standardization, and public access makes large-scale, community-facing resources possible. For more information, see the [HOMD Website↗](https://www.homd.org).
+🛡️ **eHOMD stewards** — This resource builds on the sustained efforts of the **expanded Human Oral Microbiome Database (eHOMD)** team. Their long-term commitment to curation, standardization, and public access makes large-scale, community-facing resources possible. For more information, see the [eHOMD Website↗](https://www.homd.org).
 
 🧙 **Anvi’o developers** — We gratefully acknowledge the **Anvi’o development team** for creating a platform balancing analytical rigor with intuitive, interactive visualization. For extensive documentation on Anvi’o installation, pangenome construction and usage, see [Anvi’o Pangenomics Website↗](https://anvio.org/learn/pangenomics/).
 
@@ -146,4 +150,4 @@ All content in this repository is released under the GNU General Public License 
 
 ## 📬 Contact
 
-For questions or issues related to this resource, please contact the maintainers via HOMD.
+For questions or issues related to this resource, please contact the maintainers via eHOMD.
