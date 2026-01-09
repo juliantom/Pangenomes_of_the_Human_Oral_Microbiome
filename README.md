@@ -5,10 +5,10 @@
 ***
 
 This repository provides stable, open-access workflows and direct access to hundreds of pangenomes, enabling visualization and exploration of core and accessory gene content across oral microbial taxa (bacteria and archaea).
-
+<br>
 > **Operational definition:**
 > We defined a *pangenome* as the **complete set of genes** across all genomes assigned to a taxon in eHOMD, including **core genes** (shared by all or most members) and **accessory genes** (present in some or unique to individual strains).
-
+<br>
 *This resource treats pangenomes as reusable, community-facing biological objects.*
 
 ***
