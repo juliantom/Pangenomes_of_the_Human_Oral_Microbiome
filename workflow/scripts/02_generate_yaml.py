@@ -1,73 +1,76 @@
+
 #!/usr/bin/env python3
 
 # ================================
-# Generate YAML configuration for Snakemake pangenome workflow
-# Each species (taxon) gets a thread allocation based on genome count
+# Generate YAML configuration for Snakemake workflow
+# Each group gets a thread allocation based on its size
 # ================================
 
 # ------------------------------
 # Standard library imports
 # ------------------------------
-import os       # For creating directories
-import csv      # For reading tab-delimited files
-import yaml     # For writing YAML configuration files
+import os    # For creating directories
+import csv   # For reading tab-delimited files
+import yaml  # For writing YAML configuration files
 
 # ------------------------------
 # Paths to input/output files
 # ------------------------------
-# List of taxa to include (one taxon per line)
-species_file = "98_data/03-list_group.txt"
+# List of groups to include (one per line)
+group_list_file = "list_group.txt"
 
-# Precomputed genome counts per taxon (tab-delimited)
-counts_file = "98_data/03-group_count.txt"
+# Precomputed counts per group (tab-delimited; headers: Tax_group, Group_size)
+counts_file = "group_count.txt"
 
-# Output YAML configuration for Snakemake
-output_file = "config/config_group_threads.yaml"
-
-# ------------------------------
-# Read species of interest
-# ------------------------------
-# Using a set for quick lookup and removing any empty lines
-with open(species_file) as f:
-    species_set = set(line.strip() for line in f if line.strip())
-
-# Optional debug: show number of species read
-# print(f"Loaded {len(species_set)} species from {species_file}")
+# Output YAML configuration
+output_file = "config_group_threads.yaml"
 
 # ------------------------------
-# Read genome counts and assign threads
+# Read groups of interest
 # ------------------------------
-counts = {}
+# Use a set for quick membership checks and ignore empty lines
+with open(group_list_file) as f:
+    groups_set = set(line.strip() for line in f if line.strip())
+
+# Optional debug:
+# print(f"Loaded {len(groups_set)} groups from {group_list_file}")
+
+# ------------------------------
+# Read counts and assign threads
+# ------------------------------
+group_threads = {}
 with open(counts_file) as f:
     reader = csv.DictReader(f, delimiter="\t")
     for row in reader:
-        species = row["Species"].strip()
-        count = int(row["Group_size"])
-        
-        # Only include species in our list
-        if species in species_set:
-            # Assign threads dynamically:
+        group = row["Tax_group"].strip()   # Column with group name
+        count = int(row["Group_size"])     # Column with group size (integer)
+
+        # Only include groups listed in group_list_file
+        if group in groups_set:
+            # Thread assignment policy:
             # - Minimum 6 threads
             # - Maximum 100 threads
-            # - Otherwise, use the number of genomes as thread count
+            # - Otherwise, use the group size as the thread count
             threads = min(100, max(6, count))
-            counts[species] = threads
-            
-            # Optional debug: print assignment for first few species
-            # print(f"{species}: {count} genomes -> {threads} threads")
+            group_threads[group] = threads
+
+            # Optional debug for the first few entries:
+            # print(f"{group}: {count} -> {threads} threads")
 
 # ------------------------------
 # Write YAML configuration
 # ------------------------------
-# Sort species alphabetically for readability
-outdata = {"species_threads": dict(sorted(counts.items()))}
+# Sort groups alphabetically for readability
+outdata = {"group_threads": dict(sorted(group_threads.items()))}
 
-# Make config directory if it does not exist
+# Ensure output directory exists (no-op if already present)
 os.makedirs("config", exist_ok=True)
 
 # Write YAML file
 with open(output_file, "w") as f:
     yaml.dump(outdata, f, sort_keys=False, default_flow_style=False)
 
+# ------------------------------
 # Confirm success
-print(f"Wrote threads config for {len(counts)} species to {output_file}")
+# ------------------------------
+print(f"Wrote threads config for {len(group_threads)} groups to {output_file}")
