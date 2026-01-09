@@ -120,7 +120,7 @@ Version information is provided to support reproducibility and temporal context.
 
 If you use these pangenomes, please cite the associated resource announcement and acknowledge the data and tools that made this work possible:
 
-- *Pangenomes of the Human Oral Microbiome* — Microbiology Resource Announcement — DOI: To be assinged upon publication - [MRA Paper ↗]()
+- *Pangenomes of the Human Oral Microbiome* [Microbiology Resource Announcement Paper ↗]()
 
 Please also consider citing eHOMD and Anvi’o:
 - Expanded Human Oral Microbiome Database [eHOMD Paper ↗](https://doi.org/10.1128/msystems.00187-18)
