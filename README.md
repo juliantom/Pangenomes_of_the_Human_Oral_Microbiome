@@ -25,7 +25,7 @@ This repository provides stable, open-access workflows and direct access to hund
    *No Anvi’o installation required*
 2. Select a taxon to automatically view its pangenome
 3. Explore and modify interactive visualizations
-4. Identify shared and **unique** features across strains
+4. Identify **shared** and **unique** features across strains
 5. Use these pangenomes for any purpose you choose
 
 ### 💻 Offline (full control)
