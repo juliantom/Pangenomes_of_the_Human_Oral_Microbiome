@@ -116,8 +116,8 @@ Please also consider citing eHOMD and Anvi’o:
 - Anvi’o [Anvio Paper ↗](https://anvio.org/cite/)
 
 ***
-
-## 🧭 On a Personal Note
+<details>
+<summary>## 🧠 On a Personal Note</summary>
 
 If you’re reading this, there’s a decent chance you’re procrastinating. That’s fine — so was I.
 
@@ -128,7 +128,7 @@ But I wanted more control over how things ran, to plug in a few tools that weren
 So instead of extending upstream code (or opening the appropriate GitHub issue, as a more responsible person might have done), I took the long way around. What came out of that decision is this repository: a working, reproducible pipeline shaped as much by curiosity and stubbornness as by necessity.
 
 In the end, this probably could have been achieved with fewer lines of code inside Anvi’o. That’s okay. Bioinformatics allows many paths to the same result, and sometimes the scenic route is the one where you learn the most.
-
+</details>
 ***
 
 ## 🧙 Acknowledgments
