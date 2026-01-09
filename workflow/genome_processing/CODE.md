@@ -20,19 +20,26 @@
 >  # Reduced resources for testing or smaller runs
 >  snakemake --jobs 10 --cores 10
 >  ```
-> - ✅ **Start small:** run a single genome, confirm resource usage, then scale up
+
+✅ **Start small:** run a single genome, confirm resource usage, then scale up
 
 ***
+
+## 📘 Overview
 
 This file contains all commands and scripts used to prepare genomes for pangenome analysis.
 It combines genome retrieval, cleaning, contigs database creation, and functional annotation in a single workflow.
 
-All processing is tied to VERSIONS.md
- for software and database versions.
+All processing is tied to `../VERSIONS.md` for software and database versions.
+
 Keep this file for reproducibility, troubleshooting, or re-running the workflow.
 
+***
+
+## 📘 Code
+
 ### 🖥️ 1️⃣ Prepare Working Directories and HOMD Metadata
-```
+```bash
 ####################
 # Prepare working directory
 ####################
@@ -72,8 +79,9 @@ cat 98_data/genome_ids-8177.txt \
 # Copy list to download directory
 cp 98_data/02-assembly_id_list-2025_08_19.txt 01_download_genomes/assembly_accession_list.txt
 ```
-### 📂 2️⃣ Download Genomes from NCBI
-```
+
+### 📂 2️⃣(Optional) Install Annotation Databases
+```bash
 ####################
 # Change to download directory
 ####################
@@ -83,13 +91,46 @@ cd 01_download_genomes/
 conda activate anvio-8
 
 ####################
-# Install NCBI Datasets
-# only needed once and can be installed inside anvi'o
+# Install NCBI Datasets and Annotation DBs
+# Versions will match those in the contigs.DB pangenomes.DB
+# only needed once
 ####################
 
-# Choose one option
+# NCBI Datasets (v18.9.0; probably any recent version will work)
 # conda install conda-forge::ncbi-datasets-cli=18.9.0
-# conda install conda-forge::ncbi-datasets-cli
+
+# Setup Cazymes DB (v13)
+# anvi-setup-cazymes --cazyme-version V13 --reset
+# If the above command fails, copy a pre-built CAZyme DB folder content to anvio CAZyme folder
+# cp -r path/to/misc/CAZyme/* path/to/anaconda3/envs/anvio-8/lib/python3.10/site-packages/anvio/data/misc/CAZyme/
+
+# Setup InteracDome DB (Pfam:31.0)
+anvi-setup-interacdome --reset
+
+# Setup KEGG Data (v13)
+anvi-setup-kegg-data --mode all --num-threads 16 --reset --kegg-snapshot v2023-09-22
+
+# Setup NCBI COG DB (COG20)
+anvi-setup-ncbi-cogs --cog-version COG20 --num-threads 16 --reset
+
+# Setup Pfam DB (v37.2)
+anvi-setup-pfams --pfam-version 37.2 --reset
+
+# Setup GTDB-Tk DB (v214.1)
+anvi-setup-scg-taxonomy --num-threads 16 --gtdb-release v214.1 --reset
+
+# Setup NCBI COG DB (COG20)
+anvi-setup-trna-taxonomy --num-threads 16
+
+# Setup ModelSEED DB
+anvi-setup-modelseed-database
+```
+
+### 📂 3️⃣ Download Genomes from NCBI
+```bash
+####################
+# Download genomes from NCBI
+####################
 
 # Download a dehydrated data package (NCBI datasets v18.9.0)
 assembly_list="assembly_accession_list.txt"
@@ -114,8 +155,9 @@ for fasta_file in 01_ncbi_set/ncbi_dataset/data/*/*.fna; do
   mv $fasta_file 02_genomic_files
 done
 ```
-### ⚙️ 3️⃣ Sanity Check and Clean Genome IDs
-```
+
+### ⚙️ 4️⃣ Sanity Check and Clean Genome IDs
+```bash
 ####################
 # Sanity Check
 ####################
@@ -148,8 +190,9 @@ done
 cat 98_data/genome_ids-8174.txt > 98_data/genome_ids-8174-long.txt
 sed -i 's/........//' 98_data/genome_ids-8174.txt
 ```
-### 📂 4️⃣ Prepare Contigs DB Working Directory
-```
+
+### 📂 5️⃣ Prepare Contigs DB Working Directory
+```bash
 ####################
 # Create contigs DB workspace
 ####################
@@ -171,10 +214,11 @@ done < 98_data/genome_ids-8174.txt
 # Copy genome IDs to contigs DB folder
 cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids.txt
 ```
-### 📝 5️⃣ Run Snakemake Workflow
+
+### 📝 6️⃣ Run Snakemake Workflow
 Before running, make sure the script `01_prepare-contigs_db-snakemake.sh` is in the working directory `99_scripts/`.<br>
 If you cloned the repository, it’s in `/workflow/scripts/` — copy it to the working directory:
-```
+```bash
 # Copy script 
 cp /path/to/repo/workflow/scripts/01_prepare-contigs_db-snakemake.sh 99_scripts/
 
@@ -184,13 +228,15 @@ cp /path/to/repo/workflow/scripts/01_prepare-contigs_db-snakemake.sh 99_scripts/
 nohup ./99_scripts/01_prepare-contigs_db-snakemake.sh \
      >> 97_nohup/nohup-01_prepare-contigs_db-snakemake.out 2>&1 &
 ```
-### 📂 6️⃣ Compress FASTA Files
-```
+
+### 📂 7️⃣ Compress FASTA Files
+```bash
 ####################
 # Compress fasta files for storage optimization
 ####################
 ls 01_download_genomes/02_genomic_files/*.fna | parallel gzip -9
 ls 02_individual_contigs_db/01_raw_fasta/*.fasta | parallel gzip -9
 ```
-© 2026 Julian Torres-Morales — see LICENSE
+***
 
+© 2026 Julian Torres-Morales — see LICENSE
