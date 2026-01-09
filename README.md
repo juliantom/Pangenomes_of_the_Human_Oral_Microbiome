@@ -1,8 +1,10 @@
 # Pangenomes of the Human Oral Microbiome 🦷 🦠
 
-**A curated collection of species-level pangenomes for taxa in the Human Oral Microbiome Database**
+**A curated collection of species-level pangenomes for taxa in the expanded Human Oral Microbiome Database (eHOMD)**
 
 This repository provides stable, open-access workflows and direct access to hundreds of pangenomes, enabling visualization and exploration of core and accessory gene content across oral microbial taxa (bacteria and archaea).
+
+**Operational definition:** A *pangenome* is the **complete set of genes** across all genomes assigned to a taxon in eHOMD, including **core genes** (shared by all or most members) and **accessory genes** (present in some or unique to individual strains).
 
 *This resource treats pangenomes as reusable, community-facing biological objects.*
 
@@ -10,20 +12,22 @@ This repository provides stable, open-access workflows and direct access to hund
 
 ## 🚀 Quick Start
 
-### 🌐 Online (interactive experience)
-1. Browse pangenomes interactively through the expanded Human Oral Microbiome Database Anvi’o Portal [eHOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
+### 🌐 Online (interactive experience - no installation needed)
+1. Browse pangenomes interactively through the eHOMD Anvi’o Portal [eHOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
    - *No Anvi’o installation needed*
-2. Select a taxon and inspect core and accessory gene clusters
-3. Explore pangenomes
-4. Use these pangenomes as a reference for comparative analysis
+2. Select a taxon to automatically view its pangenome
+3. Explore and modify interactive visualizations
+4. Identify shared and unqiue features across strains
+5. Use these pangenomes for any purpose you choose
 
 ### 💻 Offline (full control)
 1. Download Anvi’o-compatible pangenome databases [eHOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes)
    - *Anvi’o installation required* [Anvi’o install ↗](https://anvio.org/install/)
-4. Load databases locally for deeper exploration
-5. Summarize gene-cluster content and functional annotation
+2. Explore them locally
+3. Perform advanced or customized analyses
 
 ***
+
 ## 🧬 What This Repository Contains
 
 Code used to generate:
@@ -116,8 +120,8 @@ Please also consider citing eHOMD and Anvi’o:
 - Anvi’o [Anvio Paper ↗](https://anvio.org/cite/)
 
 ***
-<details>
-<summary>## 🧠 On a Personal Note</summary>
+
+## 🧠 On a Personal Note
 
 If you’re reading this, there’s a decent chance you’re procrastinating. That’s fine — so was I.
 
@@ -128,7 +132,7 @@ But I wanted more control over how things ran, to plug in a few tools that weren
 So instead of extending upstream code (or opening the appropriate GitHub issue, as a more responsible person might have done), I took the long way around. What came out of that decision is this repository: a working, reproducible pipeline shaped as much by curiosity and stubbornness as by necessity.
 
 In the end, this probably could have been achieved with fewer lines of code inside Anvi’o. That’s okay. Bioinformatics allows many paths to the same result, and sometimes the scenic route is the one where you learn the most.
-</details>
+
 ***
 
 ## 🧙 Acknowledgments
