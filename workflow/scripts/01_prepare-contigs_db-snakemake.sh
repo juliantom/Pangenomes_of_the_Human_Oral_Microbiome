@@ -34,8 +34,8 @@ conda activate anvio-8
 # -------------------------------
 project_id="02_individual_contigs_db"
 # Adjust this path to your actual working directory for the project
-path_workdir="my_work_dir"
-# path_workdir="$current_dir"
+# path_workdir="full/path/to/my_work_dir"
+path_workdir="$current_dir"
 
 # -------------------------------
 # Navigate to the Snakemake workflow directory
@@ -57,7 +57,7 @@ snakemake --rulegraph | dot -Tpdf > rulegraph-run.pdf
 # -------------------------------
 # --jobs 100 --cores 100: run up to 100 rules in parallel using 100 CPU cores
 # --quiet: suppress extra log output
-snakemake --jobs 100 --cores 100 --quiet
+snakemake --jobs 10 --cores 10 --quiet
 # Optional debug: for testing smaller runs, reduce cores and jobs
 # snakemake --jobs 10 --cores 10 --quiet -n  # dry run test
 
