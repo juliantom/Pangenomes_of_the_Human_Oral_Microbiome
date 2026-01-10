@@ -45,7 +45,7 @@ Keep this file for reproducibility, troubleshooting, or re-running the workflow.
 ####################
 
 # Create and change to working directory
-mkdir my_work_dir && my_work_dir
+mkdir -p my_work_dir && cd my_work_dir
 
 # Create project subdirectories
 mkdir -p 01_download_genomes/{01_ncbi_set,02_genomic_files} 97_nohup 98_data 99_scripts
@@ -69,6 +69,11 @@ cat 98_data/01_homd_v11_02-GCA_ID_info.csv \
           | sed -e 's/sp\. /sp_/' \
           | sed 's/[^a-zA-Z0-9_]/_/g' \
           > 98_data/genome_ids-8177.txt
+
+# Test
+# Subset'Abiotrophia' genomes
+# Abiotrophia has 2 taxa (HMTs) with 5 genomes each
+#grep 'Abiotro' 98_data/genome_ids-8177.txt > 98_data/genome_ids-abiotrophia.txt && mv 98_data/genome_ids-abiotrophia.txt 98_data/genome_ids.txt
 
 # Create assembly accession list
 cat 98_data/genome_ids-8177.txt \
