@@ -1,15 +1,16 @@
 #!/bin/bash
 
 # =========================================================
-# Script to run Snakemake workflow for contigs database generation
-# Date: 2025-06-14
+# Script to run Snakemake workflow for building pangenomes
+# for oral species
+# Date: 2025-05-19
 # Author: Julian Torres
 # =========================================================
 
 # -------------------------------
 # Start timing
 # -------------------------------
-SECONDS=0   # Bash internal timer to track elapsed time
+SECONDS=0   # Bash internal timer to track elapsed time of the workflow
 
 # -------------------------------
 # Store the current working directory
@@ -19,22 +20,22 @@ current_dir="$PWD"   # Save directory to return after workflow
 # -------------------------------
 # Initialize Conda in the shell
 # -------------------------------
-# This ensures the 'conda activate' command works in this script
+# This ensures that 'conda activate' works properly in scripts
 eval "$(conda shell.bash hook)"
 
 # -------------------------------
 # Activate the Anvi'o 8 environment
 # -------------------------------
 conda activate anvio-8
-# Optional debug: echo current environment
+# Optional debug: print the current environment
 # echo "Conda environment active: $(conda info --envs | grep '*')"
 
 # -------------------------------
 # Set project ID and workflow directory
 # -------------------------------
-project_id="02_individual_contigs_db"
-# Adjust this path to your actual working directory for the project
-# path_workdir="full/path/to/my_work_dir"
+project_id="03_pangenome_analysis"
+# Adjust this path to your working directory for pangenome analysis
+#path_workdir="my_work_dir"
 path_workdir="$current_dir"
 
 # -------------------------------
@@ -55,11 +56,14 @@ snakemake --rulegraph | dot -Tpdf > rulegraph-run.pdf
 # -------------------------------
 # Run Snakemake workflow
 # -------------------------------
-# --jobs 100 --cores 100: run up to 100 rules in parallel using 100 CPU cores
-# --quiet: suppress extra log output
-snakemake --jobs 10 --cores 10 --quiet
+# --cores 90 : number of CPU cores to use per job
+# --jobs 200 : maximum number of simultaneous jobs
+# --resources mem_gb=2600 : limit memory usage
+# --keep-going : continue workflow even if some rules fail
+# --quiet : suppress verbose Snakemake output
+snakemake --cores 10 --resources mem_gb=32 --jobs 200 --keep-going --quiet
 # Optional debug: for testing smaller runs, reduce cores and jobs
-# snakemake --jobs 10 --cores 10 --quiet -n  # dry run test
+# snakemake --cores 10 --jobs 10 --quiet -n  # dry run test
 
 # -------------------------------
 # Deactivate Conda environment
@@ -84,8 +88,7 @@ SECONDS_REMAINING=$((SECONDS % 60))
 # Format elapsed time as: project_id    DD:HH:MM:SS
 ELAPSED=$(printf "%s\t%02d:%02d:%02d:%02d" "$project_id" "$DAYS" "$HOURS" "$MINUTES" "$SECONDS_REMAINING")
 
-# Append elapsed time to a log file
-# This keeps track of how long each workflow takes
+# Append elapsed time to a log file for tracking runtime of workflows
 echo "$ELAPSED" >> "$path_workdir/execution_time.log"
 # Optional debug: print elapsed time
 # echo "Workflow completed in $ELAPSED"
