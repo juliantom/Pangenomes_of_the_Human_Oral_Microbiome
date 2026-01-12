@@ -118,7 +118,6 @@ cp 98_data/genome_ids-abiotrophia.txt 98_data/genome_ids.txt
 
 # Extract GenBank assembly accessions
 # Convert second underscore to dot (GCA_XXXXXX.X format)
-
 cat 98_data/genome_ids.txt \
           | awk -F'_id_' '{print $NF}' \
           | sed -e 's/_/\./2' \
@@ -288,6 +287,7 @@ done < 98_data/genome_ids-8174.txt
 
 # Copy genome IDs to contigs DB folder
 cp 98_data/genome_ids-8174.txt 02_individual_contigs_db/genome_ids-full.txt
+
 ```
 
 ### 📝 6️⃣ Run Snakemake Workflow
@@ -311,14 +311,21 @@ cp /path/to/repo/workflow/genome_processing/Snakefile 02_individual_contigs_db
 
 # Test
 cd 02_individual_contigs_db
+
 # Subset genome IDs for testing (e.g., only Abiotrophia)
 cp genome_ids-full.txt genome_ids.txt
+
 # Visualize rulegraph (single graph)
 snakemake --rulegraph | dot -Tpdf > rulegraph-test-contigs_db.pdf
-# Execute test
+
+# Run in dry-run mode to verify
 snakemake --cores 90 --jobs 200 --dry-run
+
+# Execute full test run
 snakemake --cores 100 --jobs 200
-# Optional: Clean up test outputs
+
+# OPTIONAL: Clean up test outputs
+# Never leave this command uncommented! It will delete all outputs.
 # snakemake clean --cores 90 --jobs 200
 
 # Run the workflow in background
