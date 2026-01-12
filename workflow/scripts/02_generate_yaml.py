@@ -1,5 +1,4 @@
-
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # ================================
 # Generate YAML configuration for Snakemake workflow
