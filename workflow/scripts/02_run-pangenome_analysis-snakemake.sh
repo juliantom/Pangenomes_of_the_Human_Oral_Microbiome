@@ -70,9 +70,9 @@ snakemake --rulegraph | dot -Tpdf > rulegraph-run.pdf
 # --resources mem_gb=2600 : limit memory usage
 # --keep-going : continue workflow even if some rules fail
 # --quiet : suppress verbose Snakemake output
-snakemake --cores 16 --resources mem_gb=32 --jobs 200 --keep-going --quiet
+#snakemake --cores 16 --resources mem_gb=32 --jobs 200 --keep-going --quiet
 # Original resources for 90 threads and 3 TB RAM
-#snakemake --cores 90 --resources mem_gb=2600 --jobs 200 --keep-going --quiet
+snakemake --cores 90 --resources mem_gb=2600 --jobs 200 --keep-going --quiet
 # Optional debug: for testing smaller runs, reduce cores and jobs
 # snakemake --cores 10 --jobs 10 --quiet -n  # dry run test
 

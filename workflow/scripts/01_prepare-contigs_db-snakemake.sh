@@ -66,9 +66,9 @@ snakemake --rulegraph | dot -Tpdf > rulegraph-run.pdf
 # -------------------------------
 # --jobs 100 --cores 100: run up to 100 rules in parallel using 100 CPU cores
 # --quiet: suppress extra log output
-snakemake --jobs 10 --cores 10 --quiet
+# snakemake --jobs 10 --cores 10 --quiet
 # Original resources for 100 threads and 3 TB RAM
-#snakemake --cores 100 --jobs 200 --quiet
+snakemake --cores 100 --jobs 200 --quiet
 # Optional debug: for testing smaller runs, reduce cores and jobs
 # snakemake --jobs 10 --cores 10 --quiet -n  # dry run test
 

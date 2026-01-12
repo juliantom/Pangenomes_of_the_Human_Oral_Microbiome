@@ -73,10 +73,12 @@ cat 98_data/01_homd_v11_02-GCA_ID_info.csv \
 # Test
 # Subset'Abiotrophia' genomes
 # Abiotrophia has 2 taxa (HMTs) with 5 genomes each
-#grep 'Abiotro' 98_data/genome_ids-8177.txt > 98_data/genome_ids-abiotrophia.txt && mv 98_data/genome_ids-abiotrophia.txt 98_data/genome_ids.txt
+grep 'Abiotro' 98_data/genome_ids-8177.txt > 98_data/genome_ids-abiotrophia.txt && cp 98_data/genome_ids-abiotrophia.txt 98_data/genome_ids.txt
+# else
+#cp 98_data/genome_ids-8177.txt 98_data/genome_ids.txt
 
 # Create assembly accession list
-cat 98_data/genome_ids-8177.txt \
+cat 98_data/genome_ids.txt \
           | awk -F'_id_' '{print $NF}' \
           | sed -e 's/_/\./2' \
           > 98_data/02-assembly_id_list-2025_08_19.txt
@@ -192,7 +194,7 @@ cd ../
 # Filter genome IDs to only include genomes that were successfully downloaded
 for i in $(cat 01_download_genomes/downloaded_genomes.txt); do 
     assembly_id=$( echo "$i" | sed -e 's/\./_/' )
-    grep "$assembly_id" 98_data/genome_ids-8177.txt >> 98_data/genome_ids-8174.txt
+    grep "$assembly_id" 98_data/genome_ids.txt >> 98_data/genome_ids-8174.txt
 done
 
 # Generate long and short genome ID files (portable)
@@ -261,12 +263,14 @@ cp /path/to/repo/workflow/genome_processing/Snakefile 02_individual_contigs_db
 # Test
 cd 02_individual_contigs_db
 # Subset genome IDs for testing (e.g., only Abiotrophia)
-grep 'Abiotro' genome_ids-full.txt > genome_ids.txt
+cp genome_ids-full.txt genome_ids.txt
 # Visualize rulegraph (single graph)
 snakemake --rulegraph | dot -Tpdf > rulegraph-test-contigs_db.pdf
 # Execute test
-snakemake --cores 10 --jobs 10 --dry-run
-snakemake --cores 10 --jobs 10
+snakemake --cores 90 --jobs 200 --dry-run
+snakemake --cores 100 --jobs 200
+# Optional: Clean up test outputs
+# snakemake clean --cores 90 --jobs 200
 
 # Run the workflow in background
 cp genome_ids-full.txt genome_ids.txt
