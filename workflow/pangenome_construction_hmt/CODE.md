@@ -43,26 +43,33 @@ Keep this file for reproducibility, troubleshooting, or re-running the workflow.
 # Step 1: Create pangenome directory
 # -------------------------------
 
-# Change to working directory
+# Change to working directory (same as Step 1 workflow)
 cd my_work_dir
 
-# Create main folder and 'data' subfolder
+# Create main pangenome analysis folder and data subdirectory
+# (All intermediate tables are stored in data/)
 dir_first_derep=03_pangenome_analysis
 mkdir -p "$dir_first_derep"/data
 
-# Input file generated during genome processing
+# Input file generated during genome processing (Step 1)
+# Contains full-length genome IDs with HMT annotation
 original_genome_to_hmt="98_data/genome_ids-8174-long.txt"
+
 
 # -------------------------------
 # Step 2: Generate genome-to-group mapping
 # -------------------------------
-all_genome_to_group_file=$dir_first_derep/data/01-genome_to_tax_group-8174.txt
 
-# Process original genome IDs to create a clean mapping file
-# 1) Replace the second underscore with '|' to separate fields
-# 2) Swap columns: put HMT first, genome ID second
-# 3) Append strain info as an extra field (split on '_str_')
-# 4) Format final table: HMT ID, genome ID with '_homd_' prefix
+# Output table:
+#   Column 1: HMT (taxonomic group)
+#   Column 2: Genome ID (prefixed with '_homd_' for uniqueness)
+all_genome_to_group_file="$dir_first_derep/data/01-genome_to_tax_group-8174.txt"
+
+# Processing steps:
+# 1) Replace the second underscore with '|' to split HMT from genome ID
+# 2) Swap fields so HMT comes first
+# 3) Preserve strain information
+# 4) Output a clean, tab-delimited mapping table
 cat "$original_genome_to_hmt" \
     | sed -e 's/_/|/2' \
     | awk 'BEGIN{FS=OFS="|"}{print $2,$1}' \
@@ -72,19 +79,23 @@ cat "$original_genome_to_hmt" \
 
 
 # -------------------------------
-# Step 3: List taxa with ≥2 genomes
+# Step 3: List taxa (HMT's) with ≥2 genomes
 # -------------------------------
+
+# Output file: list of taxa with more than one genome
 list_taxon=$dir_first_derep/data/02-list_group.txt
 
-# Count genomes per taxon and select taxa with more than 1 genome
-# 1) Take the second column (genome IDs), sort, count duplicates
-# 2) Keep only taxa with more than one genome
+# Count genomes per HMT taxon
+# NOTE:
+# - sort | uniq -c is executed inside awk via a POSIX pipe
+# - This avoids temporary files and scales well to thousands of genomes
 awk '{print $2 | "sort | uniq -c"}' "$all_genome_to_group_file" \
     | awk '{if($1>1)print $2}' \
     > "$list_taxon"
 
-# List taxa with only one genome (singletons)
+# List taxa represented by a single genome (excluded from pangenome construction)
 list_singleton_taxon=$dir_first_derep/data/02-list_group-only_one_genome.txt
+
 # 1) Count genomes per taxon
 # 2) Keep only taxa with exactly one genome
 awk '{print $2 | "sort | uniq -c"}' "$all_genome_to_group_file" \
@@ -92,14 +103,18 @@ awk '{print $2 | "sort | uniq -c"}' "$all_genome_to_group_file" \
     > "$list_singleton_taxon"
 
 # -------------------------------
-# Step 4: Link genomes to HMT groups
+# Step 4: Link genomes to multi-genome HMT taxa
 # -------------------------------
-# Initialize empty output file
+
+# Output file linking genomes to taxa
 genome_to_group_pass="$dir_first_derep/data/03-group_to_genomes.txt"
+
+# Initialize output file (POSIX-safe truncation)
 : > "$genome_to_group_pass"
-# For each taxon with ≥2 genomes, link all genomes to the taxon
-# 1) Find all genomes for this taxon
-# 2) Add genome ID in a separate column for easier processing
+
+# For each taxon with ≥2 genomes:
+# 1) Extract all matching genomes
+# 2) Append genome ID as a separate column for downstream Snakemake rules
 while IFS= read -r group; do
     grep "$group" "$all_genome_to_group_file" \
     | awk -F'_homd_' -v OFS="\t" '{print $0, $2}' \
@@ -109,12 +124,12 @@ done < "$list_taxon"
 # -------------------------------
 # Step 5: Count genomes per taxon
 # -------------------------------
+
+# Output file: number of genomes per taxon
 group_count="$dir_first_derep/group_count.txt"
 
-# Count number of genomes per taxon and format output
-# 1) Count genome occurrences per taxon
-# 2) Format output table with columns: Tax_group, Group_size
-# 3) Output table with columns: Tax_group, Group_size
+# Output table (NEEDS these HEADERS):
+#   Tax_group   Group_size
 awk 'BEGIN{FS=OFS="\t"}{print $2 | "sort | uniq -c"}' "$genome_to_group_pass" \
     | awk -v OFS="\t" 'NR==1{print "Tax_group","Group_size"}{if($1>1)print $2,$1}' \
     > "$group_count"
@@ -143,103 +158,135 @@ cd ../
 ```
 ### **3️⃣ Test Snakemake workflow**
 ```bash
-dir_first_derep=03_pangenome_analysis
+####################
+# TEST: Run pangenome construction workflow
+####################
 
-# Switch to the pangenome workflow directory
-cd "$dir_first_derep"
+# Set and enter the pangenome workflow directory
+dir_pangenome=03_pangenome_analysis
+cd "$dir_pangenome"
 
-# Activate the Anvi'o 8 environment (in case not already active)
+# Activate the Anvi'o environment (Anvi'o v8)
 conda activate anvio-8
 
-# Check yaml is installed
-#conda install -c conda-forge pyyaml
+# Ensure required Python dependencies are available
+# (PyYAML is required by Snakemake; install once if missing)
+# conda install -c conda-forge pyyaml
 
-# Select a single taxon for testing (quick run) (MIGHT REMOVE LATER)
+####################
+# Input selection
+####################
+
+# Copy the full taxon list into the working directory
 cp data/02-list_group.txt list_group.txt
-# Optional: limit to a specific taxon or few taxa for testing
-#grep "Abiotro" data/02-list_group.txt > list_group.txt
 
-# Copy Snakemake workflow script from GitHub workflow folder to working directory
+# Optional: restrict to a single taxon or a small subset for testing
+# (useful for quick validation runs)
+grep "Abiotro" data/02-list_group.txt > list_group.txt
+
+####################
+# Workflow setup
+####################
+
+# Copy the Snakemake workflow into the working directory
 cp /path/to/repo/workflow/pangenome_construction_hmt/Snakefile .
 
-# Visualize workflow dependencies as a PDF
-snakemake --rulegraph | dot -Tpdf > rulegraph-test_1.pdf
+# Visualize workflow dependencies
+snakemake --rulegraph | dot -Tpdf > rulegraph_test.pdf
 
-# Perform a dry run to verify workflow execution
+####################
+# Workflow execution
+####################
+
+# Perform a dry run to validate rules and inputs
 snakemake --jobs 200 --cores 90 --quiet -n
 
-# Run the workflow on the test taxon
+# Execute the workflow
 snakemake --jobs 200 --cores 90
 
-# Optional: clean outputs for re-running (Snakemake tracks completed tasks)
+# Optional: clean generated outputs for a fresh re-run
+# (Snakemake tracks completed tasks automatically)
 # snakemake --cores 90 clean
+
 
 ```
 
 ### **4️⃣ Run full Snakemake workflow**
 ```bash
-# Use the full taxon list for processing (MIGHT BE REMOVE LATER)
+####################
+# 2️⃣ Full Run (all taxa, production)
+####################
+
+# Restore full taxon list for production
 cp data/02-list_group.txt list_group.txt
 
-# Return to the main working directory
+# Return to main working directory
 cd ../
 
-# Copy bash script to launch full Snakemake workflow
-cp path/to/repo/workflow/scripts/02_run-pangenome_analysis-snakemake.sh 99_scripts
+# Copy bash script that launches the full Snakemake workflow
+cp /path/to/repo/workflow/scripts/02_run-pangenome_analysis-snakemake.sh 99_scripts/
 
 # Make the script executable
 chmod +x 99_scripts/02_run-pangenome_analysis-snakemake.sh
 
-# Launch full workflow in the background
+# Launch workflow in background with logging
+# - All taxa are processed
+# - Output and errors are logged to 97_nohup
+# - Runs asynchronously on HPC or local machine
 nohup ./99_scripts/02_run-pangenome_analysis-snakemake.sh \
     >> 97_nohup/nohup-02_run-pangenome_analysis-snakemake.out 2>&1 &
+
+# ⚠️ WARNING: Full workflow is resource-intensive
+# Expected runtime: multiple days for >500 taxa
+# Ensure sufficient cores, RAM, and storage before executing
 
 ```
 
 ### **5️⃣ Check completion status**
 ```bash
-# Some rules may fail if the number of genomes is too low (phylogenomics requires ≥3–4 genomes)
+####################
+# Check completion status of Snakemake rules
+# Note: Some rules (e.g., phylogenomics) may fail if the number of genomes <3–4
+####################
 
-# Define folder containing Snakemake "done" markers
+# Folder containing Snakemake "done" marker files
 done_dir="03_pangenome_analysis/99_done"
 
-# -------------------------------
-# Step 1: Quick overview of rule completion
-# -------------------------------
-# List completed rules with counts (rule name and number of finished processes)
-# 1) Strip leading path and text before last dash
-# 2) Count occurrences of each rule
-# 3) Format output as tab-delimited: Rule Finished
-# 4) Optional: show only rule names
-ls "$done_dir" \
-  | sed -e 's/.*-//' \
-  | sort | uniq -c \
-  | awk -v OFS="\t" 'NR==1{print "Rule","Finished"}{print $2,$1}' \
-  | cut -f1
+####################
+# Step 1: Quick overview of completed rules
+####################
 
-# Same as above but showing only counts
+# List completed rules with counts in a clean table
+# - Strip leading path and text before last dash
+# - Count occurrences per rule
+# - Display as tab-delimited table, formatted with column -t
 ls "$done_dir" \
   | sed -e 's/.*-//' \
-  | sort | uniq -c \
-  | awk -v OFS="\t" 'NR==1{print "Rule","Finished"}{print $2,$1}' \
-  | cut -f2
+  | sort \
+  | uniq -c \
+  | awk -v OFS="\t" '{print $2,$1}' \
+  | column -t \
+  | awk 'BEGIN{print "Rule\tCompleted"} {print $0}'
 
 ```
 
 ### **6️⃣ Summarize number of completed rules (tabular summary)**
 ```bash
-# -------------------------------
-# SSave summary of completed rules
-# -------------------------------
-# Save the summary of completed rules to a text file (count per rule - tabular format)
-# Expect phylogeny rule to have fewer completions as it requires >4 genomes for bootstrapping and tree building
+####################
+# Generate summary of completed rules
+# - Safe if directory is empty
+# - Outputs aligned table with Rule and Completed columns
+# - Saves to summary file
+####################
+
 dir_done="03_pangenome_analysis/99_done"
 summary_file="03_pangenome_analysis/summary_rules.txt"
 
-# Step 1: Create header for summary file
+# Initialize summary file with header
 printf 'Rule\tCompleted\n' > "$summary_file"
 
-# Step 2: Aggregate completion counts
+# POSIX glob guard:
+# If no files exist, "$dir_done/*" expands literally — this avoids errors
 # Iterate over all files in the done directory
 # 1) Keep only filenames
 # 2) Extract rule name from filename (last dash-separated field)
@@ -260,7 +307,7 @@ if [ "$1" != "$dir_done/*" ]; then
     >> "$summary_file"
 fi
 
-# ✅ Result: 'summary_rules.txt' contains a table of all rule completions
+# ✅ Summary saved
 printf 'Summary of completed rules saved to: %s\n' "$summary_file"
 ```
 

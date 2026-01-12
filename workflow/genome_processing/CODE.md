@@ -50,6 +50,7 @@ mkdir -p my_work_dir && cd my_work_dir
 # Create project subdirectories
 mkdir -p 01_download_genomes/{01_ncbi_set,02_genomic_files} 97_nohup 98_data 99_scripts
 
+
 ####################
 # Process HOMD metadata file
 ####################
@@ -58,10 +59,21 @@ mkdir -p 01_download_genomes/{01_ncbi_set,02_genomic_files} 97_nohup 98_data 99_
 wget https://www.homd.org//ftp/genomes/NCBI/V11.02/GCA_ID_info.csv \
           -O 98_data/01_homd_v11_02-GCA_ID_info.csv
 
+
+####################
 # Generate genome IDs
-# CRITICAL: only alphanumeric characters and underscores
-# Columns needed: HMT number, Genus, Species, strain ID, GenBank Assembly Accession
-# Expected ID: HMT_000_Genus_Species_str_STRAIN_id_GCA
+####################
+
+# CRITICAL:
+# - IDs must contain ONLY alphanumeric characters and underscores
+# - These IDs propagate into filenames, contigs DBs, and pangenomes
+#
+# Required columns:
+#   HMT number | Genus | Species | Strain ID | GenBank Assembly Accession
+#
+# Expected ID format:
+#   HMT_000_Genus_Species_str_STRAIN_id_GCA_XXXXXX.X
+
 cat 98_data/01_homd_v11_02-GCA_ID_info.csv \
           | awk -F',' 'NR>2{print $2,$3,$4"_str_"$5"_id_"$1}' \
           | sed -e 's/"//g' \
@@ -70,21 +82,52 @@ cat 98_data/01_homd_v11_02-GCA_ID_info.csv \
           | sed 's/[^a-zA-Z0-9_]/_/g' \
           > 98_data/genome_ids-8177.txt
 
-# Test
-# Subset'Abiotrophia' genomes
-# Abiotrophia has 2 taxa (HMTs) with 5 genomes each
-grep 'Abiotro' 98_data/genome_ids-8177.txt > 98_data/genome_ids-abiotrophia.txt && cp 98_data/genome_ids-abiotrophia.txt 98_data/genome_ids.txt
-# else
-#cp 98_data/genome_ids-8177.txt 98_data/genome_ids.txt
 
+####################
+# SAFETY GUARD — TEST MODE (INTENTIONAL)
+####################
+
+# IMPORTANT:
+# This grep-based subset is a *deliberate safety mechanism*.
+#
+# Rationale:
+# - Full HOMD run = >8,000 genomes
+# - Accidental execution would trigger a multi-day HPC job
+# - Abiotrophia is small (2 HMTs × ~5 genomes = ~10 genomes)
+#
+# Default behavior:
+#   → ONLY Abiotrophia genomes are enabled
+#
+# To run the FULL dataset:
+#   → Comment out the grep line
+#   → Uncomment the full copy command below
+
+grep 'Abiotro' 98_data/genome_ids-8177.txt \
+  > 98_data/genome_ids-abiotrophia.txt
+
+# ACTIVE (safe default: ~10 genomes)
+cp 98_data/genome_ids-abiotrophia.txt 98_data/genome_ids.txt
+
+# FULL RUN (DANGEROUS — >8,000 genomes)
+# cp 98_data/genome_ids-8177.txt 98_data/genome_ids.txt
+
+
+####################
 # Create assembly accession list
+####################
+
+# Extract GenBank assembly accessions
+# Convert second underscore to dot (GCA_XXXXXX.X format)
+
 cat 98_data/genome_ids.txt \
           | awk -F'_id_' '{print $NF}' \
           | sed -e 's/_/\./2' \
           > 98_data/02-assembly_id_list-2025_08_19.txt
 
 # Copy list to download directory
-cp 98_data/02-assembly_id_list-2025_08_19.txt 01_download_genomes/assembly_accession_list.txt
+cp 98_data/02-assembly_id_list-2025_08_19.txt \
+   01_download_genomes/assembly_accession_list.txt
+
 ```
 
 ### 📂 2️⃣(Optional) Install Annotation Databases
@@ -96,6 +139,7 @@ cd 01_download_genomes/
 
 # Activate Anvi'o environment
 conda activate anvio-8
+
 
 ####################
 # Install NCBI Datasets and Annotation DBs
@@ -126,7 +170,7 @@ anvi-setup-pfams --pfam-version 37.2 --reset
 # Setup GTDB-Tk DB (v214.1)
 anvi-setup-scg-taxonomy --num-threads 16 --gtdb-release v214.1 --reset
 
-# Setup NCBI COG DB (COG20)
+# Setup tRNA taxonomy DB
 anvi-setup-trna-taxonomy --num-threads 16
 
 # Setup ModelSEED DB
@@ -158,7 +202,8 @@ unzip 01_ncbi_set/HOMDv4_1-ncbi-2025_08_19-dehydrated.zip -d 01_ncbi_set/
 # Rehydrate package
 datasets rehydrate --max-workers 30 --directory 01_ncbi_set
 
-# Check number of genomes fetched; note 3 genomes are missing (expected =8177, downloaded = 8174)
+# Check number of genomes fetched
+# Note: 3 genomes are missing from NCBI (expected = 8177, downloaded = 8174)
 ls 01_ncbi_set/ncbi_dataset/data/*/*.fna | wc -l
 
 # Move all genomic FASTA files into a single folder
@@ -184,6 +229,7 @@ for i in $(cat missing_genomes.txt); do
   grep "$i" ../98_data/01_homd_v11_02-GCA_ID_info.csv >> missing_genomes_info.txt
 done
 
+
 ####################
 # Clean genome IDs
 ####################
@@ -200,7 +246,8 @@ done
 # Generate long and short genome ID files (portable)
 cp 98_data/genome_ids-8174.txt 98_data/genome_ids-8174-long.txt
 
-# Remove leading "HMT_<number>_" from each line (POSIX sed, no -i)
+# Remove leading "HMT_<number>_" to generate short genome IDs
+# (used for contigs DB and downstream visualization)
 sed 's/^HMT_[0-9][0-9]*_//' 98_data/genome_ids-8174.txt \
     > 98_data/genome_ids-8174.tmp && \
     mv 98_data/genome_ids-8174.tmp \
@@ -214,6 +261,7 @@ sed 's/^HMT_[0-9][0-9]*_//' 98_data/genome_ids-8174.txt \
 # Create contigs DB workspace
 ####################
 mkdir -p 02_individual_contigs_db/{01_raw_fasta,02_reformat_fasta,03_report,04_contigs_db} 97_nohup
+
 
 ####################
 # Copy genome fasta files and rename
@@ -256,6 +304,7 @@ chmod +x 99_scripts/01_prepare-contigs_db-snakemake.sh
 # Snakefile
 cp /path/to/repo/workflow/genome_processing/Snakefile 02_individual_contigs_db
 
+
 ####################
 # Execute Snakemake workflow: Prepare contigs DB and annotate assemblies
 ####################
@@ -284,10 +333,37 @@ nohup ./99_scripts/01_prepare-contigs_db-snakemake.sh \
 ### 📂 7️⃣ Compress FASTA Files
 ```bash
 ####################
-# Compress fasta files for storage optimization
+# Compress FASTA files for storage optimization
+# Scales safely to >8,000 files per directory
+# Compatible with macOS (zsh), Ubuntu (bash), and HPC systems
 ####################
-ls 01_download_genomes/02_genomic_files/*.fna | parallel gzip -9
-ls 02_individual_contigs_db/01_raw_fasta/*.fasta | parallel gzip -9
+
+# Tune parallelism explicitly (avoid oversubscription on shared nodes)
+N_JOBS=8
+
+# Compress NCBI genome FASTA files
+find 01_download_genomes/02_genomic_files \
+     -type f -name '*.fna' -print0 \
+  | xargs -0 -n 1 -P "$N_JOBS" gzip -9
+
+# Compress raw FASTA files used for contigs DBs
+find 02_individual_contigs_db/01_raw_fasta \
+     -type f -name '*.fasta' -print0 \
+  | xargs -0 -n 1 -P "$N_JOBS" gzip -9
+
+
+####################
+# Optional: GNU parallel (if available)
+####################
+# Provides simpler syntax; performance is comparable to xargs -P
+#
+# Install:
+#   Ubuntu: sudo apt-get install parallel
+#   macOS (Homebrew): brew install parallel
+
+#parallel gzip -9 ::: 01_download_genomes/02_genomic_files/*.fna
+#parallel gzip -9 ::: 02_individual_contigs_db/01_raw_fasta/*.fasta
+
 ```
 ***
 

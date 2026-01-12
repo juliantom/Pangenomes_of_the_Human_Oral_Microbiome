@@ -97,11 +97,13 @@ Re-running or extending the workflows is optional and not required to use the re
 - [Genome Processing ↗](workflow/genome_processing/CODE.md)
 - [Pangenome Analysis ↗](workflow/pangenome_construction_hmt/CODE.md)
 
-### ✅ Tested Environments
+**✅ Tested Environments**
 - 🐧 Linux (Ubuntu 24.04.3 LTS)
 - 🍎 macOS (15.7.3 Intel)
 
-*Requires a POSIX-compliant shell (bash or zsh). Not tested on Windows — use WSL2 or Docker for compatibility.*
+*This workflow requires a POSIX-compliant shell (bash or zsh).  
+It has **not been tested on native Windows or WSL**, but it should work in WSL2 or Docker, as they provide POSIX-compliant environments.*
+
 ***
 
 ## 📦 Additional Associated Files
