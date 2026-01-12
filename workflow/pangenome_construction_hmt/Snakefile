@@ -81,7 +81,7 @@
 import os
 
 # Input files
-GROUP_LIST_FILE = "list_group-test.txt"
+GROUP_LIST_FILE = "list_group.txt"
 GENOME_TO_GROUP_FILE = "group_to_genomes.txt"
 
 # Use the current working directory as the base
@@ -309,7 +309,7 @@ rule dereplicate_genomes:
         mkdir -p {LOG_DIR}/dereplicate_genomes {params.dereplication_dir}
 
         # Run dereplication
-        for threshold in $(seq 750 999); do
+        for threshold in $(seq 75 99); do
             anvi-dereplicate-genomes --ani-dir {params.genome_similarity_dir} \
                                     --output-dir {params.dereplication_dir}/derep_$threshold \
                                     --skip-fasta-report \
@@ -348,7 +348,7 @@ rule dereplicate_full_percent_identity:
         mkdir -p {LOG_DIR}/dereplicate_full_percent_identity {params.fpi_dir}
 
         # Run dereplication
-        for threshold in $(seq 750 999); do
+        for threshold in $(seq 75 99); do
             anvi-dereplicate-genomes --ani-dir {params.genome_similarity_dir} \
                                     --output-dir {params.fpi_dir}/fpi_$threshold \
                                     --skip-fasta-report \
