@@ -286,8 +286,8 @@ nohup ./99_scripts/01_prepare-contigs_db-snakemake.sh \
 ####################
 # Compress fasta files for storage optimization
 ####################
-ls my_work_dir/01_download_genomes/02_genomic_files/*.fna | parallel gzip -9
-ls my_work_dir/02_individual_contigs_db/01_raw_fasta/*.fasta | parallel gzip -9
+ls 01_download_genomes/02_genomic_files/*.fna | parallel gzip -9
+ls 02_individual_contigs_db/01_raw_fasta/*.fasta | parallel gzip -9
 ```
 ***
 

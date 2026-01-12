@@ -97,7 +97,6 @@ awk '{print $2 | "sort | uniq -c"}' "$all_genome_to_group_file" \
 # Initialize empty output file
 genome_to_group_pass="$dir_first_derep/data/03-group_to_genomes.txt"
 : > "$genome_to_group_pass"
-
 # For each taxon with ≥2 genomes, link all genomes to the taxon
 # 1) Find all genomes for this taxon
 # 2) Add genome ID in a separate column for easier processing
@@ -133,12 +132,6 @@ cp "$genome_to_group_pass" "$dir_first_derep/group_to_genomes.txt"
 
 ### **2️⃣ Copy necessary scripts**
 ```bash
-# Switch to the pangenome workflow directory
-conda activate anvio-8
-
-# Check yaml is installed
-#conda install -c conda-forge pyyaml
-
 # Copy YAML generation script from GitHub workflow folder to working directory
 cp /path/to/repo/workflow/scripts/02_generate_yaml.py "$dir_first_derep/"
 
@@ -158,22 +151,25 @@ cd "$dir_first_derep"
 # Activate the Anvi'o 8 environment (in case not already active)
 conda activate anvio-8
 
+# Check yaml is installed
+#conda install -c conda-forge pyyaml
+
 # Select a single taxon for testing (quick run) (MIGHT REMOVE LATER)
 cp data/02-list_group.txt list_group.txt
 # Optional: limit to a specific taxon or few taxa for testing
 #grep "Abiotro" data/02-list_group.txt > list_group.txt
 
 # Copy Snakemake workflow script from GitHub workflow folder to working directory
-cp /path/to/repo/workflow/workflow/pangenome_construction_hmt/Snakefile .
+cp /path/to/repo/workflow/pangenome_construction_hmt/Snakefile .
 
 # Visualize workflow dependencies as a PDF
 snakemake --rulegraph | dot -Tpdf > rulegraph-test_1.pdf
 
 # Perform a dry run to verify workflow execution
-snakemake --jobs 20 --cores 10 --quiet -n
+snakemake --jobs 200 --cores 90 --quiet -n
 
 # Run the workflow on the test taxon
-snakemake --jobs 20 --cores 16
+snakemake --jobs 200 --cores 90
 
 # Optional: clean outputs for re-running (Snakemake tracks completed tasks)
 # snakemake --cores 90 clean
