@@ -37,11 +37,51 @@
 # ============================================
 
 
+
+# ============================================
+# 🐍 Snakefile for Pangenomic Analysis Pipeline
+# ============================================
+# 📅 Date: 2025-12-12
+# 👤 Creator: Julian [📝 Registered User]
+# 📁 Project: HOMDv4 Anvi'o 8 Pangenomes
+# 🧪 Description:
+#     This Snakefile defines the workflow for generating contigs databases,
+#     running CAZyme, HMM annotations, and tracking completion status.
+#
+# 🛠️ Requirements:
+#     - Conda
+#     - Anvi'o v8 environment
+#     - Python 3.10.15
+#     - Anvi'o software:
+#       * tRNAscan-SE (v2.0.12)
+#       * DIAMOND (v2.1.11)
+#       * HMMER (v3.4)
+#     - Databases:
+#       * CAZymes (v13)
+#       * HMMS (r214.1)
+#           * Ribosomal rRNA genes
+#           * Transfer rRNA genes
+#           * Bacteria (Bacteria 71), Archaea (76), and Eukaryotes (Protista 83) single-copy genes
+#       * KEGG Modules and Orthologs (v2023-09-22; snapshot)
+#       * NCBI COGs (COG20)
+#       * Pfam (v37.2)
+#       * GTDB (v214; SCG taxonomy)
+#       * GTDB (v214; tRNA taxonomy)
+#     - Required Snakemake software:
+#     - Graphviz (for rulegraph)
+#
+# 📌 Notes:
+#     - 'contigs.db' is passed as a parameter, not checked as input
+#     - Elapsed time is logged in dd:hh:mm:ss format
+#     - Output logs and done flags are stored in structured directories
+#
+# ============================================
+
 # ========== CONFIGURATION ==========
 import os
 
 # Input files
-GROUP_LIST_FILE = "list_group.txt"
+GROUP_LIST_FILE = "list_group-test.txt"
 GENOME_TO_GROUP_FILE = "group_to_genomes.txt"
 
 # Use the current working directory as the base
@@ -63,7 +103,7 @@ with open(GROUP_LIST_FILE) as f:
 # ========== Config file ==========
 
 # Path to config file for group-specific threads
-configfile: "config_group_threads.yaml"
+configfile: "config_group_threads.yaml" 
 
 
 # ========== RULES ==========
@@ -84,7 +124,7 @@ rule all:
         expand(os.path.join(DONE_DIR, "{genomic_group}-single_copy_core_genes.done"), genomic_group = group_list),
         expand(os.path.join(DONE_DIR, "{genomic_group}-phylogenomics.done"), genomic_group = group_list)
 
-# Rule to create the output directory for each species and generate list of genome IDs for the species
+# Rule to create the output directory for each Tax_group and generate list of genome IDs for the Tax_group
 rule subset_genomes_by_group:
     input:
         GENOME_TO_GROUP_FILE
@@ -104,14 +144,14 @@ rule subset_genomes_by_group:
         # Set pipefail to catch errors in pipelines
         set -euo pipefail
 
-        # Create the output directory for the species
+        # Create the output directory for the Tax_group
         mkdir -p {params.outdir} {LOG_DIR}/subset_genomes_by_group {DONE_DIR}
 
-        # Subset the genome IDs for the species from the genome-to-species file
+        # Subset the genome IDs for the Tax_group from the genome-to-Tax_group file
         awk -F '\t' -v sp="{wildcards.genomic_group}" '$2 == sp {{ print $1 }}' {input} > {output.genome_ids_file} 2>&1 | tee {log}
         
-        # Extract additional information for the specified species
-        awk -F '\t' -v sp="{wildcards.genomic_group}" 'NR==1{{print "Genome_ID","Species","HOMD_ID"}} $2 == sp {{ print $1, $2, $3 }}' OFS='\t' {input} > {output.add_info_file}
+        # Extract additional information for the specified Tax_group
+        awk -F '\t' -v sp="{wildcards.genomic_group}" 'NR==1{{print "Genome_ID","Tax_group","HOMD_ID"}} $2 == sp {{ print $1, $2, $3 }}' OFS='\t' {input} > {output.add_info_file}
         
         # Create a done file to indicate the completion of the genome ID extraction
         touch {output.done_subset}
@@ -135,7 +175,7 @@ rule create_external_file:
         # Set pipefail to catch errors in pipelines
         set -euo pipefail
 
-        # Create the output directory for the species and log directory
+        # Create the output directory for the Tax_group and log directory
         mkdir -p {LOG_DIR}/create_external_file
         
         # Create the external file by looping through the genome IDs and writing to the external file
@@ -185,10 +225,10 @@ rule build_pangenome:
         done_pangenome = os.path.join(DONE_DIR, "{genomic_group}-build_pangenome.done")
     params:
         pangenome_dir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_pangenome"),
-        actual_threads = lambda wildcards: config["species_threads"][wildcards.genomic_group]
+        actual_threads = lambda wildcards: config["group_threads"][wildcards.genomic_group]
     log:
         os.path.join(LOG_DIR, "build_pangenome", "{genomic_group}-build_pangenome.log")
-    threads: lambda wildcards: config["species_threads"][wildcards.genomic_group]
+    threads: lambda wildcards: config["group_threads"][wildcards.genomic_group]
     resources:
         mem_gb = 32
     shell:
@@ -196,7 +236,7 @@ rule build_pangenome:
         # Set pipefail to catch errors in pipelines
         set -euo pipefail
 
-        # Create the output directory for the species and log directory
+        # Create the output directory for the Tax_group and log directory
         mkdir -p {LOG_DIR}/build_pangenome
 
         # Run anvi-pan-genome command 
@@ -222,10 +262,10 @@ rule compute_genome_similarity:
         done_ani = os.path.join(DONE_DIR, "{genomic_group}-compute_genome_similarity.done")
     params:
         genome_similarity_dir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_ani"),
-        actual_threads = lambda wildcards: config["species_threads"][wildcards.genomic_group]
+        actual_threads = lambda wildcards: config["group_threads"][wildcards.genomic_group]
     log:
         os.path.join(LOG_DIR, "compute_genome_similarity", "{genomic_group}-compute_genome_similarity.log")
-    threads: lambda wildcards: config["species_threads"][wildcards.genomic_group]
+    threads: lambda wildcards: config["group_threads"][wildcards.genomic_group]
     resources:
         mem_gb = 16
     shell:
@@ -233,7 +273,7 @@ rule compute_genome_similarity:
         # Set pipefail to catch errors in pipelines
         set -euo pipefail
 
-        # Create the output directory for the species and log directory
+        # Create the output directory for the Tax_group and log directory
         mkdir -p {LOG_DIR}/compute_genome_similarity
 
         # Run average nucleotide identity (ANI) computation
@@ -265,7 +305,7 @@ rule dereplicate_genomes:
         # Set pipefail to catch errors in pipelines
         set -euo pipefail
 
-        # Create the output directory for the species and log directory
+        # Create the output directory for the Tax_group and log directory
         mkdir -p {LOG_DIR}/dereplicate_genomes {params.dereplication_dir}
 
         # Run dereplication
@@ -304,7 +344,7 @@ rule dereplicate_full_percent_identity:
         # Set pipefail to catch errors in pipelines
         set -euo pipefail
 
-        # Create the output directory for the species and log directory
+        # Create the output directory for the Tax_group and log directory
         mkdir -p {LOG_DIR}/dereplicate_full_percent_identity {params.fpi_dir}
 
         # Run dereplication
@@ -407,10 +447,10 @@ rule phylogenomics:
         gaps_removed = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_phylogenomics", "02_concatenated-gaps_removed.fasta"),
         tree_name = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_phylogenomics", "03_tree"),
         out_tree = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_phylogenomics", f"{wildcards.genomic_group}-tree.nwk"),
-        actual_threads = lambda wc: min(int(config["species_threads"][wc.genomic_group]), 32)
+        actual_threads = lambda wc: min(int(config["group_threads"][wc.genomic_group]), 32)
     log:
         log = os.path.join(LOG_DIR, "phylogenomics", "{genomic_group}-phylogenomics-phylogenomics.log")
-    threads: lambda wc: min(int(config["species_threads"][wc.genomic_group]), 32)
+    threads: lambda wc: min(int(config["group_threads"][wc.genomic_group]), 32)
     resources:
         mem_gb = 16
     shell:
@@ -447,4 +487,4 @@ rule clean:
         rm -rf {WORKING_DIR}
         """
 
-
+# ============================================
