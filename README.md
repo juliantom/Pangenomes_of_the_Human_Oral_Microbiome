@@ -6,6 +6,8 @@
 
 This repository provides stable, open-access workflows and direct access to hundreds of pangenomes, enabling visualization and exploration of core and accessory gene content across oral microbial taxa (bacteria and archaea).
 
+*This repository constitutes an ecosystem-wide, taxon-resolved pangenome reference for the human oral microbiome.*
+
 <br>
 
 > **Operational definition**  
