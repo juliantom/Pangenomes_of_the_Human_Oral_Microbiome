@@ -123,7 +123,7 @@ These files support interpretation of the pangenomes and are not intended as sta
 ## 🔧 Data and Software Versions
 
 - **eHOMD:** v4.1φ (phi release, includes phage genomes)
-  - **HOMD Genomic RefSeq:** v11.02
+  - **Genomic RefSeq:** v11.02
 - **Anvi’o:** v8
 
 *Version information provided for reproducibility and temporal context (as of August 19, 2025).*
