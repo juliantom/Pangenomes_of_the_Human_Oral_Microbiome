@@ -9,7 +9,7 @@ This repository provides stable, open-access workflows and direct access to hund
 <br>
 
 > **Operational definition**  
-> A *pangenome* is defined here as the **complete set of genes** across all genomes assigned to a taxon in eHOMD, including **core genes** (shared by all or most members) and **accessory genes** (present in some or unique to individual strains).
+> A *pangenome* is defined here as the **complete set of protein-coding genes** across all genomes assigned to a taxon in eHOMD, including **core genes** (shared by all or most members) and **accessory genes** (present in some or unique to individual strains).
 
 <br>
 
@@ -41,7 +41,7 @@ This repository provides stable, open-access workflows and direct access to hund
 ## 🧬 What This Repository Contains
 
 Code used to generate:
-- Species-level pangenomes for **567 Human Microbial Taxa (HMTs)** with ≥2 genomes in eHOMD
+- Species-level pangenomes for **567 Human Microbial Taxa (HMTs)** represented by ≥2 genomes in eHOMD
 - **12 additional pangenomes** for named species containing multiple taxa (HMTs)
 - **Total pangenomes:** 579
 - **Genomes included:** 8,110 of 8,177 genomes in eHOMD
@@ -70,6 +70,7 @@ Pangenomes are constructed within the **Anvi’o** platform using a standardized
 Key steps include:
 - Prediction of open reading frames (ORFs; hereafter referred to as *genes*)
 - Functional annotation using curated databases (COGs, Pfams, KEGG KOs, etc.)
+  *Gene prediction and annotation are performed uniformily across all genomes to minimize technical sources of variation and maximize comparability*
 - Clustering of genes into putative homologous gene clusters based on amino-acid similarity
 - Species-level optimization of clustering parameters
 - Hierarchical organization of gene clusters and genomes to highlight shared content and strain relationships
@@ -113,7 +114,7 @@ Supplementary data products generated during pangenome construction may be provi
 - Phylogenomic reconstructions based on single-copy core genes
 - Functional annotation summaries
 
-These files support interpretation of the pangenomes and are not intended as standalone analyses.
+These files support interpretation of the pangenomes and are not intended as standalone analyses. These products are provided to contextualize the pangenomes and facilitate downstream interpretation, but are not intended to constitute independent biological claims.
 
 ***
 
