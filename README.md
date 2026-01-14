@@ -11,7 +11,7 @@ This repository provides stable, open-access workflows and direct access to hund
 <br>
 
 > **Operational definition**  
-> A *pangenome* is defined here as the **complete set of protein-coding genes** across all genomes assigned to a taxon in eHOMD, including **core genes** (shared by all or most members) and **accessory genes** (present in some or unique to individual strains).
+> A *pangenome* is defined here as the **complete set of protein-coding and non-coding genes** across all genomes assigned to a taxon in eHOMD, including **core genes** (shared by all or most members) and **accessory genes** (present in some or unique to individual strains).
 
 <br>
 
@@ -25,7 +25,7 @@ This repository provides stable, open-access workflows and direct access to hund
 1. Browse pangenomes interactively through the **eHOMD Anvi’o Portal**  
    👉 [eHOMD Anvi’o Portal ↗](https://www.homd.org/genome/anvio_pangenomes)  
    *No Anvi’o installation required*
-2. Select a taxon to automatically view its pangenome
+2. Select a taxon to view its pangenome
 3. Explore and modify interactive visualizations
 4. Identify **shared** and **unique** features across strains
 5. Use these pangenomes for any purpose you choose
@@ -43,8 +43,8 @@ This repository provides stable, open-access workflows and direct access to hund
 ## 🧬 What This Repository Contains
 
 Code used to generate:
-- Species-level pangenomes for **567 Human Microbial Taxa (HMTs)** represented by ≥2 genomes in eHOMD
-- **12 additional pangenomes** for named species containing multiple taxa (HMTs)
+- Species-level pangenomes for **567 species** represented by ≥2 genomes in a single Human Microbial Taxon (HMT) in eHOMD
+- **12 additional species pangenomes** that included multiple HMTs representing different genomic clades
 - **Total pangenomes:** 579
 - **Genomes included:** 8,110 of 8,177 genomes in eHOMD
 
