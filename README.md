@@ -1,4 +1,4 @@
-# 🧬 Pangenomes of the Human Oral Microbiome
+# 🧬 Pangenomes of the Human Oral Microbiome (Beta)
 
 **A curated collection of species-level pangenomes for taxa in the expanded Human Oral Microbiome Database (eHOMD)**
 
@@ -147,13 +147,15 @@ Please also consider citing:
 
 ## 🧠 On a Personal Note
 
-*If you’re reading this, there’s a decent chance you’re procrastinating.* That’s fine — so was I.
+*If you’re reading this, there’s a decent chance you’re as curious as I am.*
 
-This repository exists largely because I wanted to avoid doing something the “right” way the first time. Anvi’o already provides workflows that can process genomes and construct pangenomes, and in many situations those workflows would have been more than sufficient.
+This repository exists largely because I wanted to explore a slightly different path. Anvi’o already provides workflows that can process genomes and construct pangenomes, and in many situations those workflows would have been more than sufficient.
 
-But I wanted more control — to integrate tools that weren’t part of the standard workflows at the time, and, if I’m honest, to avoid bothering the Anvi’o developers with feature requests while they were busy doing far more interesting things. I also knew just enough Snakemake to be dangerous, which felt like a good reason to actually learn it.
+But I wanted more control — to integrate tools that weren’t part of the standard workflows at the time, and, if I’m honest, to avoid bothering the Anvi’o developers with feature requests while they were busy doing far more interesting things. I also knew just enough Snakemake to be dangerous, which felt like a good reason to actually learn from it.
 
-So instead of extending upstream code (or opening the appropriate GitHub issue, as a more responsible person might have done), I took the long way around. What came out of that decision is this repository: a working, reproducible pipeline shaped as much by curiosity and stubbornness as by necessity.
+So instead of extending upstream code (or opening the appropriate GitHub issue, as a more responsible person might have done), I took the long way around. What came out of that decision is 
+
+this repository: a working, reproducible pipeline shaped as much by curiosity and stubbornness as by necessity.
 
 Could this have been achieved with fewer lines of code inside Anvi’o? Almost certainly. That’s okay. Bioinformatics allows many paths to the same result, and sometimes the scenic route is where you learn the most.
 
