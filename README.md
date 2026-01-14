@@ -1,4 +1,4 @@
-# Pangenomes of the Human Oral Microbiome 🧬
+# 🧬 Pangenomes of the Human Oral Microbiome
 
 **A curated collection of species-level pangenomes for taxa in the expanded Human Oral Microbiome Database (eHOMD)**
 
