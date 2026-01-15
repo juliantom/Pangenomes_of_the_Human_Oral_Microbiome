@@ -1,4 +1,5 @@
-# 🧬 Pangenomes of the Human Oral Microbiome (Beta)
+# 🧬 Pangenomes of the Human Oral Microbiome
+## 🚧 Beta Release
 
 **A curated collection of species-level pangenomes for taxa in the expanded Human Oral Microbiome Database (eHOMD)**
 
