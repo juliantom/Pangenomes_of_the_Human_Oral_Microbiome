@@ -1,0 +1,148 @@
+{
+    "version": "3",
+    "tree-type": "phylogram",
+    "order-by": "presence-absence:euclidean:ward",
+    "current-view": "gene_cluster_presence_absence",
+    "tree-height": "1000",
+	"samples-tree-height": "1000",
+    "tree-width": "5000",
+    "layer-margin": "15",
+    "edge-normalization": false,
+    "custom-layer-margin": true,
+    "show-grid-for-bins": false,
+    "show-shade-for-bins": true,
+    "shade-fill-opacity": "0.1",
+    "invert-shade-for-bins": false,
+    "inverse-fill-opacity": "0.1",
+    "inverse-color": "#000",
+    "grid-color": "#FFFFFF",
+    "grid-width": "1",
+    "samples-order": "gene_cluster frequencies",
+    "max-font-size": "60",
+    "optimize-speed": true,
+    "show-bin-labels": true,
+    "begins-from-branch": false,
+    "bin-labels-font-size": "50",
+    "autorotate-bin-labels": true,
+    "estimate-taxonomy": false,
+    "bin-labels-angle": "0",
+    "background-opacity": "0.1",
+    "max-font-size-label": "120",
+    "draw-guide-lines": "no",
+    "state-name": "default",
+    "show-support-values": false,
+    "support-range-low": "0",
+    "support-range-high": "100",
+    "support-display-symbol": false,
+    "support-symbol-invert": false,
+    "support-display-number": false,
+    "support-symbol-size": "12",
+    "support-symbol-color": "#AA0000",
+    "support-font-size": "15",
+    "support-text-rotation": "0",
+    "samples-groups": {
+    	"ANI_alignment_coverage": false,
+        "ANI_alignment_lengths": false,
+        "ANI_full_percentage_identity": false,
+        "ANI_hadamard": false,
+        "ANI_percentage_identity": false,
+        "ANI_similarity_errors": false,
+        "default": false },
+    "layers": {
+    	"CAZyme": {
+		    "height": "0"
+	    },
+		"COG20_CATEGORY": {
+		    "height": "0"
+	    },
+    	"COG20_FUNCTION": {
+		    "height": "120"
+	    },
+   	    "COG20_PATHWAY": {
+		    "height": "0"
+	    },
+        "KEGG_BRITE": {
+		    "height": "0"
+	    },
+		"KEGG_Class": {
+		    "height": "0"
+	    },
+   	    "KEGG_Module": {
+		    "height": "0"
+        },
+        "Pfam": {
+            "height": "120"
+        },
+        "KOfam": {
+            "height": "120"
+        },
+        "SCG": {
+            "height": "0"
+        },
+    	"combined_homogeneity_index": {
+		    "height": "0"
+        },
+            "functional_homogeneity_index": {
+            "height": "0"
+        },
+        "geometric_homogeneity_index": {
+            "height": "0"
+        },
+            "max_num_paralogs": {
+            "height": "0"
+        },
+            "num_genes_in_gene_cluster": {
+            "height": "0"
+        },
+        "num_genomes_gene_cluster_has_hits": {
+            "height": "0"
+        }, 
+        "AAI_min": {
+            "height": "0"
+        }, 
+        "AAI_max": {
+            "height": "0"
+        }, 
+        "AAI_avg": {
+            "height": "0"
+        } 
+    },
+	"categorical_data_colors": {
+        "CAZyme": {
+            "UNKNOWN": "#F0F0F0",
+            "KNOWN": "#00AA00"
+        },
+        "COG20_CATEGORY": {
+            "KNOWN": "#00AA00",
+            "UNKNOWN": "#F0F0F0"
+        },
+        "COG20_FUNCTION": {
+            "KNOWN": "#00AA00",
+            "UNKNOWN": "#F0F0F0"
+        },
+        "COG20_PATHWAY": {
+            "KNOWN": "#00AA00",
+            "UNKNOWN": "#F0F0F0"
+        },
+        "KEGG_BRITE": {
+            "KNOWN": "#00AA00",
+            "UNKNOWN": "#F0F0F0"
+        },
+        "KEGG_Class": {
+            "KNOWN": "#00AA00",
+            "UNKNOWN": "#F0F0F0"
+        },
+        "KEGG_Module": {
+            "KNOWN": "#00AA00",
+            "UNKNOWN": "#F0F0F0"
+        },
+        "Pfam": {
+            "KNOWN": "#00AA00",
+            "UNKNOWN": "#F0F0F0"
+        },
+        "KOfam": {
+            "KNOWN": "#00AA00",
+            "UNKNOWN": "#F0F0F0"
+        }
+    }
+}
