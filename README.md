@@ -47,7 +47,7 @@ Code used to generate:
 - Species-level pangenomes for **567 species** represented by ≥2 genomes in a single Human Microbial Taxon (HMT) in eHOMD
 - **12 additional species pangenomes** that included multiple HMTs representing different genomic clades
 - **Total pangenomes:** 579
-- **Genomes included:** 8,110 of 8,177 genomes in eHOMD
+- **Genomes included:** 8,115 of 8,177 genomes in eHOMD
 
 ***
 

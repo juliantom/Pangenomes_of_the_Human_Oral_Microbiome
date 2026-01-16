@@ -1,0 +1,490 @@
+# ============================================
+# 🐍 Snakefile: HOMDv4.1 Φ Pangenome++ Workflow
+# ============================================
+# 📅 Date: 2025-12-23
+# 👤 Creator: Julian Torres-Morales
+# ©️ Copyright: Julian Torres-Morales
+# 📁 Project: HOMDv4.1 Φ Anvi'o 8 Pangenomes
+# 🧬 Workflow Scope:
+#     Automates comprehensive genome processing and pangenomic analysis of HOMDv4.1 genomes:
+#       1️⃣ Subset genomes by species/group
+#       2️⃣ Generate external files linking genome IDs to contigs.DB
+#       3️⃣ Build genomes storage databases for each group
+#       4️⃣ Construct pangenomes with hierarchical clustering
+#       5️⃣ Compute genome similarity using ANI (pyANI, ANIb)
+#       6️⃣ Dereplicate genomes across multiple similarity thresholds
+#       7️⃣ Perform dereplication using full percent identity
+#       8️⃣ Estimate genome metabolic potential
+#       9️⃣ Extract single-copy core genes from pangenomes
+#     1️⃣0️⃣ Perform phylogenomic reconstruction (alignment, trimming, tree inference)
+# 🛠️ Requirements:
+#     • Conda environment: anvio-8
+#     • Anvi'o v8, Python 3.10.15
+#     • Contigs.DB must exist for all genomes; annotations are optional
+#       (pangenome construction is independent of functional annotation)
+#     • If annotations exist, they must have been built with identical parameters and versions
+#     • Databases used for prior contigs.DB construction: CAZymes v13, COG20, Pfam v37.2, KEGG 2023-09-22, GTDB v214
+# 📝 Notes:
+#     • Done files track completion of each step for reproducibility
+#     • Logs stored in structured directories under 00_logs/
+#     • Genome output files are prefixed with HMT ID and species name 
+#       (format: SpeciesName_HMTID) and stored in `results/`
+#     • Full software & database versions documented in VERSIONS.md
+# ⚠️ Warnings:
+#     • ANI, dereplication, and phylogenomics are computationally intensive
+#     • Phylogeny will be skipped if ≤4 genomes are present for a group due to bootstrapping requirements
+# 📖 License: See LICENSE.md in repository
+# ============================================
+
+
+
+# ============================================
+# 🐍 Snakefile for Pangenomic Analysis Pipeline
+# ============================================
+# 📅 Date: 2025-12-12
+# 👤 Creator: Julian [📝 Registered User]
+# 📁 Project: HOMDv4 Anvi'o 8 Pangenomes
+# 🧪 Description:
+#     This Snakefile defines the workflow for generating contigs databases,
+#     running CAZyme, HMM annotations, and tracking completion status.
+#
+# 🛠️ Requirements:
+#     - Conda
+#     - Anvi'o v8 environment
+#     - Python 3.10.15
+#     - Anvi'o software:
+#       * tRNAscan-SE (v2.0.12)
+#       * DIAMOND (v2.1.11)
+#       * HMMER (v3.4)
+#     - Databases:
+#       * CAZymes (v13)
+#       * HMMS (r214.1)
+#           * Ribosomal rRNA genes
+#           * Transfer rRNA genes
+#           * Bacteria (Bacteria 71), Archaea (76), and Eukaryotes (Protista 83) single-copy genes
+#       * KEGG Modules and Orthologs (v2023-09-22; snapshot)
+#       * NCBI COGs (COG20)
+#       * Pfam (v37.2)
+#       * GTDB (v214; SCG taxonomy)
+#       * GTDB (v214; tRNA taxonomy)
+#     - Required Snakemake software:
+#     - Graphviz (for rulegraph)
+#
+# 📌 Notes:
+#     - 'contigs.db' is passed as a parameter, not checked as input
+#     - Elapsed time is logged in dd:hh:mm:ss format
+#     - Output logs and done flags are stored in structured directories
+#
+# ============================================
+
+# ========== CONFIGURATION ==========
+import os
+
+# Input files
+GROUP_LIST_FILE = "list_group.txt"
+GENOME_TO_GROUP_FILE = "group_to_genomes.txt"
+
+# Use the current working directory as the base
+CURRENT_DIR = os.getcwd()
+PARENT_DIR = os.path.dirname(CURRENT_DIR)
+
+# Define parent and working directories
+CONTIGS_DB_DIR = os.path.join(PARENT_DIR, "02_individual_contigs_db", "04_contigs_db")
+
+# Output directory for logs and done files
+WORKING_DIR = os.path.join(CURRENT_DIR, "results")
+LOG_DIR = os.path.join(CURRENT_DIR, "00_logs")
+DONE_DIR = os.path.join(CURRENT_DIR, "99_done")
+
+# Read group list
+with open(GROUP_LIST_FILE) as f:
+    group_list = [line.strip() for line in f if line.strip()]
+
+# ========== Config file ==========
+
+# Path to config file for group-specific threads
+configfile: "config_group_threads.yaml" 
+
+
+# ========== RULES ==========
+
+# Rule all: This rule is the entry point for the workflow and ensures all necessary files are generated.
+rule all:
+    input:
+        expand(os.path.join(WORKING_DIR, "{genomic_group}", "genome-ids.txt"), genomic_group = group_list),
+        expand(os.path.join(WORKING_DIR, "{genomic_group}", "genome-add_info.txt"), genomic_group = group_list),
+        expand(os.path.join(WORKING_DIR, "{genomic_group}", "external_file.txt"), genomic_group = group_list),
+        expand(os.path.join(WORKING_DIR, "{genomic_group}", "{genomic_group}-GENOMES.db"), genomic_group = group_list),
+        expand(os.path.join(DONE_DIR, "{genomic_group}-genomes_storage_db.done"), genomic_group = group_list),
+        expand(os.path.join(DONE_DIR, "{genomic_group}-build_pangenome.done"), genomic_group = group_list),
+        expand(os.path.join(DONE_DIR, "{genomic_group}-compute_genome_similarity.done"), genomic_group = group_list),
+        expand(os.path.join(DONE_DIR, "{genomic_group}-dereplicate_genomes.done"), genomic_group = group_list),
+        expand(os.path.join(DONE_DIR, "{genomic_group}-dereplicate_full_percent_identity.done"), genomic_group = group_list),
+        expand(os.path.join(DONE_DIR, "{genomic_group}-estimate_metabolism.done"), genomic_group = group_list),
+        expand(os.path.join(DONE_DIR, "{genomic_group}-single_copy_core_genes.done"), genomic_group = group_list),
+        expand(os.path.join(DONE_DIR, "{genomic_group}-phylogenomics.done"), genomic_group = group_list)
+
+# Rule to create the output directory for each Tax_group and generate list of genome IDs for the Tax_group
+rule subset_genomes_by_group:
+    input:
+        GENOME_TO_GROUP_FILE
+    output:
+        genome_ids_file = os.path.join(WORKING_DIR, "{genomic_group}", "genome-ids.txt"),
+        add_info_file = os.path.join(WORKING_DIR, "{genomic_group}", "genome-add_info.txt"),
+        done_subset=os.path.join(DONE_DIR, "{genomic_group}-subset_genomes_by_group.done")
+    params:
+        outdir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group)
+    log:
+        os.path.join(LOG_DIR, "subset_genomes_by_group", "{genomic_group}-subset_genomes_by_group.log")
+    threads: 1
+    resources:
+        mem_gb = 2
+    shell:
+        """
+        # Set pipefail to catch errors in pipelines
+        set -euo pipefail
+
+        # Create the output directory for the Tax_group
+        mkdir -p {params.outdir} {LOG_DIR}/subset_genomes_by_group {DONE_DIR}
+
+        # Subset the genome IDs for the Tax_group from the genome-to-Tax_group file
+        awk -F '\t' -v sp="{wildcards.genomic_group}" '$2 == sp {{ print $1 }}' {input} > {output.genome_ids_file} 2>&1 | tee {log}
+        
+        # Extract additional information for the specified Tax_group
+        awk -F '\t' -v sp="{wildcards.genomic_group}" 'NR==1{{print "Genome_ID","Tax_group","HOMD_ID"}} $2 == sp {{ print $1, $2, $3 }}' OFS='\t' {input} > {output.add_info_file}
+        
+        # Create a done file to indicate the completion of the genome ID extraction
+        touch {output.done_subset}
+        """
+
+rule create_external_file:
+    input:
+        genome_ids_file = os.path.join(WORKING_DIR, "{genomic_group}", "genome-ids.txt")
+    output:
+        external_file = os.path.join(WORKING_DIR, "{genomic_group}", "external_file.txt"),
+        done_external_file=os.path.join(DONE_DIR, "{genomic_group}-create_external_file.done")
+    params:
+        contigs_db_dir = CONTIGS_DB_DIR
+    log:
+        os.path.join(LOG_DIR, "create_external_file", "{genomic_group}-create_external_file.log")
+    threads: 1
+    resources:
+        mem_gb = 2
+    shell:
+        """
+        # Set pipefail to catch errors in pipelines
+        set -euo pipefail
+
+        # Create the output directory for the Tax_group and log directory
+        mkdir -p {LOG_DIR}/create_external_file
+        
+        # Create the external file by looping through the genome IDs and writing to the external file
+        echo -e "name\tcontigs_db_path" > {output.external_file}
+        while read g_id; do
+            echo -e "$g_id\t{params.contigs_db_dir}/$g_id-contigs.db" >> {output.external_file}
+        done < {input.genome_ids_file} 2>&1 | tee {log}
+
+        # Create a done file to indicate the completion of the external file creation
+        touch {output.done_external_file}
+        """
+
+rule genomes_storage_db:
+    input:
+        external_file = os.path.join(WORKING_DIR, "{genomic_group}", "external_file.txt")
+    output:
+        genomes_storage_db = os.path.join(WORKING_DIR, "{genomic_group}", "{genomic_group}-GENOMES.db"),
+        done_genome_store = os.path.join(DONE_DIR, "{genomic_group}-genomes_storage_db.done")
+    params:
+        outdir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group)
+    log:
+        os.path.join(LOG_DIR, "genomes_storage_db", "{genomic_group}-genomes_storage_db.log")
+    threads: 1
+    resources:
+        mem_gb = 8
+    shell:
+        r'''
+        # Set pipefail to catch errors in pipelines
+        set -euo pipefail
+
+        # Create the output directory for the genomic_group and log directory
+        mkdir -p {LOG_DIR}/genomes_storage_db
+
+        # Run the anvi-gen-genomes-storage command
+        anvi-gen-genomes-storage -e {input.external_file} \
+                                -o {output.genomes_storage_db} &> {log}
+        
+        # Create a done file to indicate the completion of the genomes storage database generation 
+        touch {output.done_genome_store}
+        '''
+
+rule build_pangenome:
+    input:
+        external_file = os.path.join(WORKING_DIR, "{genomic_group}", "external_file.txt"),
+        genomes_storage_db = os.path.join(WORKING_DIR, "{genomic_group}", "{genomic_group}-GENOMES.db")
+    output:
+        done_pangenome = os.path.join(DONE_DIR, "{genomic_group}-build_pangenome.done")
+    params:
+        pangenome_dir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_pangenome"),
+        actual_threads = lambda wildcards: config["group_threads"][wildcards.genomic_group]
+    log:
+        os.path.join(LOG_DIR, "build_pangenome", "{genomic_group}-build_pangenome.log")
+    threads: lambda wildcards: config["group_threads"][wildcards.genomic_group]
+    resources:
+        mem_gb = 32
+    shell:
+        r'''
+        # Set pipefail to catch errors in pipelines
+        set -euo pipefail
+
+        # Create the output directory for the Tax_group and log directory
+        mkdir -p {LOG_DIR}/build_pangenome
+
+        # Run anvi-pan-genome command 
+        anvi-pan-genome -g {input.genomes_storage_db} \
+                        --use-ncbi-blast \
+                        --minbit 0.5 \
+                        --mcl-inflation 10 \
+                        --align-with muscle \
+                        --project-name {wildcards.genomic_group} \
+                        --output-dir {params.pangenome_dir} \
+                        --num-threads {params.actual_threads} \
+                        --enforce-hierarchical-clustering \
+                        --I-know-this-is-not-a-good-idea &> {log}
+        
+        # Create a done file to indicate the completion of the pangenome build
+        touch {output.done_pangenome}
+        '''
+
+rule compute_genome_similarity:
+    input:
+        external_file = os.path.join(WORKING_DIR, "{genomic_group}", "external_file.txt")
+    output:
+        done_ani = os.path.join(DONE_DIR, "{genomic_group}-compute_genome_similarity.done")
+    params:
+        genome_similarity_dir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_ani"),
+        actual_threads = lambda wildcards: config["group_threads"][wildcards.genomic_group]
+    log:
+        os.path.join(LOG_DIR, "compute_genome_similarity", "{genomic_group}-compute_genome_similarity.log")
+    threads: lambda wildcards: config["group_threads"][wildcards.genomic_group]
+    resources:
+        mem_gb = 16
+    shell:
+        r'''
+        # Set pipefail to catch errors in pipelines
+        set -euo pipefail
+
+        # Create the output directory for the Tax_group and log directory
+        mkdir -p {LOG_DIR}/compute_genome_similarity
+
+        # Run average nucleotide identity (ANI) computation
+        anvi-compute-genome-similarity -e {input.external_file} \
+                                        -o {params.genome_similarity_dir} \
+                                        --program pyANI \
+                                        --method ANIb \
+                                        --num-threads {params.actual_threads} &> {log}
+        
+        # Create a done file to indicate the completion of the genome similarity
+        touch {output.done_ani}
+        '''
+
+rule dereplicate_genomes:
+    input:
+        done_ani = os.path.join(DONE_DIR, "{genomic_group}-compute_genome_similarity.done")
+    output:
+        done_derep = os.path.join(DONE_DIR, "{genomic_group}-dereplicate_genomes.done")
+    params:
+        genome_similarity_dir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_ani"),
+        dereplication_dir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_dereplication")
+    log:
+        os.path.join(LOG_DIR, "dereplicate_genomes", "{genomic_group}-dereplicate_genomes.log")
+    threads: 1
+    resources:
+        mem_gb = 2
+    shell:
+        r'''
+        # Set pipefail to catch errors in pipelines
+        set -euo pipefail
+
+        # Create the output directory for the Tax_group and log directory
+        mkdir -p {LOG_DIR}/dereplicate_genomes {params.dereplication_dir}
+
+        # Run dereplication
+        for threshold in $(seq 75 99); do
+            anvi-dereplicate-genomes --ani-dir {params.genome_similarity_dir} \
+                                    --output-dir {params.dereplication_dir}/derep_$threshold \
+                                    --skip-fasta-report \
+                                    --program pyANI \
+                                    --method ANIb \
+                                    --similarity-threshold 0."$threshold" \
+                                    --cluster-method simple_greedy \
+                                    --representative-method centrality \
+                                    --num-threads {threads} \
+                                    &>> {log}
+        done
+
+        # Create a done file to indicate the completion of the genome similarity
+        touch {output.done_derep}
+        '''
+
+rule dereplicate_full_percent_identity:
+    input:
+        done_ani = os.path.join(DONE_DIR, "{genomic_group}-compute_genome_similarity.done")
+    output:
+        done_fpi = os.path.join(DONE_DIR, "{genomic_group}-dereplicate_full_percent_identity.done")
+    params:
+        genome_similarity_dir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_ani"),
+        fpi_dir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_dereplication_fpi")
+    log:
+        os.path.join(LOG_DIR, "dereplicate_full_percent_identity", "{genomic_group}-dereplicate_full_percent_identity.log")
+    threads: 1
+    resources:
+        mem_gb = 2
+    shell:
+        r'''
+        # Set pipefail to catch errors in pipelines
+        set -euo pipefail
+
+        # Create the output directory for the Tax_group and log directory
+        mkdir -p {LOG_DIR}/dereplicate_full_percent_identity {params.fpi_dir}
+
+        # Run dereplication
+        for threshold in $(seq 75 99); do
+            anvi-dereplicate-genomes --ani-dir {params.genome_similarity_dir} \
+                                    --output-dir {params.fpi_dir}/fpi_$threshold \
+                                    --skip-fasta-report \
+                                    --program pyANI \
+                                    --method ANIb \
+                                    --use-full-percent-identity \
+                                    --similarity-threshold 0."$threshold" \
+                                    --cluster-method simple_greedy \
+                                    --representative-method centrality \
+                                    --num-threads {threads} \
+                                    &>> {log}
+        done
+        # Create a done file to indicate the completion of the genome similarity
+        touch {output.done_fpi}
+        '''
+
+rule estimate_metabolism:
+    input:
+        external_file = os.path.join(WORKING_DIR, "{genomic_group}", "external_file.txt")
+    output:
+        done_metab = os.path.join(DONE_DIR, "{genomic_group}-estimate_metabolism.done")
+    params:
+        metab_dir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_metabolism")
+    log:
+        log = os.path.join(LOG_DIR, "estimate_metabolism", "{genomic_group}-estimate_metabolism.log")
+    threads: 1
+    resources:
+        mem_gb = 4
+    shell:
+        r'''
+        # Set pipefail to catch errors in pipelines
+        set -euo pipefail
+
+        # Create the output directory for the genomic_group and log directory
+        mkdir -p {LOG_DIR}/estimate_metabolism {params.metab_dir}
+
+        # Estimate metabolism for the given genomic_group
+        anvi-estimate-metabolism -e {input.external_file} -O {params.metab_dir}/{wildcards.genomic_group} &> {log}
+        echo -e "\n\n>>> Metabolism matrix format <<<" >> {log}
+        anvi-estimate-metabolism -e {input.external_file} -O {params.metab_dir}/{wildcards.genomic_group} --matrix-format &>> {log}
+
+        # Create a done file to indicate the completion of the metabolism estimation
+        touch {output.done_metab}
+        '''
+
+rule single_copy_core_genes:
+    input:
+        done_pangenome = os.path.join(DONE_DIR, "{genomic_group}-build_pangenome.done")
+    output:
+        done_single_copy_core_genes = os.path.join(DONE_DIR, "{genomic_group}-single_copy_core_genes.done")
+    params:
+        phylo_dir = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_phylogenomics"),
+        genome_ids_file = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "genome-ids.txt"),
+        genomes_storage_db = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, f"{wildcards.genomic_group}-GENOMES.db"),
+        pangenome_db = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_pangenome", f"{wildcards.genomic_group}-PAN.db"),
+        concatenated_file = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_phylogenomics", "01_concatenated.fasta"),
+        partition_file = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_phylogenomics", "01_partition.txt"),
+    log:
+        log = os.path.join(LOG_DIR, "phylogenomics", "{genomic_group}-phylogenomics-single_copy_core_genes.log")
+    threads: 1
+    resources:
+        mem_gb = 2
+    shell:
+        r'''
+        # Set pipefail to catch errors in pipelines
+        set -euo pipefail
+
+        # Create the output directory for the genomic_group and log directory
+        mkdir -p {LOG_DIR}/phylogenomics {params.phylo_dir} 
+
+        # Store max number of genomes from genome id file (count number of rows)
+        max_genomes=$(wc -l < {params.genome_ids_file})
+
+        # Get single-copy core genes from prangenome
+        anvi-get-sequences-for-gene-clusters --genomes-storage {params.genomes_storage_db} \
+                                            --pan-db {params.pangenome_db} \
+                                            --output-file {params.concatenated_file} \
+                                            --min-num-genomes-gene-cluster-occurs "$max_genomes" \
+                                            --max-num-genes-from-each-genome 1 \
+                                            --concatenate-gene-clusters \
+                                            --partition-file {params.partition_file} \
+                                            --align-with muscle \
+                                            > "{log}" 2>&1
+
+        # Create a done file to indicate the completion of the phylogenomics
+        touch {output.done_single_copy_core_genes}
+        '''
+
+rule phylogenomics:
+    input:
+        done_single_copy_core_genes = os.path.join(DONE_DIR, "{genomic_group}-single_copy_core_genes.done")
+    output:
+        done_phylogenomics = os.path.join(DONE_DIR, "{genomic_group}-phylogenomics.done")
+    params:
+        concatenated_file = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_phylogenomics", "01_concatenated.fasta"),
+        gaps_removed = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_phylogenomics", "02_concatenated-gaps_removed.fasta"),
+        tree_name = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_phylogenomics", "03_tree"),
+        out_tree = lambda wildcards: os.path.join(WORKING_DIR, wildcards.genomic_group, "dir_phylogenomics", f"{wildcards.genomic_group}-tree.nwk"),
+        actual_threads = lambda wc: min(int(config["group_threads"][wc.genomic_group]), 32)
+    log:
+        log = os.path.join(LOG_DIR, "phylogenomics", "{genomic_group}-phylogenomics-phylogenomics.log")
+    threads: lambda wc: min(int(config["group_threads"][wc.genomic_group]), 32)
+    resources:
+        mem_gb = 16
+    shell:
+        r'''
+        # Set pipefail to catch errors in pipelines
+        set -euo pipefail
+
+        # Removal of positions with >50% gaps
+        trimal -in {params.concatenated_file} -out {params.gaps_removed} -gt 0.50
+
+        # Build phylogenomic tree using the WAG method and 1000 bootstrap replicates
+        iqtree2 -s {params.gaps_removed} \
+                -m WAG \
+                -bb 1000 \
+                -nt {threads} \
+                --prefix {params.tree_name} \
+                --quiet
+
+        # Tree for publication
+        cp "{params.tree_name}.contree" "{params.out_tree}"
+
+        # Create a done file to indicate the completion of the phylogenomics
+        touch {output.done_phylogenomics}
+        '''
+
+# Rule to remove all output files
+rule clean:
+    message:
+        "Removing all output files..."
+    shell:
+        """
+        rm -rf {LOG_DIR}
+        rm -rf {DONE_DIR}
+        rm -rf {WORKING_DIR}
+        """
+
+# ============================================

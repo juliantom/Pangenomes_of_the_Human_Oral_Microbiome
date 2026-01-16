@@ -23,7 +23,7 @@
 
 ✅ **Start small:** run a single taxon, confirm resource usage, then scale up
 
-Taxonomic groups (HMTs) as defined by  HOMD genome table: [HOMD Genome Table](https://www.homd.org/genome/genome_table).  
+Taxonomic groups (HMTs and **Species**) as defined by  HOMD genome table: [HOMD Genome Table](https://www.homd.org/genome/genome_table).  
 
 ***
 
@@ -48,7 +48,7 @@ cd my_work_dir
 
 # Create main pangenome analysis folder and data subdirectory
 # (All intermediate tables are stored in data/)
-dir_first_derep=03_pangenome_analysis
+dir_first_derep=04_pangenome_analysis_species
 mkdir -p "$dir_first_derep"/data
 
 # Input file generated during genome processing (Step 1)
@@ -71,11 +71,46 @@ all_genome_to_group_file="$dir_first_derep/data/01-genome_to_tax_group-8174.txt"
 # 3) Preserve strain information
 # 4) Output a clean, tab-delimited mapping table
 cat "$original_genome_to_hmt" \
-    | sed -e 's/_/|/2' \
-    | awk 'BEGIN{FS=OFS="|"}{print $2,$1}' \
-    | awk -F'_str_' '{print $0 "|" $1}' \
-    | awk -F'|' 'BEGIN{OFS="\t"} {print $1, $3 "_homd_" $2}' \
-    > "$all_genome_to_group_file"
+| sed 's/_/,/2' \
+| awk -F',' -v OFS=',' '{print $2,$1}' \
+| awk -F'_str_' -v OFS=',' '{print $0","$1}' \
+| awk -F',' -v OFS=',' '
+  {
+    sub(/(_subsp_|_clade|__bacterium).*/, "", $3)
+    print $1, $2, $3
+  }
+' \
+| awk -F',' -v OFS='\t' '{print $1,$3,$2}' \
+| awk -F'\t' -v OFS='\t' '
+{
+  genome = $1
+  species = $2
+  hmt = $3
+
+  gsub(/^HMT_/, "", hmt)   # numeric only
+  species_hmts[species][hmt] = 1
+
+  genomes[NR] = genome
+  species_of[NR] = species
+  hmt_of[NR] = hmt
+}
+END {
+  # build collapsed species labels
+  for (s in species_hmts) {
+    n = asorti(species_hmts[s], h, "@ind_num_asc")
+    label = s "_HMT"
+    for (i = 1; i <= n; i++) {
+      label = label "_" h[i]
+    }
+    species_label[s] = label
+  }
+
+  # emit rows
+  for (i = 1; i <= NR; i++) {
+    print genomes[i], species_label[species_of[i]], "HMT_" hmt_of[i]
+  }
+}
+' > "$all_genome_to_group_file"
 
 
 # -------------------------------
@@ -89,18 +124,26 @@ list_taxon=$dir_first_derep/data/02-list_group.txt
 # NOTE:
 # - sort | uniq -c is executed inside awk via a POSIX pipe
 # - This avoids temporary files and scales well to thousands of genomes
-awk '{print $2 | "sort | uniq -c"}' "$all_genome_to_group_file" \
-    | awk '{if($1>1)print $2}' \
-    > "$list_taxon"
+list_taxon="$dir_first_derep/data/02-list_group.txt"
+awk -F'\t' '
+{
+  # unique species–HMT pairs
+  seen[$2 SUBSEP $3] = 1
+}
+END {
+  # count distinct HMTs per species
+  for (k in seen) {
+    split(k, a, SUBSEP)
+    species[a[1]]++
+  }
 
-# List taxa represented by a single genome (excluded from pangenome construction)
-list_singleton_taxon=$dir_first_derep/data/02-list_group-only_one_genome.txt
+  # print species with >1 HMT
+  for (s in species)
+    if (species[s] > 1)
+      print s
+}
+' "$all_genome_to_group_file" | sort > "$list_taxon"
 
-# 1) Count genomes per taxon
-# 2) Keep only taxa with exactly one genome
-awk '{print $2 | "sort | uniq -c"}' "$all_genome_to_group_file" \
-    | awk '{if($1==1)print $2}' \
-    > "$list_singleton_taxon"
 
 # -------------------------------
 # Step 4: Link genomes to multi-genome HMT taxa
@@ -117,9 +160,9 @@ genome_to_group_pass="$dir_first_derep/data/03-group_to_genomes.txt"
 # 2) Append genome ID as a separate column for downstream Snakemake rules
 while IFS= read -r group; do
     grep "$group" "$all_genome_to_group_file" \
-    | awk -F'_homd_' -v OFS="\t" '{print $0, $2}' \
     >> "$genome_to_group_pass"
 done < "$list_taxon"
+
 
 # -------------------------------
 # Step 5: Count genomes per taxon
@@ -133,6 +176,7 @@ group_count="$dir_first_derep/group_count.txt"
 awk 'BEGIN{FS=OFS="\t"}{print $2 | "sort | uniq -c"}' "$genome_to_group_pass" \
     | awk -v OFS="\t" 'NR==1{print "Tax_group","Group_size"}{if($1>1)print $2,$1}' \
     > "$group_count"
+
 
 # -------------------------------
 # Step 6: Copy files for workflow input
@@ -156,6 +200,7 @@ cd "$dir_first_derep"
 ./generate_config_yaml.py
 cd ../
 ```
+
 ### **3️⃣ Test Snakemake workflow**
 ```bash
 ####################
@@ -163,7 +208,7 @@ cd ../
 ####################
 
 # Set and enter the pangenome workflow directory
-dir_pangenome=03_pangenome_analysis
+dir_pangenome=04_pangenome_analysis_species
 cd "$dir_pangenome"
 
 # Activate the Anvi'o environment (Anvi'o v8)
@@ -182,12 +227,13 @@ cp data/02-list_group.txt list_group.txt
 
 # Optional: restrict to a single taxon or a small subset for testing
 # (useful for quick validation runs)
-grep "Abiotro" data/02-list_group.txt > list_group.txt
+grep "oralis" data/02-list_group.txt > list_group.txt
 
 ####################
 # Workflow setup
 ####################
 
+# REUSE
 # Copy the Snakemake workflow into the working directory
 cp /path/to/repo/workflow/pangenome_construction_hmt/Snakefile .
 
@@ -224,17 +270,17 @@ cp data/02-list_group.txt list_group.txt
 cd ../
 
 # Copy bash script that launches the full Snakemake workflow
-cp /path/to/repo/workflow/scripts/02_run-pangenome_analysis-snakemake.sh 99_scripts/
+cp /path/to/repo/workflow/scripts/03_run-pangenome_analysis_species-snakemake.sh 99_scripts/
 
 # Make the script executable
-chmod +x 99_scripts/02_run-pangenome_analysis-snakemake.sh
+chmod +x 99_scripts/03_run-pangenome_analysis_species-snakemake.sh
 
 # Launch workflow in background with logging
 # - All taxa are processed
 # - Output and errors are logged to 97_nohup
 # - Runs asynchronously on HPC or local machine
-nohup ./99_scripts/02_run-pangenome_analysis-snakemake.sh \
-    >> 97_nohup/nohup-02_run-pangenome_analysis-snakemake.out 2>&1 &
+nohup ./99_scripts/03_run-pangenome_analysis_species-snakemake.sh \
+    >> 97_nohup/nohup-03_run-pangenome_analysis_species-snakemake.out 2>&1 &
 
 # ⚠️ WARNING: Full workflow is resource-intensive
 # Expected runtime: multiple days for >500 taxa
@@ -250,7 +296,7 @@ nohup ./99_scripts/02_run-pangenome_analysis-snakemake.sh \
 ####################
 
 # Folder containing Snakemake "done" marker files
-done_dir="03_pangenome_analysis/99_done"
+done_dir="04_pangenome_analysis_species/99_done"
 
 ####################
 # Step 1: Quick overview of completed rules
@@ -279,8 +325,8 @@ ls "$done_dir" \
 # - Saves to summary file
 ####################
 
-dir_done="03_pangenome_analysis/99_done"
-summary_file="03_pangenome_analysis/summary_rules.txt"
+dir_done="04_pangenome_analysis_species/99_done"
+summary_file="04_pangenome_analysis_species/summary_rules.txt"
 
 # Initialize summary file with header
 printf 'Rule\tCompleted\n' > "$summary_file"
