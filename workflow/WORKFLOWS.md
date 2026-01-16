@@ -1,6 +1,6 @@
 # 🧬 Workflow Overview
 
-This repository implements a **two-stage modular workflow** for constructing and analyzing taxon-specific level pangenomes of oral microbes. The designed prioritizes transparency, reproducibility, and community utility, so each step can be reused or adapted for new genome collections.
+This repository implements a **two-stage modular workflow** for constructing and analyzing taxon-specific pangenomes of oral microbes. The workflows prioritize transparency, reproducibility, and community utility, allowing each stage to be reused or adapted for new genome collections. A **third stage** describes how to import state files (JSON) containing the visual instructions for anvi’o, along with the corresponding procedure to generate SVG and PDF outputs for download.
 
 ***
 
