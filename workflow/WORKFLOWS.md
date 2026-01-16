@@ -70,4 +70,3 @@ This repository implements a **two-stage modular workflow** for constructing and
 
 - Interactive visualization via web
 - Local exploration
-- 
