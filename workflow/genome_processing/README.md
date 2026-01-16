@@ -10,7 +10,8 @@
 > 
 > - Optimized for a machine with **112 threads** and **3 TB RAM**
 >   - ⏱ Run Time Full Genome Processing Workflow (genomes = 8,174): ~6 days
->   - ⏱ Run Time Full Pangenomic Analysis Workflow (taxa = 567): ~3 days
+>   - ⏱ Run Time Full Pangenomic Analysis Workflow (HMT = 567): ~3 days
+>   - ⏱ Run Time Full Pangenomic Analysis Workflow (Species = 12): ~6 hours
 > 
 > - **Thread allocation is static set per rule** — adjust if needed
 > - **Control total threads and jobs** in the script: `01_prepare-contigs_db-snakemake.sh`

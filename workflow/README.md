@@ -26,13 +26,43 @@ workflow/
 │   ├── CODE.md
 │   ├── Snakefile
 │   └── README.md
+│
+├── pangenome_construction_species/
+│   ├── CODE.md
+│   ├── Snakefile
+│   └── README.md
+│
 ├── scripts/
 │   ├── 01_prepare-contigs_db-snakemake.sh
-│   ├── 02_generate-yaml.sh
-│   └── 02_run-pangenome_analysis-snakemake.sh
+│   ├── 02_run-pangenome_analysis-snakemake.sh
+│   ├── 03_run-pangenome_analysis_species-snakemake.sh
+│   └── generate-yaml.sh
+│
 ├── workflow_images/
     ├── rulegraph-contigs_db.pdf
     └── rulegraph-pangenome_analysis.pdf
+```
+
+***
+
+## 📂 Expected output
+
+```text
+../results/
+├── Abiotrophia_defectiva_homd_HMT_389
+│   ├── Abiotrophia_defectiva_homd_HMT_389-GENOMES.db
+│   ├── dir_ani
+│   ├── dir_dereplication
+│   ├── dir_dereplication_fpi
+│   ├── dir_metabolism
+│   ├── dir_pangenome
+│   ├── dir_phylogenomics
+│   ├── external_file.txt
+│   ├── genome-add_info.txt
+│   └── genome-ids.txt
+├── Abiotrophia_sp_HMT_427_homd_HMT_427
+│   ├── Abiotrophia_sp_HMT_427_homd_HMT_427-GENOMES.db
+
 ```
 
 ***

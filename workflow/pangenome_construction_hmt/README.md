@@ -10,7 +10,8 @@
 >
 > - Optimized for a machine with **112 threads** and **3 TB RAM**
 >   - ⏱ Estimated Run Time Full Genome Processing Workflow (genomes = 8,174): ~6 days
->   - ⏱ Estimated Run Time Full Pangenomic Analysis Workflow (taxa = 567): ~3 days
+>   - ⏱ Run Time Full Pangenomic Analysis Workflow (HMT = 567): ~3 days
+>   - ⏱ Run Time Full Pangenomic Analysis Workflow (Species = 12): ~6 hours
 > 
 > - **Thread allocation is dynamic**, set per **taxon** and **rule** — adjust to match your system
 > - Adjust per taxon thread in `config_group_threads.yaml` as needed
