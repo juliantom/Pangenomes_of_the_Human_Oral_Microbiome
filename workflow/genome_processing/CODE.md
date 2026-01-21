@@ -129,7 +129,8 @@ cp 98_data/02-assembly_id_list-2025_08_19.txt \
 
 ```
 
-### 📂 2️⃣(Optional) Install Annotation Databases
+### 📂 2️⃣ Install Annotation Databases
+The code Snakemake workflow expects to run annotations- what is optional is the DBs versions.
 ```bash
 ####################
 # Change to download directory
