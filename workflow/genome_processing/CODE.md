@@ -338,7 +338,7 @@ nohup ./99_scripts/01_prepare-contigs_db-snakemake.sh \
 
 ```
 
-### 📂 7️⃣ Compress FASTA Files
+### 📂 7️⃣ Compress FASTA Files (Optional to save disk space)
 ```bash
 ####################
 # Compress FASTA files for storage optimization
