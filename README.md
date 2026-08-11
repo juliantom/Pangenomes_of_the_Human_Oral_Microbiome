@@ -1,5 +1,4 @@
 # 🧬 Pangenomes of the Human Oral Microbiome
-## 🚧 Beta Release
 
 **A curated collection of species-level pangenomes for taxa in the expanded Human Oral Microbiome Database (eHOMD)**
 
@@ -135,8 +134,7 @@ These files support interpretation of the pangenomes and are not intended as sta
 
 If you use these pangenomes, please cite the associated resource announcement and acknowledge the data and tools that made this work possible:
 
-- *Pangenomes of the Human Oral Microbiome*  
-  **Microbiology Resource Announcement** ↗ *(link forthcoming)*
+- Torres-Morales J, Giacomini JJ, Chen T, Voorhis A, Kauffman KM, Dewhirst FE, Borisy GG, Mark Welch JL. Pangenomes of the human oral microbiome. Microbiol Resour Announc. 2026 Jul 9;15(7):e0026126. doi: 10.1128/mra.00261-26. Epub 2026 May 29. PMID: 42212655; PMCID: PMC13348354.
 
 Please also consider citing:
 - Expanded Human Oral Microbiome Database (eHOMD)  
